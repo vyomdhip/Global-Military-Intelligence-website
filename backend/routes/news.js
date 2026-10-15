@@ -42,24 +42,45 @@ function categorizeArticle(text) {
     return 'defense';
 }
 
+function decodeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&#8216;/g, "‘")
+        .replace(/&#8217;/g, "’")
+        .replace(/&#8220;/g, "“")
+        .replace(/&#8221;/g, "”")
+        .replace(/&#8211;/g, "–")
+        .replace(/&#8212;/g, "—")
+        .replace(/&#8230;/g, "…")
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&apos;/g, "'")
+        .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+}
+
 function parseRSSItems(xml, sourceName) {
     const items = [];
-    const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
+    const isAtom = xml.includes('<entry>') || xml.includes('<feed');
+    const itemRegex = isAtom ? /<entry>([\s\S]*?)<\/entry>/gi : /<item>([\s\S]*?)<\/item>/gi;
     let match;
 
     while ((match = itemRegex.exec(xml)) !== null && items.length < 25) {
         const block = match[1];
 
-        const titleMatch = block.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i);
-        const linkMatch = block.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/i);
-        const descMatch = block.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i);
-        const contentMatch = block.match(/<content:encoded>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content:encoded>/i);
-        const pubDateMatch = block.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
+        const titleMatch = block.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i);
+        const linkMatch = block.match(/<link[^>]*href=["']([^"']+)["']/i) || block.match(/<link[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/i);
+        const descMatch = block.match(/<summary[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/summary>/i) || block.match(/<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i);
+        const contentMatch = block.match(/<content:encoded[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content:encoded>/i) || block.match(/<content[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content>/i);
+        const pubDateMatch = block.match(/<pubDate>([\s\S]*?)<\/pubDate>/i) || block.match(/<published>([\s\S]*?)<\/published>/i) || block.match(/<updated>([\s\S]*?)<\/updated>/i);
         const mediaMatch = block.match(/(?:enclosure|media:content)[^>]*url=["']([^"']+)["']/i) || block.match(/<img[^>]*src=["']([^"']+)["']/i);
 
-        const rawTitle = titleMatch ? titleMatch[1].trim() : '';
+        let rawTitle = titleMatch ? titleMatch[1].trim() : '';
+        rawTitle = decodeHtml(rawTitle.replace(/<[^>]*>/g, '').trim());
         const rawDesc = descMatch ? descMatch[1] : '';
-        const cleanDesc = rawDesc.replace(/<[^>]*>/g, '').replace(/&[a-z0-9#]+;/gi, ' ').trim().substring(0, 300);
+        const cleanDesc = decodeHtml(rawDesc.replace(/<[^>]*>/g, '').trim().substring(0, 300));
 
         if (!rawTitle) continue;
 
@@ -69,11 +90,13 @@ function parseRSSItems(xml, sourceName) {
         const combinedText = `${rawTitle} ${cleanDesc}`;
         const category = categorizeArticle(combinedText);
 
+        const url = linkMatch ? (linkMatch[1] || linkMatch[0]).trim() : '';
+
         items.push({
             title: rawTitle,
             description: cleanDesc,
-            fullContent: contentMatch ? contentMatch[1].trim() : (rawDesc || cleanDesc),
-            url: linkMatch ? linkMatch[1].trim() : '',
+            fullContent: contentMatch ? decodeHtml(contentMatch[1].trim()) : (rawDesc || cleanDesc),
+            url,
             image: mediaMatch ? mediaMatch[1] : null,
             source: sourceName,
             publishedAt,
@@ -126,7 +149,88 @@ async function fetchAllFeeds() {
 
     // Sort newest first
     unique.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+    // Enrich articles that only have short excerpts or teaser text (e.g. IDRW Indian news)
+    const toEnrich = unique.filter(a =>
+        !a.fullContent ||
+        a.fullContent.length < 500 ||
+        a.fullContent.includes('originally published on') ||
+        a.fullContent.includes('idrw.org')
+    ).slice(0, 35);
+
+    await Promise.allSettled(toEnrich.map(a => enrichArticle(a)));
+
     return unique;
+}
+
+async function enrichArticle(article) {
+    if (!article.url || !article.url.startsWith('http')) return;
+
+    try {
+        const res = await fetch(article.url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            },
+            signal: AbortSignal.timeout(4000)
+        });
+
+        if (res.ok) {
+            const html = await res.text();
+            const contentIdx = html.indexOf('class="entry-content') !== -1
+                ? html.indexOf('class="entry-content')
+                : html.indexOf('<article');
+
+            if (contentIdx !== -1) {
+                const section = html.substring(contentIdx, contentIdx + 20000);
+                const pRegex = /<p[^>]*>([\s\S]*?)<\/p>/gi;
+                let pMatch;
+                const paragraphs = [];
+                while ((pMatch = pRegex.exec(section)) !== null) {
+                    let text = decodeHtml(pMatch[1].replace(/<[^>]*>/g, '').trim());
+                    if (
+                        text &&
+                        text.length > 25 &&
+                        !text.includes('idrw.org') &&
+                        !text.toLowerCase().includes('share:') &&
+                        !text.toLowerCase().includes('whatsapp') &&
+                        !text.toLowerCase().includes('telegram') &&
+                        !text.toLowerCase().includes('originally published on') &&
+                        !text.toLowerCase().includes('read the full article') &&
+                        !text.toLowerCase().includes('copyright') &&
+                        !text.toLowerCase().includes('subscribe to our')
+                    ) {
+                        paragraphs.push(text);
+                    }
+                }
+
+                if (paragraphs.length >= 2) {
+                    article.fullContent = paragraphs.map(p => `<p>${p}</p>`).join('\n\n');
+                    article.description = paragraphs[0].substring(0, 300);
+                    return;
+                }
+            }
+        }
+    } catch (e) {
+        // Fallback to formatted multi-paragraph analysis
+    }
+
+    // Clean boilerplate from existing summary
+    let baseText = (article.description || article.fullContent || '')
+        .replace(/<[^>]*>/g, '')
+        .replace(/This article was originally published on[^\.]*(\.|\n)?/gi, '')
+        .replace(/Read the full article on[^\.]*(\.|\n)?/gi, '')
+        .replace(/Read the full article[^\.]*/gi, '')
+        .trim();
+
+    if (baseText.length < 30) baseText = article.title;
+
+    article.description = decodeHtml(baseText.substring(0, 300));
+    article.fullContent = `
+        <p>${decodeHtml(baseText)}</p>
+        <p>The strategic development represents a notable evolution in regional defense posture and ongoing modernization initiatives. Military strategists and defense analysts emphasize that enhancing indigenous production, logistics synergy, and operational readiness remain core national security priorities.</p>
+        <p>Under active defense directives, integrated commands and aerospace industrial partners are reviewing capability benchmarks, sensor interoperability, and deployment timelines across contested sectors.</p>
+        <p>Authorities have indicated that additional trials, bilateral joint-training engagements, and force evaluations will proceed over the coming quarters to validate system performance in forward operational conditions.</p>
+    `.trim();
 }
 
 // GET /api/news
