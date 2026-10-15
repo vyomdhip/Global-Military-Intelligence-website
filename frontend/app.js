@@ -1641,7 +1641,6 @@ async function fetchNews() {
     if (!newsGrid) return;
 
     try {
-        // Always have sample news as baseline
         const sampleNews = getSampleNews();
 
         if (refreshBtn) refreshBtn.classList.add('loading');
@@ -1650,77 +1649,68 @@ async function fetchNews() {
         newsGrid.innerHTML = `
             <div class="news-loading-overlay">
                 <div class="loading-spinner"></div>
-                <p>Hold on While we Provide you with latest intel...</p>
+                <p>Hold on while we gather the latest defense intelligence...</p>
             </div>
         `;
 
-        // Try to fetch live news from multiple RSS feeds simultaneously
         let liveArticles = [];
+
+        // 1. First try our backend proxy route which fetches direct from live defense RSS feeds
         try {
-            // Try multiple RSS feeds in parallel
-            const feedPromises = RSS_FEEDS.map(feed =>
-                fetch(`${RSS2JSON_BASE}${encodeURIComponent(feed.url)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'ok' && data.items && data.items.length > 0) {
-                            return data.items.map(item => ({
-                                title: item.title || '',
-                                description: item.description
-                                    ? item.description.replace(/<[^>]*>/g, '').substring(0, 300)
-                                    : '',
-                                fullContent: item.content || item.description || '',
-                                url: item.link || '',
-                                image: item.enclosure && item.enclosure.link
-                                    ? item.enclosure.link
-                                    : item.thumbnail
-                                        ? item.thumbnail
-                                        : extractImageFromContent(item.content || item.description || ''),
-                                source: feed.name || (item.author || 'Defense Source'),
-                                publishedAt: item.pubDate || new Date().toISOString(),
-                                category: categorizeArticle((item.title || '') + ' ' + (item.description || ''))
-                            }));
-                        }
-                        return [];
-                    })
-                    .catch(() => [])
-            );
-
-            const results = await Promise.allSettled(feedPromises);
-            results.forEach(result => {
-                if (result.status === 'fulfilled' && Array.isArray(result.value)) {
-                    liveArticles = liveArticles.concat(result.value);
+            const apiRes = await fetch('/api/news');
+            if (apiRes.ok) {
+                const apiData = await apiRes.json();
+                if ((apiData.status === 'ok' || apiData.status === 'live' || apiData.status === 'cache' || apiData.status === 'stale-cache') && Array.isArray(apiData.articles) && apiData.articles.length > 0) {
+                    liveArticles = apiData.articles;
+                    console.log(`📡 Received ${liveArticles.length} defense articles from server news stream`);
                 }
-            });
-
-            // STRICT FILTER: Only keep articles that contain military keywords
-            liveArticles = liveArticles.filter(article =>
-                isMilitaryArticle(article.title, article.description)
-            );
-
-            // Deduplicate by title similarity
-            const seen = new Set();
-            liveArticles = liveArticles.filter(article => {
-                const key = article.title.toLowerCase().substring(0, 60);
-                if (seen.has(key) || !article.title) return false;
-                seen.add(key);
-                return true;
-            });
-
-            // Sort by date (newest first)
-            liveArticles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-            // Validate and fix images — reject emojis, icons, tiny images, bad URLs
-            liveArticles.forEach((article, i) => {
-                if (!article.image || !isValidNewsImage(article.image)) {
-                    article.image = getRelevantImage(article.title, article.description, i);
-                }
-            });
-
-        } catch (rssError) {
-            console.error('RSS fetch error:', rssError);
+            }
+        } catch (apiErr) {
+            console.warn('Backend news endpoint error, attempting client-side feeds:', apiErr);
         }
 
-        // Also try GNews API if key is set — strictly military query
+        // 2. If backend had no articles, attempt client-side RSS feeds as secondary option
+        if (liveArticles.length === 0) {
+            try {
+                const feedPromises = RSS_FEEDS.map(feed =>
+                    fetch(`${RSS2JSON_BASE}${encodeURIComponent(feed.url)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'ok' && data.items && data.items.length > 0) {
+                                return data.items.map(item => ({
+                                    title: item.title || '',
+                                    description: item.description
+                                        ? item.description.replace(/<[^>]*>/g, '').substring(0, 300)
+                                        : '',
+                                    fullContent: item.content || item.description || '',
+                                    url: item.link || '',
+                                    image: item.enclosure && item.enclosure.link
+                                        ? item.enclosure.link
+                                        : item.thumbnail
+                                            ? item.thumbnail
+                                            : extractImageFromContent(item.content || item.description || ''),
+                                    source: feed.name || (item.author || 'Defense Source'),
+                                    publishedAt: item.pubDate || new Date().toISOString(),
+                                    category: categorizeArticle((item.title || '') + ' ' + (item.description || ''))
+                                }));
+                            }
+                            return [];
+                        })
+                        .catch(() => [])
+                );
+
+                const results = await Promise.allSettled(feedPromises);
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && Array.isArray(result.value)) {
+                        liveArticles = liveArticles.concat(result.value);
+                    }
+                });
+            } catch (rssError) {
+                console.warn('Client-side RSS fetch error:', rssError);
+            }
+        }
+
+        // Also check GNews API if key configured
         if (GNEWS_API_KEY !== 'YOUR_API_KEY_HERE') {
             try {
                 const response = await fetch(
@@ -1747,17 +1737,41 @@ async function fetchNews() {
             }
         }
 
-        // Populate newsData with live military articles only
+        // Filter military articles and deduplicate
+        if (liveArticles.length > 0) {
+            liveArticles = liveArticles.filter(article =>
+                isMilitaryArticle(article.title, article.description)
+            );
+
+            const seen = new Set();
+            liveArticles = liveArticles.filter(article => {
+                const key = article.title.toLowerCase().substring(0, 60);
+                if (seen.has(key) || !article.title) return false;
+                seen.add(key);
+                return true;
+            });
+
+            liveArticles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+            // Validate and fix images
+            liveArticles.forEach((article, i) => {
+                if (!article.image || !isValidNewsImage(article.image)) {
+                    article.image = getRelevantImage(article.title, article.description, i);
+                }
+            });
+        }
+
+        // 3. Final population: use live articles if available, ALWAYS fallback to curated sampleNews
         if (liveArticles.length > 0) {
             newsData = liveArticles;
-            // Sort newsData by date (newest first)
-            newsData.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
             console.log(`✅ Loaded ${liveArticles.length} live military articles`);
-            // Show notification bar with latest live headline
             showNewsNotification(liveArticles[0].title, liveArticles.length, liveArticles[0].url || liveArticles[0].link, liveArticles[0].description);
         } else {
-            newsData = [];
-            console.log(`ℹ️ No live military articles available`);
+            newsData = sampleNews;
+            console.log(`ℹ️ Loaded ${newsData.length} curated military intel articles as reliable baseline`);
+            if (newsData.length > 0) {
+                showNewsNotification(newsData[0].title, newsData.length, newsData[0].url, newsData[0].description);
+            }
         }
 
         renderNews();
@@ -1767,10 +1781,18 @@ async function fetchNews() {
 
     } catch (error) {
         console.error('fetchNews error:', error);
-        // Emergency fallback
-        if (newsGrid) {
-            newsGrid.innerHTML = '<div class="news-error"><p>Error loading news. Please refresh the page.</p><button class="retry-btn" onclick="refreshNews()">Retry</button></div>';
+        // Resilient fallback: ensure news is rendered even if unexpected error happens
+        try {
+            newsData = getSampleNews();
+            renderNews();
+            populateDateDropdown();
+            updateTimestamp();
+        } catch (innerError) {
+            if (newsGrid) {
+                newsGrid.innerHTML = '<div class="news-error"><p>Error loading news. Please refresh the page.</p><button class="retry-btn" onclick="refreshNews()">Retry</button></div>';
+            }
         }
+        if (refreshBtn) refreshBtn.classList.remove('loading');
     }
 }
 

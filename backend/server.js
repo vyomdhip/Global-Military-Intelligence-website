@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const watchlistRoutes = require('./routes/watchlist');
 const reportRoutes = require('./routes/reports');
 const adminRoutes = require('./routes/admin');
+const newsRoutes = require('./routes/news');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/news', newsRoutes);
 
 // ============================================
 // CATCH-ALL — serve index.html for any non-API route
