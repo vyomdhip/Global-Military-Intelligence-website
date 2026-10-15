@@ -348,7 +348,7 @@ function populateProfileUI(data) {
     // Watchlist count (from in-memory state if available)
     const watchlistCount = (typeof window.watchlistItems !== 'undefined' && Array.isArray(window.watchlistItems))
         ? window.watchlistItems.length
-        : 0;
+        : (typeof watchlistCache !== 'undefined' && Array.isArray(watchlistCache) ? watchlistCache.length : 0);
     setInfo('profile-info-watchlist', watchlistCount.toString());
 
     // Pre-fill the edit form

@@ -740,11 +740,13 @@ function openNationModal(nationKey) {
     const modalNationInfo = document.querySelector('#nation-modal .nation-info');
     let existingFollowBtn = document.getElementById('modal-follow-btn');
     if (existingFollowBtn) existingFollowBtn.remove();
-    if (isLoggedIn()) {
+    if (modalNationInfo) {
         const followBtn = document.createElement('button');
         followBtn.id = 'modal-follow-btn';
-        followBtn.className = 'modal-follow-btn' + (isFollowing('nation', nationKey) ? ' active' : '');
-        followBtn.innerHTML = isFollowing('nation', nationKey) ? '★ Following' : '☆ Follow Nation';
+        const following = isFollowing('nation', nationKey);
+        followBtn.className = 'modal-follow-btn' + (following ? ' active' : '');
+        followBtn.innerHTML = following ? '★ Following' : '☆ Follow Nation';
+        followBtn.title = following ? 'Unfollow this nation' : 'Add to Intel Watchlist';
         followBtn.onclick = function (e) { toggleWatchlistItem('nation', nationKey, e); };
         modalNationInfo.appendChild(followBtn);
     }
@@ -5447,14 +5449,40 @@ function getAuthHeaders() {
 async function loadWatchlist() {
     if (!isLoggedIn()) {
         watchlistCache = [];
+        window.watchlistItems = [];
+        refreshFollowButtons();
         return;
     }
     try {
         const res = await fetch('/api/watchlist', { headers: getAuthHeaders() });
+        if (res.status === 401) {
+            localStorage.removeItem('gmi_token');
+            localStorage.removeItem('gmi_user');
+            if (typeof updateAuthUI === 'function') updateAuthUI(null);
+            watchlistCache = [];
+            window.watchlistItems = [];
+            refreshFollowButtons();
+            return;
+        }
         if (res.ok) {
             const data = await res.json();
             watchlistCache = data.items || [];
+            window.watchlistItems = watchlistCache;
             refreshFollowButtons();
+
+            // Process any pending follow saved before login
+            const pending = sessionStorage.getItem('pending_follow');
+            if (pending) {
+                sessionStorage.removeItem('pending_follow');
+                try {
+                    const parsed = JSON.parse(pending);
+                    if (parsed && parsed.targetType && parsed.targetId && !isFollowing(parsed.targetType, parsed.targetId)) {
+                        toggleWatchlistItem(parsed.targetType, parsed.targetId);
+                    }
+                } catch (e) {
+                    console.error('Error processing pending follow:', e);
+                }
+            }
         }
     } catch (err) {
         console.error('Failed to load watchlist:', err);
@@ -5462,48 +5490,92 @@ async function loadWatchlist() {
 }
 
 function isFollowing(targetType, targetId) {
-    return watchlistCache.some(item => item.targetType === targetType && item.targetId === targetId);
+    return watchlistCache.some(item => item.targetType === targetType && String(item.targetId) === String(targetId));
 }
 
 async function toggleWatchlistItem(targetType, targetId, event) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
+        if (event.stopImmediatePropagation) {
+            event.stopImmediatePropagation();
+        }
     }
+
     if (!isLoggedIn()) {
-        showToast('Please sign up or login to follow items.', 'error');
-        openSignupModal();
+        sessionStorage.setItem('pending_follow', JSON.stringify({ targetType, targetId }));
+        const name = getTargetDisplayName(targetType, targetId);
+        showToast('Sign in or create an account to add ' + name + ' to your Intel Watchlist.', 'info');
+        if (typeof openSignupModal === 'function') {
+            openSignupModal();
+        }
         return;
     }
+
     const alreadyFollowing = isFollowing(targetType, targetId);
     try {
         if (alreadyFollowing) {
-            const res = await fetch('/api/watchlist/' + targetType + '/' + targetId, {
+            const res = await fetch('/api/watchlist/' + encodeURIComponent(targetType) + '/' + encodeURIComponent(targetId), {
                 method: 'DELETE',
                 headers: getAuthHeaders()
             });
+
+            if (res.status === 401) {
+                showToast('Session expired. Please log in again.', 'error');
+                if (typeof logoutUser === 'function') logoutUser();
+                if (typeof openLoginModal === 'function') openLoginModal();
+                return;
+            }
+
             if (res.ok) {
                 watchlistCache = watchlistCache.filter(
-                    item => !(item.targetType === targetType && item.targetId === targetId)
+                    item => !(item.targetType === targetType && String(item.targetId) === String(targetId))
                 );
+                window.watchlistItems = watchlistCache;
                 const name = getTargetDisplayName(targetType, targetId);
-                showToast('Unfollowed ' + name, 'success');
+                showToast('Removed ' + name + ' from watchlist', 'info');
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                showToast(errData.error || 'Failed to remove from watchlist.', 'error');
             }
         } else {
             const res = await fetch('/api/watchlist', {
                 method: 'POST',
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ targetType, targetId })
+                body: JSON.stringify({ targetType, targetId: String(targetId) })
             });
-            if (res.ok) {
-                const data = await res.json();
-                watchlistCache.push(data.item);
+
+            if (res.status === 401) {
+                showToast('Session expired. Please log in again.', 'error');
+                if (typeof logoutUser === 'function') logoutUser();
+                if (typeof openLoginModal === 'function') openLoginModal();
+                return;
+            }
+
+            if (res.status === 409) {
+                if (!isFollowing(targetType, targetId)) {
+                    watchlistCache.push({ targetType, targetId: String(targetId) });
+                    window.watchlistItems = watchlistCache;
+                }
                 const name = getTargetDisplayName(targetType, targetId);
-                showToast('Following ' + name + ' ?', 'success');
+                showToast('Already following ' + name + ' ⭐', 'info');
+            } else if (res.ok) {
+                const data = await res.json();
+                const newItem = data.item || { targetType, targetId: String(targetId) };
+                if (!isFollowing(targetType, targetId)) {
+                    watchlistCache.push(newItem);
+                    window.watchlistItems = watchlistCache;
+                }
+                const name = getTargetDisplayName(targetType, targetId);
+                showToast('Added ' + name + ' to Intel Watchlist ⭐', 'success');
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                showToast(errData.error || 'Failed to add to watchlist.', 'error');
             }
         }
         refreshFollowButtons();
     } catch (err) {
+        console.error('Watchlist error:', err);
         showToast('Connection error. Please try again.', 'error');
     }
 }
@@ -5525,29 +5597,31 @@ function refreshFollowButtons() {
         if (isFollowing(type, id)) {
             btn.classList.add('active');
             btn.innerHTML = '\u2605';
-            btn.title = 'Unfollow';
+            btn.title = 'Remove from Intel Watchlist';
         } else {
             btn.classList.remove('active');
             btn.innerHTML = '\u2606';
-            btn.title = 'Follow';
+            btn.title = 'Add to Intel Watchlist';
         }
     });
+
     var modalBtn = document.getElementById('modal-follow-btn');
     if (modalBtn && currentNation) {
         if (isFollowing('nation', currentNation)) {
             modalBtn.classList.add('active');
-            modalBtn.innerHTML = '\u2605 Following';
+            modalBtn.innerHTML = '★ Following';
+            modalBtn.title = 'Unfollow this nation';
         } else {
             modalBtn.classList.remove('active');
-            modalBtn.innerHTML = '\u2606 Follow Nation';
+            modalBtn.innerHTML = '☆ Follow Nation';
+            modalBtn.title = 'Add to Intel Watchlist';
         }
     }
 }
 
 function getFollowBtnHtml(targetType, targetId) {
-    if (!isLoggedIn()) return '';
     var active = isFollowing(targetType, targetId);
-    return '<button class="follow-btn ' + (active ? 'active' : '') + '" data-target-type="' + targetType + '" data-target-id="' + targetId + '" onclick="toggleWatchlistItem(\'' + targetType + '\', \'' + targetId + '\', event)" title="' + (active ? 'Unfollow' : 'Follow') + '">' + (active ? '\u2605' : '\u2606') + '</button>';
+    return '<button type="button" class="follow-btn ' + (active ? 'active' : '') + '" data-target-type="' + targetType + '" data-target-id="' + targetId + '" onclick="toggleWatchlistItem(\'' + targetType + '\', \'' + targetId + '\', event)" title="' + (active ? 'Remove from Intel Watchlist' : 'Add to Intel Watchlist') + '">' + (active ? '\u2605' : '\u2606') + '</button>';
 }
 
 // ============================================

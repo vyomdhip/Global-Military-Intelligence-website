@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
         });
 
         if (existing) {
-            return res.status(409).json({ error: 'Already following this item.' });
+            return res.status(200).json({ message: 'Already following this item.', item: existing, alreadyFollowing: true });
         }
 
         const item = await Watchlist.create({
@@ -76,7 +76,7 @@ router.delete('/:targetType/:targetId', async (req, res) => {
         });
 
         if (!result) {
-            return res.status(404).json({ error: 'Item not found in watchlist.' });
+            return res.json({ message: 'Item already removed from watchlist.' });
         }
 
         console.log(`💫 User ${req.user.username} unfollowed ${targetType}: ${targetId}`);
