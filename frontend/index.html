@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=1.1.0">
+    <link rel="stylesheet" href="styles.css?v=1.2.0">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
                     <a href="#news-section" class="nav-link" data-page="news">News</a>
                     <a href="#conflicts-section" class="nav-link" data-page="conflicts">Conflicts</a>
                     <a href="#history-section" class="nav-link" data-page="history">History</a>
-                    <a href="#footer" class="nav-link" data-page="about">About</a>
+                    <a href="#about-section" class="nav-link" data-page="about">About</a>
                 </nav>
                 <div class="search-container">
                     <div class="search-box">
@@ -583,6 +583,223 @@
             </section>
         </main>
 
+        <!-- Privacy Policy Overlay -->
+        <div id="privacy-policy-overlay" class="privacy-overlay">
+            <div class="privacy-page">
+                <div class="privacy-header">
+                    <button class="privacy-back-btn" onclick="closePrivacyPolicy()" aria-label="Close Privacy Policy">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        <span>Back</span>
+                    </button>
+                    <div class="privacy-header-title">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <h2>Privacy Policy</h2>
+                    </div>
+                    <span class="privacy-updated">Last updated: October 2026</span>
+                </div>
+
+                <div class="privacy-content">
+                    <!-- Introduction -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">📋</span> Introduction
+                        </h3>
+                        <p>Global Military Intelligence ("GMI", "we", "us", or "our") operates the Global Military Intelligence website (the "Service"). This Privacy Policy explains what information we collect, how we use it, and your rights regarding your data.</p>
+                        <p>By using our Service, you acknowledge the data practices described in this policy. If you do not agree, please discontinue use of the Service.</p>
+                    </section>
+
+                    <!-- Information We Collect -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">📦</span> Information We Collect
+                        </h3>
+
+                        <div class="privacy-card">
+                            <h4>Account Registration Data</h4>
+                            <p>When you create an account, we collect:</p>
+                            <ul>
+                                <li><strong>Username</strong> — a unique identifier you choose (minimum 3 characters)</li>
+                                <li><strong>Email address</strong> — used for account identification</li>
+                                <li><strong>Password</strong> — stored in hashed form using bcrypt (12 salt rounds); we never store or have access to your plaintext password</li>
+                                <li><strong>Display name</strong> — optional, defaults to your username</li>
+                            </ul>
+                        </div>
+
+                        <div class="privacy-card">
+                            <h4>Automatically Recorded Data</h4>
+                            <p>Our system automatically records the following timestamps:</p>
+                            <ul>
+                                <li><strong>Account creation date</strong> (createdAt)</li>
+                                <li><strong>Last profile update</strong> (updatedAt)</li>
+                                <li><strong>Last login date</strong> — updated each time you sign in</li>
+                            </ul>
+                            <p>We do <strong>not</strong> collect IP addresses, browser fingerprints, geolocation data, or usage analytics. No third-party analytics or tracking scripts are embedded in the Service.</p>
+                        </div>
+                    </section>
+
+                    <!-- Authentication & Security -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🔐</span> Authentication &amp; Security
+                        </h3>
+                        <div class="privacy-card">
+                            <h4>How Authentication Works</h4>
+                            <ul>
+                                <li>Authentication is handled via <strong>JSON Web Tokens (JWT)</strong> signed with a server-side secret</li>
+                                <li>Tokens are issued at login and registration, and expire after <strong>7 days</strong></li>
+                                <li>Tokens contain your user ID, username, and role ("user" or "admin") — no sensitive data such as your email or password is included in the token</li>
+                                <li>Passwords are hashed using <strong>bcryptjs</strong> with a work factor of 12 before storage — we cannot retrieve or view your original password</li>
+                            </ul>
+                        </div>
+                        <div class="privacy-card">
+                            <h4>Password Changes</h4>
+                            <p>You can change your password through the profile settings. The system verifies your current password before accepting any change. New passwords must be at least 6 characters and differ from the current password.</p>
+                        </div>
+                    </section>
+
+                    <!-- Cookies & Local Storage -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🍪</span> Cookies &amp; Local Storage
+                        </h3>
+                        <div class="privacy-card">
+                            <p>This Service does <strong>not</strong> use browser cookies.</p>
+                            <p>We use <strong>browser localStorage</strong> to store two items on your device:</p>
+                            <ul>
+                                <li><code>gmi_token</code> — your JWT authentication token (used to keep you logged in)</li>
+                                <li><code>gmi_user</code> — a JSON object containing your user ID, username, email, role, and display name (used to render the UI without additional API calls)</li>
+                            </ul>
+                            <p>Both items are removed from your browser when you log out. You can also manually clear them at any time via your browser's developer tools or settings.</p>
+                        </div>
+                    </section>
+
+                    <!-- Watchlists -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">⭐</span> Watchlist Data
+                        </h3>
+                        <div class="privacy-card">
+                            <p>Authenticated users can follow nations or conflicts by adding them to a personal watchlist. Each watchlist entry stores:</p>
+                            <ul>
+                                <li>Your user ID (linking the entry to your account)</li>
+                                <li>The target type ("nation" or "conflict")</li>
+                                <li>The target identifier (e.g. country key)</li>
+                                <li>Timestamp of when the item was added</li>
+                            </ul>
+                            <p>Watchlist data is private to your account and is not shared with other users or third parties. You can remove any item from your watchlist at any time.</p>
+                        </div>
+                    </section>
+
+                    <!-- Analyst Reports -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">📝</span> Analyst Reports
+                        </h3>
+                        <div class="privacy-card">
+                            <p>Authenticated users can create analyst reports (notebooks). Each report stores:</p>
+                            <ul>
+                                <li>Your user ID (as the author)</li>
+                                <li>Report title (up to 200 characters) and text content</li>
+                                <li>Embedded data widgets (comparison charts, fleet distributions, force tables) with their configuration</li>
+                                <li>A public/private flag — you choose whether to share reports in the Community Hub</li>
+                                <li>Creation and last-updated timestamps</li>
+                            </ul>
+                            <p>Private reports are visible only to you and site administrators. Public reports are visible to all visitors and display your display name as the author.</p>
+                        </div>
+                    </section>
+
+                    <!-- Data Security -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🛡️</span> Data Security
+                        </h3>
+                        <div class="privacy-card">
+                            <p>We take reasonable measures to protect your data:</p>
+                            <ul>
+                                <li>Passwords are hashed with bcrypt before storage — plaintext passwords are never persisted</li>
+                                <li>API endpoints that access personal data (profile, watchlist, reports) require a valid JWT</li>
+                                <li>Administrative endpoints are additionally restricted to accounts with the "admin" role</li>
+                                <li>The database is hosted on <strong>MongoDB Atlas</strong>, which provides encryption at rest and in transit</li>
+                            </ul>
+                            <p>While we strive to protect your data, no method of electronic storage or transmission is 100% secure. We cannot guarantee absolute security.</p>
+                        </div>
+                    </section>
+
+                    <!-- Third-Party Services -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🔗</span> Third-Party Services
+                        </h3>
+                        <div class="privacy-card">
+                            <p>The Service integrates with the following third-party services:</p>
+                            <ul>
+                                <li><strong>MongoDB Atlas</strong> — cloud database hosting for user accounts, watchlists, and reports</li>
+                                <li><strong>Google Fonts</strong> — serves the Inter and Rajdhani typefaces; Google may collect limited usage data per their <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a></li>
+                                <li><strong>Leaflet / OpenStreetMap</strong> — provides the interactive map; map tile requests are sent to OpenStreetMap tile servers</li>
+                                <li><strong>CDNJS (Cloudflare)</strong> — serves the GSAP animation library</li>
+                                <li><strong>RSS News Feeds</strong> — the server fetches publicly available RSS feeds from defense news outlets (USNI News, Naval News, UK Defence Journal, LiveFist Defence, Indian Defence Research Wing) to display news articles; no user data is sent to these sources</li>
+                            </ul>
+                            <p>We do <strong>not</strong> integrate any advertising networks, social media trackers, or third-party analytics services.</p>
+                        </div>
+                    </section>
+
+                    <!-- Data Retention -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🗄️</span> Data Retention
+                        </h3>
+                        <div class="privacy-card">
+                            <p>Your account data, watchlist entries, and analyst reports are retained for as long as your account exists. Server-side news feed caches are temporary and are refreshed approximately every 10 minutes.</p>
+                            <p>If you wish to have your account and all associated data deleted, please contact us using the details below.</p>
+                        </div>
+                    </section>
+
+                    <!-- User Rights -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">⚖️</span> Your Rights
+                        </h3>
+                        <div class="privacy-card">
+                            <p>Depending on your jurisdiction, you may have rights including:</p>
+                            <ul>
+                                <li><strong>Access</strong> — view the personal data we hold about you (available through the Profile page)</li>
+                                <li><strong>Rectification</strong> — update your display name or change your password through the Profile settings</li>
+                                <li><strong>Deletion</strong> — request deletion of your account and all associated data by contacting us</li>
+                                <li><strong>Portability</strong> — request a copy of your data in a structured format</li>
+                                <li><strong>Withdrawal of consent</strong> — you can stop using the Service at any time; log out to remove locally stored data, and contact us to request account deletion</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Policy Updates -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">🔄</span> Policy Updates
+                        </h3>
+                        <div class="privacy-card">
+                            <p>We may update this Privacy Policy from time to time. Changes will be reflected on this page with an updated "Last updated" date. We encourage you to review this policy periodically.</p>
+                            <p>Continued use of the Service after any changes constitutes your acceptance of the updated policy.</p>
+                        </div>
+                    </section>
+
+                    <!-- Contact -->
+                    <section class="privacy-section">
+                        <h3 class="privacy-section-title">
+                            <span class="privacy-icon">📬</span> Contact Information
+                        </h3>
+                        <div class="privacy-card privacy-contact-card">
+                            <p>For privacy-related inquiries, data requests, or account deletion, please contact us:</p>
+                            <ul>
+                                <li><strong>Email:</strong> <span class="privacy-placeholder">[INSERT CONTACT EMAIL]</span></li>
+                                <li><strong>Website:</strong> <span class="privacy-placeholder">[INSERT WEBSITE URL]</span></li>
+                            </ul>
+                            <p class="privacy-placeholder-note">⚠️ The contact details above are placeholders. Please update them with actual contact information before publishing.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
         <!-- Nation Detail Modal -->
         <div id="nation-modal" class="modal">
             <div class="modal-overlay" onclick="closeModal()"></div>
@@ -655,7 +872,7 @@
         </div>
 
         <!-- About Section -->
-        <section id="footer" class="about-section">
+        <section id="about-section" class="about-section">
             <div class="about-container">
 
                 <!-- Mission -->
@@ -732,31 +949,47 @@
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Global Military Intelligence</h4>
-                    <p>The world's most comprehensive open-source defense analysis platform — tracking 33+ nations, 15+
-                        active conflicts, and real-time military news.</p>
+        <!-- Site Footer -->
+        <footer id="footer" class="site-footer">
+            <div class="footer-inner">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-col footer-brand-col">
+                        <div class="footer-brand">
+                            <img src="logo.png" alt="GMI Logo" class="footer-logo-img">
+                            <div class="footer-brand-text">
+                                <span class="footer-brand-title">GLOBAL MILITARY</span>
+                                <span class="footer-brand-subtitle">INTELLIGENCE</span>
+                            </div>
+                        </div>
+                        <p class="footer-description">Comprehensive defense analysis and military intelligence for 30+ nations worldwide. Open-source data for research and educational purposes.</p>
+                    </div>
+                    <!-- Navigation Column -->
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="#hero">Home</a></li>
+                            <li><a href="#map-section">Nations</a></li>
+                            <li><a href="#compare-section">Compare</a></li>
+                            <li><a href="#news-section">News</a></li>
+                            <li><a href="#conflicts-section">Conflicts</a></li>
+                            <li><a href="#history-section">History</a></li>
+                            <li><a href="#about-section">About</a></li>
+                        </ul>
+                    </div>
+                    <!-- Legal Column -->
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Legal</h4>
+                        <ul class="footer-links">
+                            <li><a href="#" onclick="openPrivacyPolicy(); return false;">Privacy Policy</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <a href="#hero">Home</a>
-                    <a href="#map-section">Nations</a>
-                    <a href="#compare-section">Compare</a>
-                    <a href="#news-section">News</a>
-                    <a href="#conflicts-section">Conflicts</a>
-                    <a href="#history-section">History</a>
+                <div class="footer-divider"></div>
+                <div class="footer-bottom">
+                    <p class="footer-copyright">&copy; <script>document.write(new Date().getFullYear())</script> Global Military Intelligence. All rights reserved.</p>
+                    <p class="footer-disclaimer">All data is derived from publicly available open-source intelligence (OSINT). This platform is for informational and educational purposes only.</p>
                 </div>
-                <div class="footer-section">
-                    <h4>Disclaimer & Intelligence Sources</h4>
-                    <p>All intelligence data and statistical indicators on this platform are compiled from open-source registries, public defense reports, and historical archives. No classified data or active military operational telemetry is stored or accessed.</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Global Military Intelligence. For educational purposes only. Not affiliated with any
-                    government.</p>
             </div>
         </footer>
     </div>
@@ -1271,7 +1504,7 @@
     <script src="data.js"></script>
     <script src="auth.js"></script>
     <script src="admin.js"></script>
-    <script src="app.js?v=1.2.0"></script>
+    <script src="app.js?v=1.2.1"></script>
 </body>
 
 </html>

@@ -109,7 +109,7 @@ function initNavigation() {
     });
 
     // Update active link on scroll
-    const sections = ['hero', 'map-section', 'compare-section', 'news-section', 'conflicts-section', 'history-section', 'footer'];
+    const sections = ['hero', 'map-section', 'compare-section', 'news-section', 'conflicts-section', 'history-section', 'about-section'];
 
     window.addEventListener('scroll', () => {
         const scrollPos = window.scrollY + 100;
@@ -6850,3 +6850,104 @@ function renderCommunityMarkdown(md) {
 
     return html;
 }
+
+// ============================================
+// PRIVACY POLICY OVERLAY CONTROLLER
+// ============================================
+function openPrivacyPolicy() {
+    const overlay = document.getElementById('privacy-policy-overlay');
+    if (!overlay) return;
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    overlay.scrollTop = 0;
+
+    // Sync URL hash without triggering double open
+    if (window.location.hash !== '#privacy') {
+        try {
+            history.pushState({ overlay: 'privacy' }, '', '#privacy');
+        } catch (e) {
+            window.location.hash = 'privacy';
+        }
+    }
+}
+
+function closePrivacyPolicy() {
+    const overlay = document.getElementById('privacy-policy-overlay');
+    if (!overlay) return;
+
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Clear hash if it is #privacy
+    if (window.location.hash === '#privacy') {
+        try {
+            history.pushState(null, '', window.location.pathname + window.location.search);
+        } catch (e) {
+            window.location.hash = '';
+        }
+    }
+}
+
+// Expose globally
+window.openPrivacyPolicy = openPrivacyPolicy;
+window.closePrivacyPolicy = closePrivacyPolicy;
+
+// Initialize Privacy Policy event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('privacy-policy-overlay');
+    if (!overlay) return;
+
+    // Close when clicking directly on the overlay backdrop
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closePrivacyPolicy();
+        }
+    });
+
+    // Handle Escape key to close overlay
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+            closePrivacyPolicy();
+        }
+    });
+
+    // Check if directly loaded with #privacy
+    if (window.location.hash === '#privacy') {
+        openPrivacyPolicy();
+    }
+});
+
+// Support browser Back/Forward buttons and hash navigation
+window.addEventListener('popstate', () => {
+    const overlay = document.getElementById('privacy-policy-overlay');
+    if (!overlay) return;
+
+    if (window.location.hash === '#privacy') {
+        if (!overlay.classList.contains('active')) {
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    } else {
+        if (overlay.classList.contains('active')) {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+});
+
+window.addEventListener('hashchange', () => {
+    const overlay = document.getElementById('privacy-policy-overlay');
+    if (!overlay) return;
+
+    if (window.location.hash === '#privacy') {
+        if (!overlay.classList.contains('active')) {
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    } else if (overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
