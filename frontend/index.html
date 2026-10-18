@@ -92,7 +92,10 @@
                     <button class="auth-user-btn" onclick="toggleUserDropdown()">
                         <div class="auth-avatar" id="auth-avatar">U</div>
                         <span class="auth-username" id="auth-username">User</span>
-                        <svg class="auth-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                        <svg class="auth-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
                     </button>
                     <div class="auth-dropdown" id="auth-dropdown">
                         <div class="auth-dropdown-header">
@@ -101,19 +104,36 @@
                         </div>
                         <div class="auth-dropdown-divider"></div>
                         <button class="auth-dropdown-item" onclick="showProfile()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
                             Profile
                         </button>
                         <button class="auth-dropdown-item" onclick="openWatchlistDashboard()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
                             My Watchlist
                         </button>
-                        <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin" onclick="openAdminPanel()" style="display:none;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin"
+                            onclick="openAdminPanel()" style="display:none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
                             Admin Panel
                         </button>
                         <button class="auth-dropdown-item auth-dropdown-logout" onclick="logoutUser()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
                             Logout
                         </button>
                     </div>
@@ -383,25 +403,26 @@
                             <button class="category-btn" data-category="tech">Military Tech</button>
                         </div>
                         <div class="news-controls-right">
-                        <div class="news-date-filter">
-                            <svg class="news-date-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
-                            <select id="news-date-select" onchange="filterNewsByDate()">
-                                <option value="all">All Dates</option>
-                            </select>
-                        </div>
-                        <button class="refresh-btn" onclick="refreshNews()">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M23 4v6h-6M1 20v-6h6" />
-                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                            </svg>
-                            <span>Refresh</span>
-                        </button>
+                            <div class="news-date-filter">
+                                <svg class="news-date-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                                <select id="news-date-select" onchange="filterNewsByDate()">
+                                    <option value="all">All Dates</option>
+                                </select>
+                            </div>
+                            <button class="refresh-btn" onclick="refreshNews()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M23 4v6h-6M1 20v-6h6" />
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                                </svg>
+                                <span>Refresh</span>
+                            </button>
                         </div>
                     </div>
                     <div class="news-status">
@@ -567,8 +588,14 @@
 
                     <div class="conquest-map-wrapper">
                         <div id="conquest-map" class="conquest-map"></div>
-                        <button class="conquest-legend-open-btn hidden" id="conquest-legend-open-btn" onclick="toggleConquestLegend(event)" title="Show Legend">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        <button class="conquest-legend-open-btn hidden" id="conquest-legend-open-btn"
+                            onclick="toggleConquestLegend(event)" title="Show Legend">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                                <polyline points="2 17 12 22 22 17" />
+                                <polyline points="2 12 12 17 22 12" />
+                            </svg>
                             Legend
                         </button>
                         <div class="conquest-legend" id="conquest-legend">
@@ -588,11 +615,17 @@
             <div class="privacy-page">
                 <div class="privacy-header">
                     <button class="privacy-back-btn" onclick="closePrivacyPolicy()" aria-label="Close Privacy Policy">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
                         <span>Back</span>
                     </button>
                     <div class="privacy-header-title">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
                         <h2>Privacy Policy</h2>
                     </div>
                     <span class="privacy-updated">Last updated: October 2026</span>
@@ -604,8 +637,11 @@
                         <h3 class="privacy-section-title">
                             <span class="privacy-icon">📋</span> Introduction
                         </h3>
-                        <p>Global Military Intelligence ("GMI", "we", "us", or "our") operates the Global Military Intelligence website (the "Service"). This Privacy Policy explains what information we collect, how we use it, and your rights regarding your data.</p>
-                        <p>By using our Service, you acknowledge the data practices described in this policy. If you do not agree, please discontinue use of the Service.</p>
+                        <p>Global Military Intelligence ("GMI", "we", "us", or "our") operates the Global Military
+                            Intelligence website (the "Service"). This Privacy Policy explains what information we
+                            collect, how we use it, and your rights regarding your data.</p>
+                        <p>By using our Service, you acknowledge the data practices described in this policy. If you do
+                            not agree, please discontinue use of the Service.</p>
                     </section>
 
                     <!-- Information We Collect -->
@@ -618,9 +654,11 @@
                             <h4>Account Registration Data</h4>
                             <p>When you create an account, we collect:</p>
                             <ul>
-                                <li><strong>Username</strong> — a unique identifier you choose (minimum 3 characters)</li>
+                                <li><strong>Username</strong> — a unique identifier you choose (minimum 3 characters)
+                                </li>
                                 <li><strong>Email address</strong> — used for account identification</li>
-                                <li><strong>Password</strong> — stored in hashed form using bcrypt (12 salt rounds); we never store or have access to your plaintext password</li>
+                                <li><strong>Password</strong> — stored in hashed form using bcrypt (12 salt rounds); we
+                                    never store or have access to your plaintext password</li>
                                 <li><strong>Display name</strong> — optional, defaults to your username</li>
                             </ul>
                         </div>
@@ -633,7 +671,9 @@
                                 <li><strong>Last profile update</strong> (updatedAt)</li>
                                 <li><strong>Last login date</strong> — updated each time you sign in</li>
                             </ul>
-                            <p>We do <strong>not</strong> collect IP addresses, browser fingerprints, geolocation data, or usage analytics. No third-party analytics or tracking scripts are embedded in the Service.</p>
+                            <p>We do <strong>not</strong> collect IP addresses, browser fingerprints, geolocation data,
+                                or usage analytics. No third-party analytics or tracking scripts are embedded in the
+                                Service.</p>
                         </div>
                     </section>
 
@@ -645,15 +685,21 @@
                         <div class="privacy-card">
                             <h4>How Authentication Works</h4>
                             <ul>
-                                <li>Authentication is handled via <strong>JSON Web Tokens (JWT)</strong> signed with a server-side secret</li>
-                                <li>Tokens are issued at login and registration, and expire after <strong>7 days</strong></li>
-                                <li>Tokens contain your user ID, username, and role ("user" or "admin") — no sensitive data such as your email or password is included in the token</li>
-                                <li>Passwords are hashed using <strong>bcryptjs</strong> with a work factor of 12 before storage — we cannot retrieve or view your original password</li>
+                                <li>Authentication is handled via <strong>JSON Web Tokens (JWT)</strong> signed with a
+                                    server-side secret</li>
+                                <li>Tokens are issued at login and registration, and expire after <strong>7
+                                        days</strong></li>
+                                <li>Tokens contain your user ID, username, and role ("user" or "admin") — no sensitive
+                                    data such as your email or password is included in the token</li>
+                                <li>Passwords are hashed using <strong>bcryptjs</strong> with a work factor of 12 before
+                                    storage — we cannot retrieve or view your original password</li>
                             </ul>
                         </div>
                         <div class="privacy-card">
                             <h4>Password Changes</h4>
-                            <p>You can change your password through the profile settings. The system verifies your current password before accepting any change. New passwords must be at least 6 characters and differ from the current password.</p>
+                            <p>You can change your password through the profile settings. The system verifies your
+                                current password before accepting any change. New passwords must be at least 6
+                                characters and differ from the current password.</p>
                         </div>
                     </section>
 
@@ -666,10 +712,13 @@
                             <p>This Service does <strong>not</strong> use browser cookies.</p>
                             <p>We use <strong>browser localStorage</strong> to store two items on your device:</p>
                             <ul>
-                                <li><code>gmi_token</code> — your JWT authentication token (used to keep you logged in)</li>
-                                <li><code>gmi_user</code> — a JSON object containing your user ID, username, email, role, and display name (used to render the UI without additional API calls)</li>
+                                <li><code>gmi_token</code> — your JWT authentication token (used to keep you logged in)
+                                </li>
+                                <li><code>gmi_user</code> — a JSON object containing your user ID, username, email,
+                                    role, and display name (used to render the UI without additional API calls)</li>
                             </ul>
-                            <p>Both items are removed from your browser when you log out. You can also manually clear them at any time via your browser's developer tools or settings.</p>
+                            <p>Both items are removed from your browser when you log out. You can also manually clear
+                                them at any time via your browser's developer tools or settings.</p>
                         </div>
                     </section>
 
@@ -679,14 +728,16 @@
                             <span class="privacy-icon">⭐</span> Watchlist Data
                         </h3>
                         <div class="privacy-card">
-                            <p>Authenticated users can follow nations or conflicts by adding them to a personal watchlist. Each watchlist entry stores:</p>
+                            <p>Authenticated users can follow nations or conflicts by adding them to a personal
+                                watchlist. Each watchlist entry stores:</p>
                             <ul>
                                 <li>Your user ID (linking the entry to your account)</li>
                                 <li>The target type ("nation" or "conflict")</li>
                                 <li>The target identifier (e.g. country key)</li>
                                 <li>Timestamp of when the item was added</li>
                             </ul>
-                            <p>Watchlist data is private to your account and is not shared with other users or third parties. You can remove any item from your watchlist at any time.</p>
+                            <p>Watchlist data is private to your account and is not shared with other users or third
+                                parties. You can remove any item from your watchlist at any time.</p>
                         </div>
                     </section>
 
@@ -700,11 +751,14 @@
                             <ul>
                                 <li>Your user ID (as the author)</li>
                                 <li>Report title (up to 200 characters) and text content</li>
-                                <li>Embedded data widgets (comparison charts, fleet distributions, force tables) with their configuration</li>
-                                <li>A public/private flag — you choose whether to share reports in the Community Hub</li>
+                                <li>Embedded data widgets (comparison charts, fleet distributions, force tables) with
+                                    their configuration</li>
+                                <li>A public/private flag — you choose whether to share reports in the Community Hub
+                                </li>
                                 <li>Creation and last-updated timestamps</li>
                             </ul>
-                            <p>Private reports are visible only to you and site administrators. Public reports are visible to all visitors and display your display name as the author.</p>
+                            <p>Private reports are visible only to you and site administrators. Public reports are
+                                visible to all visitors and display your display name as the author.</p>
                         </div>
                     </section>
 
@@ -716,12 +770,17 @@
                         <div class="privacy-card">
                             <p>We take reasonable measures to protect your data:</p>
                             <ul>
-                                <li>Passwords are hashed with bcrypt before storage — plaintext passwords are never persisted</li>
-                                <li>API endpoints that access personal data (profile, watchlist, reports) require a valid JWT</li>
-                                <li>Administrative endpoints are additionally restricted to accounts with the "admin" role</li>
-                                <li>The database is hosted on <strong>MongoDB Atlas</strong>, which provides encryption at rest and in transit</li>
+                                <li>Passwords are hashed with bcrypt before storage — plaintext passwords are never
+                                    persisted</li>
+                                <li>API endpoints that access personal data (profile, watchlist, reports) require a
+                                    valid JWT</li>
+                                <li>Administrative endpoints are additionally restricted to accounts with the "admin"
+                                    role</li>
+                                <li>The database is hosted on <strong>MongoDB Atlas</strong>, which provides encryption
+                                    at rest and in transit</li>
                             </ul>
-                            <p>While we strive to protect your data, no method of electronic storage or transmission is 100% secure. We cannot guarantee absolute security.</p>
+                            <p>While we strive to protect your data, no method of electronic storage or transmission is
+                                100% secure. We cannot guarantee absolute security.</p>
                         </div>
                     </section>
 
@@ -733,13 +792,21 @@
                         <div class="privacy-card">
                             <p>The Service integrates with the following third-party services:</p>
                             <ul>
-                                <li><strong>MongoDB Atlas</strong> — cloud database hosting for user accounts, watchlists, and reports</li>
-                                <li><strong>Google Fonts</strong> — serves the Inter and Rajdhani typefaces; Google may collect limited usage data per their <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a></li>
-                                <li><strong>Leaflet / OpenStreetMap</strong> — provides the interactive map; map tile requests are sent to OpenStreetMap tile servers</li>
+                                <li><strong>MongoDB Atlas</strong> — cloud database hosting for user accounts,
+                                    watchlists, and reports</li>
+                                <li><strong>Google Fonts</strong> — serves the Inter and Rajdhani typefaces; Google may
+                                    collect limited usage data per their <a href="https://policies.google.com/privacy"
+                                        target="_blank" rel="noopener noreferrer">privacy policy</a></li>
+                                <li><strong>Leaflet / OpenStreetMap</strong> — provides the interactive map; map tile
+                                    requests are sent to OpenStreetMap tile servers</li>
                                 <li><strong>CDNJS (Cloudflare)</strong> — serves the GSAP animation library</li>
-                                <li><strong>RSS News Feeds</strong> — the server fetches publicly available RSS feeds from defense news outlets (USNI News, Naval News, UK Defence Journal, LiveFist Defence, Indian Defence Research Wing) to display news articles; no user data is sent to these sources</li>
+                                <li><strong>RSS News Feeds</strong> — the server fetches publicly available RSS feeds
+                                    from defense news outlets (USNI News, Naval News, UK Defence Journal, LiveFist
+                                    Defence, Indian Defence Research Wing) to display news articles; no user data is
+                                    sent to these sources</li>
                             </ul>
-                            <p>We do <strong>not</strong> integrate any advertising networks, social media trackers, or third-party analytics services.</p>
+                            <p>We do <strong>not</strong> integrate any advertising networks, social media trackers, or
+                                third-party analytics services.</p>
                         </div>
                     </section>
 
@@ -749,8 +816,11 @@
                             <span class="privacy-icon">🗄️</span> Data Retention
                         </h3>
                         <div class="privacy-card">
-                            <p>Your account data, watchlist entries, and analyst reports are retained for as long as your account exists. Server-side news feed caches are temporary and are refreshed approximately every 10 minutes.</p>
-                            <p>If you wish to have your account and all associated data deleted, please contact us using the details below.</p>
+                            <p>Your account data, watchlist entries, and analyst reports are retained for as long as
+                                your account exists. Server-side news feed caches are temporary and are refreshed
+                                approximately every 10 minutes.</p>
+                            <p>If you wish to have your account and all associated data deleted, please contact us using
+                                the details below.</p>
                         </div>
                     </section>
 
@@ -762,11 +832,17 @@
                         <div class="privacy-card">
                             <p>Depending on your jurisdiction, you may have rights including:</p>
                             <ul>
-                                <li><strong>Access</strong> — view the personal data we hold about you (available through the Profile page)</li>
-                                <li><strong>Rectification</strong> — update your display name or change your password through the Profile settings</li>
-                                <li><strong>Deletion</strong> — request deletion of your account and all associated data by contacting us</li>
-                                <li><strong>Portability</strong> — request a copy of your data in a structured format</li>
-                                <li><strong>Withdrawal of consent</strong> — you can stop using the Service at any time; log out to remove locally stored data, and contact us to request account deletion</li>
+                                <li><strong>Access</strong> — view the personal data we hold about you (available
+                                    through the Profile page)</li>
+                                <li><strong>Rectification</strong> — update your display name or change your password
+                                    through the Profile settings</li>
+                                <li><strong>Deletion</strong> — request deletion of your account and all associated data
+                                    by contacting us</li>
+                                <li><strong>Portability</strong> — request a copy of your data in a structured format
+                                </li>
+                                <li><strong>Withdrawal of consent</strong> — you can stop using the Service at any time;
+                                    log out to remove locally stored data, and contact us to request account deletion
+                                </li>
                             </ul>
                         </div>
                     </section>
@@ -777,8 +853,11 @@
                             <span class="privacy-icon">🔄</span> Policy Updates
                         </h3>
                         <div class="privacy-card">
-                            <p>We may update this Privacy Policy from time to time. Changes will be reflected on this page with an updated "Last updated" date. We encourage you to review this policy periodically.</p>
-                            <p>Continued use of the Service after any changes constitutes your acceptance of the updated policy.</p>
+                            <p>We may update this Privacy Policy from time to time. Changes will be reflected on this
+                                page with an updated "Last updated" date. We encourage you to review this policy
+                                periodically.</p>
+                            <p>Continued use of the Service after any changes constitutes your acceptance of the updated
+                                policy.</p>
                         </div>
                     </section>
 
@@ -790,10 +869,13 @@
                         <div class="privacy-card privacy-contact-card">
                             <p>For privacy-related inquiries, data requests, or account deletion, please contact us:</p>
                             <ul>
-                                <li><strong>Email:</strong> <span class="privacy-placeholder">[INSERT CONTACT EMAIL]</span></li>
-                                <li><strong>Website:</strong> <span class="privacy-placeholder">[INSERT WEBSITE URL]</span></li>
+                                <li><strong>Email:</strong> <span
+                                        class="privacy-placeholder">vyomdhip1132003@gmail.com</span></li>
+                                <li><strong>Website:</strong> <span class="privacy-placeholder">[INSERT WEBSITE
+                                        URL]</span></li>
                             </ul>
-                            <p class="privacy-placeholder-note">⚠️ The contact details above are placeholders. Please update them with actual contact information before publishing.</p>
+                            <p class="privacy-placeholder-note">⚠️ The contact details above are placeholders. Please
+                                update them with actual contact information before publishing.</p>
                         </div>
                     </section>
                 </div>
@@ -962,7 +1044,8 @@
                                 <span class="footer-brand-subtitle">INTELLIGENCE</span>
                             </div>
                         </div>
-                        <p class="footer-description">Comprehensive defense analysis and military intelligence for 30+ nations worldwide. Open-source data for research and educational purposes.</p>
+                        <p class="footer-description">Comprehensive defense analysis and military intelligence for 30+
+                            nations worldwide. Open-source data for research and educational purposes.</p>
                     </div>
                     <!-- Navigation Column -->
                     <div class="footer-col">
@@ -987,8 +1070,12 @@
                 </div>
                 <div class="footer-divider"></div>
                 <div class="footer-bottom">
-                    <p class="footer-copyright">&copy; <script>document.write(new Date().getFullYear())</script> Global Military Intelligence. All rights reserved.</p>
-                    <p class="footer-disclaimer">All data is derived from publicly available open-source intelligence (OSINT). This platform is for informational and educational purposes only.</p>
+                    <p class="footer-copyright">&copy;
+                        <script>document.write(new Date().getFullYear())</script> Global Military Intelligence. All
+                        rights reserved.
+                    </p>
+                    <p class="footer-disclaimer">All data is derived from publicly available open-source intelligence
+                        (OSINT). This platform is for informational and educational purposes only.</p>
                 </div>
             </div>
         </footer>
@@ -999,7 +1086,9 @@
         <div class="auth-modal-overlay" onclick="closeLoginModal()"></div>
         <div class="auth-modal-content">
             <button class="auth-modal-close" onclick="closeLoginModal()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
             </button>
             <!-- Role Selection -->
             <div class="auth-role-select" id="auth-role-select">
@@ -1008,14 +1097,21 @@
                 <div class="auth-role-cards">
                     <button class="auth-role-card" onclick="showLoginForm('user')">
                         <div class="auth-role-icon">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
                         </div>
                         <h3>User Login</h3>
                         <p>Access your personal dashboard</p>
                     </button>
                     <button class="auth-role-card auth-role-admin" onclick="showLoginForm('admin')">
                         <div class="auth-role-icon">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
                         </div>
                         <h3>Admin Login</h3>
                         <p>Administrative access</p>
@@ -1025,7 +1121,9 @@
             <!-- Login Form -->
             <div class="auth-form-container" id="auth-login-form" style="display:none;">
                 <button class="auth-back-btn" onclick="showRoleSelect()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
                     Back
                 </button>
                 <h2 class="auth-modal-title" id="login-form-title">User Login</h2>
@@ -1035,15 +1133,25 @@
                     <div class="auth-input-group">
                         <label for="login-username">Username or Email</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" id="login-username" placeholder="Enter username or email" required autocomplete="username">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            <input type="text" id="login-username" placeholder="Enter username or email" required
+                                autocomplete="username">
                         </div>
                     </div>
                     <div class="auth-input-group">
                         <label for="login-password">Password</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <input type="password" id="login-password" placeholder="Enter password" required
+                                autocomplete="current-password">
                         </div>
                     </div>
                     <button type="submit" class="auth-submit-btn" id="login-submit-btn">
@@ -1051,7 +1159,8 @@
                         <div class="auth-btn-spinner" style="display:none;"></div>
                     </button>
                 </form>
-                <p class="auth-switch-text" id="login-switch-text">Don't have an account? <a href="#" onclick="closeLoginModal();openSignupModal();return false;">Sign Up</a></p>
+                <p class="auth-switch-text" id="login-switch-text">Don't have an account? <a href="#"
+                        onclick="closeLoginModal();openSignupModal();return false;">Sign Up</a></p>
             </div>
         </div>
     </div>
@@ -1061,7 +1170,9 @@
         <div class="auth-modal-overlay" onclick="closeSignupModal()"></div>
         <div class="auth-modal-content">
             <button class="auth-modal-close" onclick="closeSignupModal()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
             </button>
             <h2 class="auth-modal-title">Create Account</h2>
             <p class="auth-modal-subtitle">Join Global Military Intelligence</p>
@@ -1069,22 +1180,37 @@
                 <div class="auth-input-group">
                     <label for="signup-username">Username</label>
                     <div class="auth-input-wrap">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        <input type="text" id="signup-username" placeholder="Choose a username" required minlength="3" autocomplete="username">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <input type="text" id="signup-username" placeholder="Choose a username" required minlength="3"
+                            autocomplete="username">
                     </div>
                 </div>
                 <div class="auth-input-group">
                     <label for="signup-email">Email</label>
                     <div class="auth-input-wrap">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required autocomplete="email">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required
+                            autocomplete="email">
                     </div>
                 </div>
                 <div class="auth-input-group">
                     <label for="signup-password">Password</label>
                     <div class="auth-input-wrap">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="signup-password" placeholder="Min 6 characters" required
+                            minlength="6" autocomplete="new-password">
                     </div>
                 </div>
                 <button type="submit" class="auth-submit-btn" id="signup-submit-btn">
@@ -1092,7 +1218,8 @@
                     <div class="auth-btn-spinner" style="display:none;"></div>
                 </button>
             </form>
-            <p class="auth-switch-text">Already have an account? <a href="#" onclick="closeSignupModal();openLoginModal();return false;">Login</a></p>
+            <p class="auth-switch-text">Already have an account? <a href="#"
+                    onclick="closeSignupModal();openLoginModal();return false;">Login</a></p>
         </div>
     </div>
 
@@ -1101,14 +1228,17 @@
         <div class="auth-modal-overlay" onclick="closeProfileModal()"></div>
         <div class="auth-modal-content profile-modal-content">
             <button class="auth-modal-close" onclick="closeProfileModal()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
             </button>
 
             <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
                 <div class="profile-header-info">
-                    <h2 class="auth-modal-title" style="text-align:left;margin-bottom:2px;" id="profile-display-title">Username</h2>
+                    <h2 class="auth-modal-title" style="text-align:left;margin-bottom:2px;" id="profile-display-title">
+                        Username</h2>
                     <span class="profile-role-badge" id="profile-role-badge">User</span>
                 </div>
             </div>
@@ -1116,15 +1246,24 @@
             <!-- Profile Tabs -->
             <div class="profile-tabs">
                 <button class="profile-tab active" data-profile-tab="info" onclick="switchProfileTab('info')">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
                     Account Info
                 </button>
                 <button class="profile-tab" data-profile-tab="edit" onclick="switchProfileTab('edit')">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
                     Edit Profile
                 </button>
                 <button class="profile-tab" data-profile-tab="security" onclick="switchProfileTab('security')">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
                     Security
                 </button>
             </div>
@@ -1134,42 +1273,67 @@
                 <div class="profile-info-grid" id="profile-info-grid">
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
                             Username
                         </div>
                         <div class="profile-info-value" id="profile-info-username">—</div>
                     </div>
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
                             Email
                         </div>
                         <div class="profile-info-value" id="profile-info-email">—</div>
                     </div>
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
                             Joined
                         </div>
                         <div class="profile-info-value" id="profile-info-joined">—</div>
                     </div>
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
                             Last Login
                         </div>
                         <div class="profile-info-value" id="profile-info-lastlogin">—</div>
                     </div>
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
                             Role
                         </div>
                         <div class="profile-info-value" id="profile-info-role">—</div>
                     </div>
                     <div class="profile-info-item">
                         <div class="profile-info-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
                             Watchlist Items
                         </div>
                         <div class="profile-info-value" id="profile-info-watchlist">0</div>
@@ -1183,12 +1347,22 @@
                     <div class="auth-input-group">
                         <label for="profile-edit-displayname">Display Name</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <input type="text" id="profile-edit-displayname" placeholder="Enter your display name" autocomplete="name">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            <input type="text" id="profile-edit-displayname" placeholder="Enter your display name"
+                                autocomplete="name">
                         </div>
                     </div>
                     <div class="profile-form-note">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
                         Your username and email cannot be changed. Contact an admin for assistance.
                     </div>
                     <button type="submit" class="auth-submit-btn" id="profile-edit-btn">
@@ -1204,26 +1378,45 @@
                     <div class="auth-input-group">
                         <label for="profile-current-password">Current Password</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            <input type="password" id="profile-current-password" placeholder="Enter current password" required minlength="6" autocomplete="current-password">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <input type="password" id="profile-current-password" placeholder="Enter current password"
+                                required minlength="6" autocomplete="current-password">
                         </div>
                     </div>
                     <div class="auth-input-group">
                         <label for="profile-new-password">New Password</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            <input type="password" id="profile-new-password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <input type="password" id="profile-new-password" placeholder="Min 6 characters" required
+                                minlength="6" autocomplete="new-password">
                         </div>
                     </div>
                     <div class="auth-input-group">
                         <label for="profile-confirm-password">Confirm New Password</label>
                         <div class="auth-input-wrap">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            <input type="password" id="profile-confirm-password" placeholder="Re-enter new password" required minlength="6" autocomplete="new-password">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            <input type="password" id="profile-confirm-password" placeholder="Re-enter new password"
+                                required minlength="6" autocomplete="new-password">
                         </div>
                     </div>
                     <button type="submit" class="auth-submit-btn profile-password-btn" id="profile-password-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
                         <span>Update Password</span>
                         <div class="auth-btn-spinner" style="display:none;"></div>
                     </button>
@@ -1238,30 +1431,52 @@
         <div class="watchlist-dashboard-inner">
             <div class="watchlist-header">
                 <div class="watchlist-header-left">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
                     <h2>Analyst Workspace</h2>
                 </div>
                 <button class="watchlist-close-btn" onclick="closeWatchlistDashboard()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
             <!-- Tab Bar -->
             <div class="notebook-tabs" id="notebook-tabs">
                 <button class="notebook-tab active" data-tab="watchlist" onclick="switchDashboardTab('watchlist')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
                     Intel Watchlist
                 </button>
                 <button class="notebook-tab" data-tab="notebook" onclick="switchDashboardTab('notebook')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
                     Analyst Notebook
                 </button>
                 <button class="notebook-tab" data-tab="community" onclick="switchDashboardTab('community')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
                     Community Hub
                 </button>
-                <button class="notebook-tab admin-tab-btn" data-tab="admin" onclick="switchDashboardTab('admin')" id="admin-tab-btn" style="display:none;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <button class="notebook-tab admin-tab-btn" data-tab="admin" onclick="switchDashboardTab('admin')"
+                    id="admin-tab-btn" style="display:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
                     Admin Panel
                 </button>
             </div>
@@ -1279,7 +1494,11 @@
                     <!-- Left: Reports List -->
                     <div class="notebook-sidebar" id="notebook-sidebar">
                         <button class="notebook-new-btn" onclick="createNewReport()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
                             New Report
                         </button>
                         <div class="notebook-reports-list" id="notebook-reports-list">
@@ -1292,51 +1511,90 @@
                         <div class="notebook-empty-state" id="notebook-empty-state">
                             <div class="notebook-empty-icon">📝</div>
                             <h3>Defense Analyst Notebook</h3>
-                            <p>Create strategic analyses with live data widgets from the GMI database. Select a report or create a new one to begin.</p>
+                            <p>Create strategic analyses with live data widgets from the GMI database. Select a report
+                                or create a new one to begin.</p>
                         </div>
                         <div class="notebook-editor-area" id="notebook-editor-area" style="display:none;">
                             <!-- Title -->
-                            <input type="text" class="notebook-title-input" id="notebook-title" placeholder="Report Title..." maxlength="200">
+                            <input type="text" class="notebook-title-input" id="notebook-title"
+                                placeholder="Report Title..." maxlength="200">
                             <!-- Toolbar -->
                             <div class="notebook-toolbar">
                                 <div class="notebook-toolbar-group">
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('bold')" title="Bold"><b>B</b></button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('italic')" title="Italic"><i>I</i></button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('heading')" title="Heading"><b>H</b></button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('ul')" title="Bullet List">⋮≡</button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('ol')" title="Numbered List">1.</button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('code')" title="Code Block">&lt;/&gt;</button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('quote')" title="Blockquote">❝</button>
-                                    <button class="nb-tool-btn" onclick="nbInsertMd('hr')" title="Horizontal Rule">―</button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('bold')"
+                                        title="Bold"><b>B</b></button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('italic')"
+                                        title="Italic"><i>I</i></button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('heading')"
+                                        title="Heading"><b>H</b></button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('ul')"
+                                        title="Bullet List">⋮≡</button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('ol')"
+                                        title="Numbered List">1.</button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('code')"
+                                        title="Code Block">&lt;/&gt;</button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('quote')"
+                                        title="Blockquote">❝</button>
+                                    <button class="nb-tool-btn" onclick="nbInsertMd('hr')"
+                                        title="Horizontal Rule">―</button>
                                 </div>
                                 <div class="notebook-toolbar-group">
-                                    <button class="nb-tool-btn nb-widget-btn" onclick="openWidgetInsertModal()" title="Insert Data Widget">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                    <button class="nb-tool-btn nb-widget-btn" onclick="openWidgetInsertModal()"
+                                        title="Insert Data Widget">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="3" width="7" height="7" />
+                                            <rect x="14" y="3" width="7" height="7" />
+                                            <rect x="3" y="14" width="7" height="7" />
+                                            <rect x="14" y="14" width="7" height="7" />
+                                        </svg>
                                         Insert Widget
                                     </button>
                                 </div>
                                 <div class="notebook-toolbar-group notebook-toolbar-right">
                                     <label class="nb-public-toggle" title="Make this report visible to the community">
-                                        <input type="checkbox" id="notebook-public-toggle" onchange="toggleReportPublic()">
+                                        <input type="checkbox" id="notebook-public-toggle"
+                                            onchange="toggleReportPublic()">
                                         <span class="nb-public-label">Public</span>
                                     </label>
                                     <button class="nb-tool-btn nb-save-btn" onclick="saveReport()" title="Save Report">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                            <polyline points="17 21 17 13 7 13 7 21" />
+                                            <polyline points="7 3 7 8 15 8" />
+                                        </svg>
                                         Save
                                     </button>
-                                    <button class="nb-tool-btn nb-export-btn" onclick="exportReportPDF()" title="Export as PDF">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    <button class="nb-tool-btn nb-export-btn" onclick="exportReportPDF()"
+                                        title="Export as PDF">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="7 10 12 15 17 10" />
+                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                        </svg>
                                         PDF
                                     </button>
-                                    <button class="nb-tool-btn nb-delete-btn" onclick="deleteCurrentReport()" title="Delete Report">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                                    <button class="nb-tool-btn nb-delete-btn" onclick="deleteCurrentReport()"
+                                        title="Delete Report">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <polyline points="3 6 5 6 21 6" />
+                                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                            <path d="M10 11v6" />
+                                            <path d="M14 11v6" />
+                                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
                             <!-- Editor + Preview Split -->
                             <div class="notebook-split">
                                 <div class="notebook-edit-pane">
-                                    <textarea class="notebook-textarea" id="notebook-content" placeholder="Write your strategic analysis in Markdown...&#10;&#10;Use the toolbar to format text or insert data widgets from the GMI database." oninput="updateNotebookPreview()"></textarea>
+                                    <textarea class="notebook-textarea" id="notebook-content"
+                                        placeholder="Write your strategic analysis in Markdown...&#10;&#10;Use the toolbar to format text or insert data widgets from the GMI database."
+                                        oninput="updateNotebookPreview()"></textarea>
                                 </div>
                                 <div class="notebook-preview-pane" id="notebook-preview">
                                     <div class="notebook-preview-placeholder">Live preview will appear here...</div>
@@ -1352,8 +1610,13 @@
                 <!-- Community Controls -->
                 <div class="community-controls">
                     <div class="community-search-wrap">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="community-search" class="community-search-input" placeholder="Search public reports..." oninput="debounceCommunitySearch()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input type="text" id="community-search" class="community-search-input"
+                            placeholder="Search public reports..." oninput="debounceCommunitySearch()">
                     </div>
                     <div class="community-sort">
                         <select id="community-sort" class="community-sort-select" onchange="loadCommunityReports(1)">
@@ -1374,7 +1637,11 @@
                 <!-- Read-only Report Viewer (inline, replaces grid when active) -->
                 <div class="community-reader" id="community-reader" style="display:none;">
                     <button class="community-reader-back" onclick="closeCommunityReader()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
                         Back to Community Hub
                     </button>
                     <div class="community-reader-header">
@@ -1390,16 +1657,33 @@
                 <div class="admin-panel">
                     <!-- Admin Sub-tabs -->
                     <div class="admin-subtabs">
-                        <button class="admin-subtab active" data-subtab="overview" onclick="switchAdminSubTab('overview')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        <button class="admin-subtab active" data-subtab="overview"
+                            onclick="switchAdminSubTab('overview')">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                            </svg>
                             Overview
                         </button>
                         <button class="admin-subtab" data-subtab="users" onclick="switchAdminSubTab('users')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
                             Users
                         </button>
                         <button class="admin-subtab" data-subtab="reports" onclick="switchAdminSubTab('reports')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
                             Reports
                         </button>
                     </div>
@@ -1415,8 +1699,13 @@
                     <div class="admin-subtab-content" id="admin-sub-users">
                         <div class="admin-toolbar">
                             <div class="admin-search-wrap">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                <input type="text" id="admin-users-search" class="admin-search-input" placeholder="Search users..." oninput="adminSearchUsersDebounced()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                                <input type="text" id="admin-users-search" class="admin-search-input"
+                                    placeholder="Search users..." oninput="adminSearchUsersDebounced()">
                             </div>
                         </div>
                         <div id="admin-users-container">
@@ -1428,13 +1717,21 @@
                     <div class="admin-subtab-content" id="admin-sub-reports">
                         <div class="admin-toolbar">
                             <div class="admin-search-wrap">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                <input type="text" id="admin-reports-search" class="admin-search-input" placeholder="Search reports..." oninput="adminSearchReportsDebounced()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                                <input type="text" id="admin-reports-search" class="admin-search-input"
+                                    placeholder="Search reports..." oninput="adminSearchReportsDebounced()">
                             </div>
                             <div class="admin-filter-group">
-                                <button class="admin-filter-btn active" data-filter="all" onclick="adminFilterReports('all')">All</button>
-                                <button class="admin-filter-btn" data-filter="public" onclick="adminFilterReports('public')">Public</button>
-                                <button class="admin-filter-btn" data-filter="private" onclick="adminFilterReports('private')">Private</button>
+                                <button class="admin-filter-btn active" data-filter="all"
+                                    onclick="adminFilterReports('all')">All</button>
+                                <button class="admin-filter-btn" data-filter="public"
+                                    onclick="adminFilterReports('public')">Public</button>
+                                <button class="admin-filter-btn" data-filter="private"
+                                    onclick="adminFilterReports('private')">Private</button>
                             </div>
                         </div>
                         <div id="admin-reports-container">
@@ -1451,12 +1748,14 @@
                         <h3>Insert Data Widget</h3>
                         <button class="widget-modal-close" onclick="closeWidgetInsertModal()">&times;</button>
                     </div>
-                    <div class="widget-modal-body" style="display: flex; flex-direction: column; gap: 16px; padding: 16px 22px 22px;">
+                    <div class="widget-modal-body"
+                        style="display: flex; flex-direction: column; gap: 16px; padding: 16px 22px 22px;">
                         <div class="widget-type-card" onclick="selectWidgetType('comparison')">
                             <div class="widget-type-icon">📊</div>
                             <div class="widget-type-info">
                                 <div class="widget-type-name">Nation Comparison Chart</div>
-                                <div class="widget-type-desc">Compare military stats between two nations side-by-side</div>
+                                <div class="widget-type-desc">Compare military stats between two nations side-by-side
+                                </div>
                             </div>
                         </div>
                         <div class="widget-type-card" onclick="selectWidgetType('pie-fleet')">
@@ -1470,7 +1769,8 @@
                             <div class="widget-type-icon">📋</div>
                             <div class="widget-type-info">
                                 <div class="widget-type-name">Force Summary Table</div>
-                                <div class="widget-type-desc">Side-by-side comparison table of ranks, budgets & personnel</div>
+                                <div class="widget-type-desc">Side-by-side comparison table of ranks, budgets &
+                                    personnel</div>
                             </div>
                         </div>
                     </div>
