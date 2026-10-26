@@ -6920,34 +6920,132 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Support browser Back/Forward buttons and hash navigation
 window.addEventListener('popstate', () => {
-    const overlay = document.getElementById('privacy-policy-overlay');
-    if (!overlay) return;
+    const privacyOverlay = document.getElementById('privacy-policy-overlay');
+    const termsOverlay = document.getElementById('terms-conditions-overlay');
 
-    if (window.location.hash === '#privacy') {
-        if (!overlay.classList.contains('active')) {
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+    if (privacyOverlay) {
+        if (window.location.hash === '#privacy') {
+            if (!privacyOverlay.classList.contains('active')) {
+                privacyOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else {
+            if (privacyOverlay.classList.contains('active')) {
+                privacyOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         }
-    } else {
-        if (overlay.classList.contains('active')) {
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
+    }
+
+    if (termsOverlay) {
+        if (window.location.hash === '#terms') {
+            if (!termsOverlay.classList.contains('active')) {
+                termsOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else {
+            if (termsOverlay.classList.contains('active')) {
+                termsOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         }
     }
 });
 
 window.addEventListener('hashchange', () => {
-    const overlay = document.getElementById('privacy-policy-overlay');
-    if (!overlay) return;
+    const privacyOverlay = document.getElementById('privacy-policy-overlay');
+    const termsOverlay = document.getElementById('terms-conditions-overlay');
 
-    if (window.location.hash === '#privacy') {
-        if (!overlay.classList.contains('active')) {
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+    if (privacyOverlay) {
+        if (window.location.hash === '#privacy') {
+            if (!privacyOverlay.classList.contains('active')) {
+                privacyOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else if (privacyOverlay.classList.contains('active')) {
+            privacyOverlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
-    } else if (overlay.classList.contains('active')) {
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+    }
+
+    if (termsOverlay) {
+        if (window.location.hash === '#terms') {
+            if (!termsOverlay.classList.contains('active')) {
+                termsOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else if (termsOverlay.classList.contains('active')) {
+            termsOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 });
+
+// ============================================
+// TERMS & CONDITIONS OVERLAY CONTROLLER
+// ============================================
+function openTermsConditions() {
+    const overlay = document.getElementById('terms-conditions-overlay');
+    if (!overlay) return;
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    overlay.scrollTop = 0;
+
+    // Sync URL hash without triggering double open
+    if (window.location.hash !== '#terms') {
+        try {
+            history.pushState({ overlay: 'terms' }, '', '#terms');
+        } catch (e) {
+            window.location.hash = 'terms';
+        }
+    }
+}
+
+function closeTermsConditions() {
+    const overlay = document.getElementById('terms-conditions-overlay');
+    if (!overlay) return;
+
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Clear hash if it is #terms
+    if (window.location.hash === '#terms') {
+        try {
+            history.pushState(null, '', window.location.pathname + window.location.search);
+        } catch (e) {
+            window.location.hash = '';
+        }
+    }
+}
+
+// Expose globally
+window.openTermsConditions = openTermsConditions;
+window.closeTermsConditions = closeTermsConditions;
+
+// Initialize Terms & Conditions event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('terms-conditions-overlay');
+    if (!overlay) return;
+
+    // Close when clicking directly on the overlay backdrop
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeTermsConditions();
+        }
+    });
+
+    // Handle Escape key to close overlay
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+            closeTermsConditions();
+        }
+    });
+
+    // Check if directly loaded with #terms
+    if (window.location.hash === '#terms') {
+        openTermsConditions();
+    }
+});
+
 
