@@ -3702,7 +3702,7 @@ const conflictsData = [
         casualties: "Hundreds killed in cross-border strikes",
         intensity: "high",
         description: "Pakistan launched military operations and airstrikes inside Afghan territory targeting TTP militants sheltered by the Taliban. Cross-border tensions escalated sharply in 2024-2026 with Pakistan conducting Operation Azm-e-Istehkam and retaliatory strikes after deadly TTP attacks.",
-        image: "Conflicts_section/Porkistan_afghanistan_news.png",
+        image: "Conflicts_section/Pakistan_afghanistan_news.png",
         coords: [33.0, 69.5],
         news: [
             { title: "Pakistan conducts fresh airstrikes on TTP camps inside Afghanistan", date: "Feb 2026", source: "Dawn" },
