@@ -77,7 +77,8 @@ function showLoginForm(role) {
 }
 
 // User Dropdown
-function toggleUserDropdown() {
+function toggleUserDropdown(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
     const menu = document.getElementById('auth-user-menu');
     if (menu) menu.classList.toggle('open');
 }
@@ -195,6 +196,9 @@ function updateAuthUI(user) {
     const dropdownRole = document.getElementById('auth-dropdown-role');
     const adminDropdownBtn = document.getElementById('auth-dropdown-admin');
     const adminTabBtn = document.getElementById('admin-tab-btn');
+    const profileAdminShortcut = document.getElementById('profile-admin-shortcut-btn');
+    const profileTabAdmin = document.getElementById('profile-tab-admin-btn');
+    const profileAdminBanner = document.getElementById('profile-admin-banner');
 
     if (user) {
         if (guestBtns) guestBtns.style.display = 'none';
@@ -203,22 +207,31 @@ function updateAuthUI(user) {
         if (avatar) avatar.textContent = initial;
         if (usernameEl) usernameEl.textContent = user.displayName || user.username;
         if (dropdownName) dropdownName.textContent = user.displayName || user.username;
+
+        const roleStr = (user.role || 'user').toString().trim().toLowerCase();
+        const isAdmin = roleStr === 'admin';
+
         if (dropdownRole) {
-            dropdownRole.textContent = user.role === 'admin' ? 'Admin' : 'User';
-            dropdownRole.style.background = user.role === 'admin' ? 'rgba(212, 175, 55, 0.15)' : 'rgba(59, 130, 246, 0.15)';
-            dropdownRole.style.borderColor = user.role === 'admin' ? 'rgba(212, 175, 55, 0.3)' : 'rgba(59, 130, 246, 0.3)';
-            dropdownRole.style.color = user.role === 'admin' ? '#d4af37' : '#3b82f6';
+            dropdownRole.textContent = isAdmin ? 'Admin' : 'User';
+            dropdownRole.style.background = isAdmin ? 'rgba(212, 175, 55, 0.15)' : 'rgba(59, 130, 246, 0.15)';
+            dropdownRole.style.borderColor = isAdmin ? 'rgba(212, 175, 55, 0.3)' : 'rgba(59, 130, 246, 0.3)';
+            dropdownRole.style.color = isAdmin ? '#d4af37' : '#3b82f6';
         }
 
         // Show/hide admin-only elements
-        const isAdmin = user.role === 'admin';
-        if (adminDropdownBtn) adminDropdownBtn.style.display = isAdmin ? '' : 'none';
-        if (adminTabBtn) adminTabBtn.style.display = isAdmin ? '' : 'none';
+        if (adminDropdownBtn) adminDropdownBtn.style.display = isAdmin ? 'flex' : 'none';
+        if (adminTabBtn) adminTabBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+        if (profileAdminShortcut) profileAdminShortcut.style.display = isAdmin ? 'inline-flex' : 'none';
+        if (profileTabAdmin) profileTabAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
+        if (profileAdminBanner) profileAdminBanner.style.display = isAdmin ? 'flex' : 'none';
     } else {
         if (guestBtns) guestBtns.style.display = '';
         if (userMenu) userMenu.style.display = 'none';
         if (adminDropdownBtn) adminDropdownBtn.style.display = 'none';
         if (adminTabBtn) adminTabBtn.style.display = 'none';
+        if (profileAdminShortcut) profileAdminShortcut.style.display = 'none';
+        if (profileTabAdmin) profileTabAdmin.style.display = 'none';
+        if (profileAdminBanner) profileAdminBanner.style.display = 'none';
     }
 }
 
@@ -232,9 +245,13 @@ function showProfile() {
     if (menu) menu.classList.remove('open');
 
     const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
-    if (user && user.role === 'admin') {
+    const roleStr = (user && user.role) ? String(user.role).trim().toLowerCase() : '';
+    if (roleStr === 'admin') {
         if (typeof openAdminPanel === 'function') {
-            openAdminPanel('security');
+            openAdminPanel('overview');
+            return;
+        } else if (typeof window.openAdminPanel === 'function') {
+            window.openAdminPanel('overview');
             return;
         }
     }
@@ -362,6 +379,16 @@ function populateProfileUI(data) {
     // Pre-fill the edit form
     const displayNameInput = document.getElementById('profile-edit-displayname');
     if (displayNameInput) displayNameInput.value = data.displayName || '';
+
+    // Show/hide Admin shortcuts inside the profile modal
+    const roleStr = (data.role || 'user').toString().trim().toLowerCase();
+    const isAdmin = roleStr === 'admin';
+    const profileAdminShortcut = document.getElementById('profile-admin-shortcut-btn');
+    const profileTabAdmin = document.getElementById('profile-tab-admin-btn');
+    const profileAdminBanner = document.getElementById('profile-admin-banner');
+    if (profileAdminShortcut) profileAdminShortcut.style.display = isAdmin ? 'inline-flex' : 'none';
+    if (profileTabAdmin) profileTabAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
+    if (profileAdminBanner) profileAdminBanner.style.display = isAdmin ? 'flex' : 'none';
 }
 
 async function handleProfileUpdate(event) {

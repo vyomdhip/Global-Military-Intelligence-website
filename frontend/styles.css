@@ -5657,6 +5657,74 @@ body {
     letter-spacing: 0.06em;
 }
 
+.profile-admin-shortcut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: auto;
+    padding: 6px 14px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: var(--radius-full);
+    color: #d4af37;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+    white-space: nowrap;
+}
+
+.profile-admin-shortcut-btn:hover {
+    background: rgba(212, 175, 55, 0.28);
+    border-color: #d4af37;
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
+}
+
+.profile-tab-admin {
+    color: #d4af37 !important;
+    border: 1px solid rgba(212, 175, 55, 0.35) !important;
+}
+
+.profile-tab-admin:hover {
+    background: rgba(212, 175, 55, 0.14) !important;
+    border-color: #d4af37 !important;
+}
+
+.profile-admin-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.profile-admin-banner-info {
+    min-width: 0;
+}
+
+.profile-admin-banner-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.profile-admin-banner-desc {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}
+
 /* Profile Tabs */
 .profile-tabs {
     display: flex;

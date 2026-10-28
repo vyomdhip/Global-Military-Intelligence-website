@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.0.0">
+    <link rel="stylesheet" href="styles.css?v=2.0.2">
 </head>
 
 <body>
@@ -89,7 +89,7 @@
                 </div>
                 <!-- User Menu (logged in) -->
                 <div class="auth-user-menu" id="auth-user-menu" style="display:none;">
-                    <button class="auth-user-btn" onclick="toggleUserDropdown()">
+                    <button class="auth-user-btn" onclick="toggleUserDropdown(event)" id="auth-user-btn" aria-label="User Account Menu">
                         <div class="auth-avatar" id="auth-avatar">U</div>
                         <span class="auth-username" id="auth-username">User</span>
                         <svg class="auth-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -120,12 +120,12 @@
                             My Watchlist
                         </button>
                         <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin"
-                            onclick="openAdminPanel()" style="display:none;">
+                            onclick="openAdminPanel('overview')" style="display:none;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
-                            Admin Panel
+                            Admin Command Center
                         </button>
                         <button class="auth-dropdown-item auth-dropdown-logout" onclick="logoutUser()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1570,6 +1570,12 @@
                         Username</h2>
                     <span class="profile-role-badge" id="profile-role-badge">User</span>
                 </div>
+                <button class="profile-admin-shortcut-btn" id="profile-admin-shortcut-btn" onclick="closeProfileModal(); openAdminPanel('overview');" style="display:none;" title="Launch GMI Enterprise Command Center">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Admin Console
+                </button>
             </div>
 
             <!-- Profile Tabs -->
@@ -1595,10 +1601,25 @@
                     </svg>
                     Security
                 </button>
+                <button class="profile-tab profile-tab-admin" id="profile-tab-admin-btn" onclick="closeProfileModal(); openAdminPanel('overview');" style="display:none;" title="Open Production Admin Panel">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Admin Panel
+                </button>
             </div>
 
             <!-- Tab: Account Info -->
             <div class="profile-tab-content active" id="profile-tab-info">
+                <div class="profile-admin-banner" id="profile-admin-banner" style="display:none;">
+                    <div class="profile-admin-banner-info">
+                        <div class="profile-admin-banner-title">🛡️ Administrator Clearance Active</div>
+                        <div class="profile-admin-banner-desc">Full administrator privileges enabled. Launch Mission Control to manage users, moderate intelligence reports, and review MongoDB Atlas telemetry.</div>
+                    </div>
+                    <button class="gmi-btn-gold" onclick="closeProfileModal(); openAdminPanel('overview');" style="white-space:nowrap;padding:9px 18px;font-size:0.86rem;">
+                        Launch Command Center →
+                    </button>
+                </div>
                 <div class="profile-info-grid" id="profile-info-grid">
                     <div class="profile-info-item">
                         <div class="profile-info-label">
@@ -2043,6 +2064,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
     <!-- ============================================ -->
     <!-- GMI PRODUCTION ADMIN COMMAND CENTER -->
@@ -2292,8 +2315,8 @@
 
     <!-- Main JavaScript -->
     <script src="data.js"></script>
-    <script src="auth.js"></script>
-    <script src="admin.js?v=2.0.0"></script>
+    <script src="auth.js?v=2.0.2"></script>
+    <script src="admin.js?v=2.0.2"></script>
     <script src="app.js?v=1.2.1"></script>
 </body>
 

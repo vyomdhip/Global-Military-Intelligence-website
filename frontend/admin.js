@@ -33,7 +33,8 @@ let adminReportsSearchTimer = null;
 function checkAdminAccess() {
     const token = localStorage.getItem('gmi_token');
     const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
-    return Boolean(token && user && user.role === 'admin');
+    const roleStr = (user && user.role) ? String(user.role).trim().toLowerCase() : '';
+    return Boolean(token && roleStr === 'admin');
 }
 
 function adminHeaders() {
