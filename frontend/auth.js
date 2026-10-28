@@ -231,6 +231,14 @@ function showProfile() {
     const menu = document.getElementById('auth-user-menu');
     if (menu) menu.classList.remove('open');
 
+    const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
+    if (user && user.role === 'admin') {
+        if (typeof openAdminPanel === 'function') {
+            openAdminPanel('security');
+            return;
+        }
+    }
+
     openProfileModal();
 }
 

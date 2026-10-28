@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=1.2.0">
+    <link rel="stylesheet" href="styles.css?v=2.0.0">
 </head>
 
 <body>
@@ -1983,89 +1983,19 @@
 
             <!-- Admin Panel Tab Content -->
             <div class="dashboard-tab-content" id="tab-admin">
-                <div class="admin-panel">
-                    <!-- Admin Sub-tabs -->
-                    <div class="admin-subtabs">
-                        <button class="admin-subtab active" data-subtab="overview"
-                            onclick="switchAdminSubTab('overview')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7" />
-                                <rect x="14" y="3" width="7" height="7" />
-                                <rect x="14" y="14" width="7" height="7" />
-                                <rect x="3" y="14" width="7" height="7" />
-                            </svg>
-                            Overview
+                <div class="admin-panel" style="padding: 24px; text-align: center;">
+                    <div style="max-width: 540px; margin: 40px auto; background: rgba(15, 26, 46, 0.7); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 14px; padding: 36px 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.4); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #d4af37; font-size: 1.5rem;">
+                            🛡️
+                        </div>
+                        <h3 style="font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; color: #ffffff; margin-bottom: 8px;">GMI Command Center</h3>
+                        <p style="font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 22px;">
+                            Access the production administrative command console for real-time mission telemetry, registered analyst user management, intelligence briefing moderation, and MongoDB Atlas infrastructure diagnostics.
+                        </p>
+                        <button class="gmi-btn-gold" onclick="openAdminPanel('overview')" style="padding: 12px 26px; font-size: 0.92rem; margin: 0 auto;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            Launch Enterprise Command Center
                         </button>
-                        <button class="admin-subtab" data-subtab="users" onclick="switchAdminSubTab('users')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                            Users
-                        </button>
-                        <button class="admin-subtab" data-subtab="reports" onclick="switchAdminSubTab('reports')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                            </svg>
-                            Reports
-                        </button>
-                    </div>
-
-                    <!-- Overview Sub-tab -->
-                    <div class="admin-subtab-content active" id="admin-sub-overview">
-                        <div class="admin-stats-grid" id="admin-stats-grid">
-                            <!-- Populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Users Sub-tab -->
-                    <div class="admin-subtab-content" id="admin-sub-users">
-                        <div class="admin-toolbar">
-                            <div class="admin-search-wrap">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <circle cx="11" cy="11" r="8" />
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                                </svg>
-                                <input type="text" id="admin-users-search" class="admin-search-input"
-                                    placeholder="Search users..." oninput="adminSearchUsersDebounced()">
-                            </div>
-                        </div>
-                        <div id="admin-users-container">
-                            <!-- Populated by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Reports Sub-tab -->
-                    <div class="admin-subtab-content" id="admin-sub-reports">
-                        <div class="admin-toolbar">
-                            <div class="admin-search-wrap">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <circle cx="11" cy="11" r="8" />
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                                </svg>
-                                <input type="text" id="admin-reports-search" class="admin-search-input"
-                                    placeholder="Search reports..." oninput="adminSearchReportsDebounced()">
-                            </div>
-                            <div class="admin-filter-group">
-                                <button class="admin-filter-btn active" data-filter="all"
-                                    onclick="adminFilterReports('all')">All</button>
-                                <button class="admin-filter-btn" data-filter="public"
-                                    onclick="adminFilterReports('public')">Public</button>
-                                <button class="admin-filter-btn" data-filter="private"
-                                    onclick="adminFilterReports('private')">Private</button>
-                            </div>
-                        </div>
-                        <div id="admin-reports-container">
-                            <!-- Populated by JavaScript -->
-                        </div>
                     </div>
                 </div>
             </div>
@@ -2114,6 +2044,237 @@
                 </div>
             </div>
 
+    <!-- ============================================ -->
+    <!-- GMI PRODUCTION ADMIN COMMAND CENTER -->
+    <!-- ============================================ -->
+    <div id="gmi-admin-panel" class="gmi-admin-panel" style="display: none;" role="dialog" aria-modal="true" aria-label="GMI Admin Command Center">
+        <!-- Overlay backdrop -->
+        <div class="gmi-admin-backdrop" onclick="closeAdminPanel()"></div>
+
+        <!-- Main Admin Shell -->
+        <div class="gmi-admin-shell">
+            <!-- Responsive Sidebar -->
+            <aside class="gmi-admin-sidebar" id="gmi-admin-sidebar">
+                <div class="gmi-admin-brand">
+                    <div class="gmi-brand-logo-wrap">
+                        <img src="logo.png" alt="GMI Emblem" class="gmi-brand-logo" onerror="this.style.display='none'">
+                        <div class="gmi-brand-shield">🛡️</div>
+                    </div>
+                    <div class="gmi-brand-meta">
+                        <span class="gmi-brand-title">GMI COMMAND</span>
+                        <span class="gmi-brand-sub">DEFENSE INTELLIGENCE ADMIN</span>
+                    </div>
+                    <button class="gmi-sidebar-close-btn" onclick="toggleAdminSidebar(false)" aria-label="Close sidebar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- MongoDB Atlas Live Status Pill -->
+                <div class="gmi-admin-pulse-pill" id="gmi-sidebar-pulse">
+                    <span class="gmi-pulse-dot"></span>
+                    <span class="gmi-pulse-text" id="gmi-sidebar-status-text">ATLAS CONNECTED</span>
+                    <span class="gmi-pulse-ping" id="gmi-sidebar-ping">--ms</span>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="gmi-admin-nav" id="gmi-admin-nav">
+                    <button class="gmi-nav-item active" data-tab="overview" onclick="switchAdminTab('overview')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">Mission Control</span>
+                        <span class="gmi-nav-pill" id="nav-pill-status">LIVE</span>
+                    </button>
+
+                    <button class="gmi-nav-item" data-tab="users" onclick="switchAdminTab('users')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">User Management</span>
+                        <span class="gmi-nav-pill gmi-pill-count" id="nav-pill-users">0</span>
+                    </button>
+
+                    <button class="gmi-nav-item" data-tab="reports" onclick="switchAdminTab('reports')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">Reports Moderation</span>
+                        <span class="gmi-nav-pill gmi-pill-count" id="nav-pill-reports">0</span>
+                    </button>
+
+                    <button class="gmi-nav-item" data-tab="health" onclick="switchAdminTab('health')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">System & Health</span>
+                        <span class="gmi-nav-pill gmi-pill-green" id="nav-pill-health">HEALTHY</span>
+                    </button>
+
+                    <button class="gmi-nav-item" data-tab="activity" onclick="switchAdminTab('activity')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">Recent Activity</span>
+                        <span class="gmi-nav-pill" id="nav-pill-activity">AUDIT</span>
+                    </button>
+
+                    <button class="gmi-nav-item" data-tab="security" onclick="switchAdminTab('security')">
+                        <span class="gmi-nav-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </span>
+                        <span class="gmi-nav-label">Admin Security</span>
+                    </button>
+                </nav>
+
+                <!-- Sidebar Footer: Admin Profile & Controls -->
+                <div class="gmi-admin-sidebar-footer">
+                    <div class="gmi-sidebar-user" onclick="switchAdminTab('security')" title="View Admin Profile Settings">
+                        <div class="gmi-sidebar-avatar" id="gmi-admin-avatar">A</div>
+                        <div class="gmi-sidebar-user-meta">
+                            <span class="gmi-sidebar-user-name" id="gmi-admin-name">Administrator</span>
+                            <span class="gmi-sidebar-user-role">SYS-ADMIN</span>
+                        </div>
+                    </div>
+                    <div class="gmi-sidebar-actions">
+                        <button class="gmi-sidebar-btn" onclick="closeAdminPanel()" title="Exit to Platform">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 6L6 18M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <button class="gmi-sidebar-btn gmi-sidebar-logout" onclick="closeAdminPanel(); logoutUser();" title="Logout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Workspace Canvas -->
+            <main class="gmi-admin-content">
+                <!-- Top Navigation Bar -->
+                <header class="gmi-admin-topbar">
+                    <div class="gmi-topbar-left">
+                        <button class="gmi-menu-toggle-btn" onclick="toggleAdminSidebar()" aria-label="Toggle Navigation">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                            </svg>
+                        </button>
+                        <div class="gmi-breadcrumbs">
+                            <span class="gmi-crumb-root">GMI Command</span>
+                            <span class="gmi-crumb-separator">/</span>
+                            <span class="gmi-crumb-current" id="gmi-current-crumb">Mission Control</span>
+                        </div>
+                    </div>
+
+                    <div class="gmi-topbar-right">
+                        <!-- Military Zulu Clock -->
+                        <div class="gmi-zulu-clock" id="gmi-zulu-clock" title="Universal Coordinated Time (UTC)">
+                            <span class="gmi-clock-dot"></span>
+                            <span class="gmi-clock-time">00:00:00 UTC</span>
+                        </div>
+
+                        <!-- Manual Refresh / Sync Button -->
+                        <button class="gmi-topbar-btn" id="gmi-btn-refresh-all" onclick="refreshAdminData()" title="Sync Live Database Telemetry">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                            <span>Sync</span>
+                        </button>
+
+                        <!-- Exit Command Center -->
+                        <button class="gmi-topbar-btn gmi-btn-exit" onclick="closeAdminPanel()" title="Exit to Platform (Esc)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            <span>Exit</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Scrollable View Body -->
+                <div class="gmi-admin-view-body" id="gmi-admin-view-body">
+                    <!-- Dynamic tab views rendered by JavaScript -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="gmi-confirm-modal" class="gmi-confirm-modal" style="display: none;" role="dialog" aria-modal="true">
+        <div class="gmi-confirm-backdrop" onclick="closeConfirmModal(false)"></div>
+        <div class="gmi-confirm-dialog">
+            <div class="gmi-confirm-icon-wrap" id="gmi-confirm-icon-wrap">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </div>
+            <h3 class="gmi-confirm-title" id="gmi-confirm-title">Confirm Action</h3>
+            <p class="gmi-confirm-message" id="gmi-confirm-message">Are you sure you want to proceed?</p>
+            <div class="gmi-confirm-warning" id="gmi-confirm-warning" style="display:none;"></div>
+            <div class="gmi-confirm-actions">
+                <button class="gmi-confirm-cancel-btn" onclick="closeConfirmModal(false)">Cancel</button>
+                <button class="gmi-confirm-action-btn" id="gmi-confirm-action-btn" onclick="closeConfirmModal(true)">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dossier Modal -->
+    <div id="gmi-user-dossier-modal" class="gmi-modal-container" style="display: none;" role="dialog" aria-modal="true">
+        <div class="gmi-modal-backdrop" onclick="closeUserDossierModal()"></div>
+        <div class="gmi-modal-box gmi-dossier-box">
+            <div class="gmi-modal-header">
+                <div class="gmi-modal-title-group">
+                    <div class="gmi-modal-badge">ANALYST DOSSIER</div>
+                    <h3 class="gmi-modal-title" id="dossier-name">Analyst Profile</h3>
+                </div>
+                <button class="gmi-modal-close" onclick="closeUserDossierModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="gmi-modal-body" id="dossier-body">
+                <!-- Rendered dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Preview Reader Modal -->
+    <div id="gmi-report-preview-modal" class="gmi-modal-container" style="display: none;" role="dialog" aria-modal="true">
+        <div class="gmi-modal-backdrop" onclick="closeReportPreviewModal()"></div>
+        <div class="gmi-modal-box gmi-report-preview-box">
+            <div class="gmi-modal-header">
+                <div class="gmi-modal-title-group">
+                    <div class="gmi-modal-badge" id="report-preview-badge">INTEL REPORT</div>
+                    <h3 class="gmi-modal-title" id="report-preview-title">Report Title</h3>
+                </div>
+                <div class="gmi-modal-header-actions">
+                    <button class="gmi-pill-btn" id="report-preview-toggle-btn" onclick="previewToggleVisibility()">Toggle Visibility</button>
+                    <button class="gmi-modal-close" onclick="closeReportPreviewModal()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="gmi-modal-body" id="report-preview-body">
+                <!-- Rendered markdown & widgets -->
+            </div>
         </div>
     </div>
 
@@ -2132,7 +2293,7 @@
     <!-- Main JavaScript -->
     <script src="data.js"></script>
     <script src="auth.js"></script>
-    <script src="admin.js"></script>
+    <script src="admin.js?v=2.0.0"></script>
     <script src="app.js?v=1.2.1"></script>
 </body>
 
