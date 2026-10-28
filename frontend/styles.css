@@ -9050,21 +9050,25 @@ body {
 }
 
 .gmi-brand-logo-wrap {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(15, 23, 42, 0.9));
-    border: 1px solid rgba(212, 175, 55, 0.35);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 17, 30, 0.95);
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.22);
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .gmi-brand-logo {
-    max-width: 24px;
-    max-height: 24px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
 }
 
 .gmi-brand-meta {

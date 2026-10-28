@@ -1415,7 +1415,7 @@ async function loadSystemHealth() {
                     <div class="gmi-memory-meter-box">
                         <div class="gmi-meter-header">
                             <span>System Physical RAM</span>
-                            <span>${usedSysMemMB || (sysTotalMB - sysFreeMB)} MB / ${sysTotalMB} MB (${sysPct}%)</span>
+                            <span>${sysUsedMB} MB / ${sysTotalMB} MB (${sysPct}%)</span>
                         </div>
                         <div class="gmi-meter-track">
                             <div class="gmi-meter-fill ${sysPct > 85 ? 'warn' : ''}" style="width: ${Math.min(100, sysPct)}%;"></div>
