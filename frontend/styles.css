@@ -9037,7 +9037,11 @@ body {
     padding: 22px 16px;
     backdrop-filter: blur(16px);
     z-index: 20;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: margin-left 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gmi-admin-sidebar.collapsed {
+    margin-left: -290px;
 }
 
 .gmi-admin-brand {
@@ -9095,17 +9099,28 @@ body {
 }
 
 .gmi-sidebar-close-btn {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     right: 4px;
     top: 50%;
     transform: translateY(-50%);
-    background: transparent;
-    border: none;
+    width: 28px;
+    height: 28px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.15);
     color: #94a3b8;
     cursor: pointer;
-    padding: 6px;
     border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gmi-sidebar-close-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.45);
+    color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
 /* Atlas Pulse Chip */
@@ -9337,13 +9352,30 @@ body {
 }
 
 .gmi-menu-toggle-btn {
-    display: none;
-    background: transparent;
-    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.16);
     color: #cbd5e1;
     cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gmi-menu-toggle-btn:hover {
+    background: rgba(212, 175, 55, 0.14);
+    border-color: rgba(212, 175, 55, 0.45);
+    color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.gmi-menu-toggle-btn.is-collapsed {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #d4af37;
+    color: #d4af37;
 }
 
 .gmi-breadcrumbs {
@@ -11280,6 +11312,7 @@ body {
         top: 0;
         bottom: 0;
         left: 0;
+        margin-left: 0 !important;
         transform: translateX(-100%);
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
     }

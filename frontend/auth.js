@@ -196,6 +196,7 @@ function updateAuthUI(user) {
     const dropdownRole = document.getElementById('auth-dropdown-role');
     const adminDropdownBtn = document.getElementById('auth-dropdown-admin');
     const adminTabBtn = document.getElementById('admin-tab-btn');
+    const authAdminDivider = document.getElementById('auth-admin-divider');
     const profileAdminShortcut = document.getElementById('profile-admin-shortcut-btn');
     const profileTabAdmin = document.getElementById('profile-tab-admin-btn');
     const profileAdminBanner = document.getElementById('profile-admin-banner');
@@ -219,6 +220,7 @@ function updateAuthUI(user) {
         }
 
         // Show/hide admin-only elements
+        if (authAdminDivider) authAdminDivider.style.display = isAdmin ? 'block' : 'none';
         if (adminDropdownBtn) adminDropdownBtn.style.display = isAdmin ? 'flex' : 'none';
         if (adminTabBtn) adminTabBtn.style.display = isAdmin ? 'inline-flex' : 'none';
         if (profileAdminShortcut) profileAdminShortcut.style.display = isAdmin ? 'inline-flex' : 'none';
@@ -227,6 +229,7 @@ function updateAuthUI(user) {
     } else {
         if (guestBtns) guestBtns.style.display = '';
         if (userMenu) userMenu.style.display = 'none';
+        if (authAdminDivider) authAdminDivider.style.display = 'none';
         if (adminDropdownBtn) adminDropdownBtn.style.display = 'none';
         if (adminTabBtn) adminTabBtn.style.display = 'none';
         if (profileAdminShortcut) profileAdminShortcut.style.display = 'none';
@@ -244,18 +247,7 @@ function showProfile() {
     const menu = document.getElementById('auth-user-menu');
     if (menu) menu.classList.remove('open');
 
-    const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
-    const roleStr = (user && user.role) ? String(user.role).trim().toLowerCase() : '';
-    if (roleStr === 'admin') {
-        if (typeof openAdminPanel === 'function') {
-            openAdminPanel('overview');
-            return;
-        } else if (typeof window.openAdminPanel === 'function') {
-            window.openAdminPanel('overview');
-            return;
-        }
-    }
-
+    // Open personal profile card
     openProfileModal();
 }
 

@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.0.3">
+    <link rel="stylesheet" href="styles.css?v=2.0.5">
 </head>
 
 <body>
@@ -119,6 +119,7 @@
                             </svg>
                             My Watchlist
                         </button>
+                        <div class="auth-dropdown-divider auth-admin-divider" id="auth-admin-divider" style="display:none;"></div>
                         <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin"
                             onclick="openAdminPanel('overview')" style="display:none;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2086,9 +2087,9 @@
                         <span class="gmi-brand-title">GMI COMMAND</span>
                         <span class="gmi-brand-sub">DEFENSE INTELLIGENCE ADMIN</span>
                     </div>
-                    <button class="gmi-sidebar-close-btn" onclick="toggleAdminSidebar(false)" aria-label="Close sidebar">
+                    <button class="gmi-sidebar-close-btn" onclick="toggleAdminSidebar(false)" aria-label="Collapse sidebar" title="Collapse sidebar (Slide Left)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            <path d="M15 18l-6-6 6-6"/>
                         </svg>
                     </button>
                 </div>
@@ -2191,9 +2192,11 @@
                 <!-- Top Navigation Bar -->
                 <header class="gmi-admin-topbar">
                     <div class="gmi-topbar-left">
-                        <button class="gmi-menu-toggle-btn" onclick="toggleAdminSidebar()" aria-label="Toggle Navigation">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                        <button class="gmi-menu-toggle-btn" onclick="toggleAdminSidebar()" aria-label="Toggle Navigation" title="Toggle Sidebar Navigation (Slide Left / Right)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="9" y1="3" x2="9" y2="21"/>
+                                <path d="M14 9l-3 3 3 3"/>
                             </svg>
                         </button>
                         <div class="gmi-breadcrumbs">
@@ -2314,9 +2317,9 @@
 
     <!-- Main JavaScript -->
     <script src="data.js"></script>
-    <script src="auth.js?v=2.0.4"></script>
-    <script src="admin.js?v=2.0.4"></script>
-    <script src="app.js?v=1.2.1"></script>
+    <script src="auth.js?v=2.0.5"></script>
+    <script src="admin.js?v=2.0.5"></script>
+    <script src="app.js?v=1.2.2"></script>
 </body>
 
 </html>

@@ -135,6 +135,18 @@ function openAdminPanel(targetTab = 'overview') {
 
     // Switch to target tab
     switchAdminTab(targetTab);
+
+    // Reset sidebar state on open
+    const sidebar = document.getElementById('gmi-admin-sidebar');
+    const toggleBtn = document.querySelector('.gmi-menu-toggle-btn');
+    if (sidebar) {
+        sidebar.classList.remove('open');
+        sidebar.classList.remove('collapsed');
+        if (toggleBtn) {
+            toggleBtn.classList.remove('is-collapsed');
+            toggleBtn.title = "Collapse Sidebar (Slide Left)";
+        }
+    }
 }
 
 function closeAdminPanel() {
@@ -154,15 +166,36 @@ function closeAdminPanel() {
     closeReportPreviewModal();
 }
 
-// Mobile Sidebar Drawer Toggle
+// Mobile & Desktop Sidebar Slide / Collapse Toggle
 function toggleAdminSidebar(forceState) {
     const sidebar = document.getElementById('gmi-admin-sidebar');
+    const toggleBtn = document.querySelector('.gmi-menu-toggle-btn');
     if (!sidebar) return;
-    if (typeof forceState === 'boolean') {
-        sidebar.classList.toggle('open', forceState);
+
+    const isMobile = window.innerWidth <= 991;
+    if (isMobile) {
+        if (typeof forceState === 'boolean') {
+            sidebar.classList.toggle('open', forceState);
+        } else {
+            sidebar.classList.toggle('open');
+        }
     } else {
-        sidebar.classList.toggle('open');
+        let isCollapsed;
+        if (typeof forceState === 'boolean') {
+            isCollapsed = !forceState;
+            sidebar.classList.toggle('collapsed', isCollapsed);
+        } else {
+            isCollapsed = sidebar.classList.toggle('collapsed');
+        }
+        if (toggleBtn) {
+            toggleBtn.classList.toggle('is-collapsed', isCollapsed);
+            toggleBtn.title = isCollapsed ? 'Expand Sidebar (Slide Right)' : 'Collapse Sidebar (Slide Left)';
+        }
     }
+}
+
+function closeAdminSidebar() {
+    toggleAdminSidebar(false);
 }
 
 // Military / Zulu Clock
