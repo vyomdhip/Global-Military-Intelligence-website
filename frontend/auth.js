@@ -239,58 +239,204 @@ function updateAuthUI(user) {
 }
 
 // ============================================
-// PROFILE MODAL SYSTEM
+// PROFILE MODAL & DEFENSE ANALYST COMMAND DASHBOARD SYSTEM
 // ============================================
 
-function showProfile() {
-    // Close the dropdown menu
-    const menu = document.getElementById('auth-user-menu');
-    if (menu) menu.classList.remove('open');
+let dashZuluTimer = null;
+let currentDashWatchlistFilter = 'all';
+let userBriefingsCache = [];
+let audioCtxInstance = null;
 
-    // Open personal profile card
-    openProfileModal();
+// Tactical Web Audio Synthesizer (Zero dependencies, pure Web Audio API)
+function playTacticalSound(type = 'chirp') {
+    try {
+        const soundEnabled = localStorage.getItem('gmi_pref_sound') !== 'false';
+        if (!soundEnabled) return;
+
+        if (!audioCtxInstance) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) audioCtxInstance = new AudioContext();
+        }
+        if (!audioCtxInstance) return;
+        if (audioCtxInstance.state === 'suspended') {
+            audioCtxInstance.resume();
+        }
+
+        const now = audioCtxInstance.currentTime;
+        const osc = audioCtxInstance.createOscillator();
+        const gain = audioCtxInstance.createGain();
+
+        osc.connect(gain);
+        gain.connect(audioCtxInstance.destination);
+
+        if (type === 'tab' || type === 'click') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(1400, now + 0.04);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.start(now);
+            osc.stop(now + 0.05);
+        } else if (type === 'open') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.start(now);
+            osc.stop(now + 0.12);
+        } else if (type === 'success') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, now); // D5
+            osc.frequency.setValueAtTime(880, now + 0.06); // A5
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+            osc.start(now);
+            osc.stop(now + 0.18);
+        } else if (type === 'chirp') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, now);
+            osc.frequency.exponentialRampToValueAtTime(1800, now + 0.06);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+            osc.start(now);
+            osc.stop(now + 0.07);
+        }
+    } catch (e) {
+        // Audio errors fail silently
+    }
 }
 
-function openProfileModal() {
+// Show Profile / Analyst Dashboard
+function showProfile(targetTab = 'overview') {
+    const menu = document.getElementById('auth-user-menu');
+    if (menu) menu.classList.remove('open');
+    openProfileModal(targetTab);
+}
+
+// Open Command Dashboard Modal
+function openProfileModal(targetTab = 'overview') {
     const modal = document.getElementById('auth-profile-modal');
     if (!modal) return;
 
-    // Reset to info tab
-    switchProfileTab('info');
+    // Map legacy alias tabs if passed
+    if (targetTab === 'info') targetTab = 'overview';
+    if (targetTab === 'edit') targetTab = 'dossier';
 
-    // Show the modal
+    // Activate Dashboard Window
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    // Fetch fresh profile data from the API
+    // Switch to target tab
+    switchProfileTab(targetTab);
+
+    // Initialize Preferences & Tactical Theme
+    initPreferencesUI();
+
+    // Start Live Zulu Clock
+    startDashZuluClock();
+
+    // Play subtle tactical audio chime
+    playTacticalSound('open');
+
+    // Fetch fresh profile data and render workspace
     fetchProfileData();
+
+    // Render components
+    renderUserOverviewTelemetry();
+    renderUserWatchlistTab();
+    renderUserBriefingsTab();
 }
 
+// Close Command Dashboard Modal
 function closeProfileModal() {
     const modal = document.getElementById('auth-profile-modal');
     if (!modal) return;
     modal.classList.remove('active');
     document.body.style.overflow = '';
 
-    // Clear password form on close
+    // Stop Zulu Clock Timer
+    if (dashZuluTimer) {
+        clearInterval(dashZuluTimer);
+        dashZuluTimer = null;
+    }
+
+    // Reset password form
     const pwForm = document.getElementById('profile-password-form');
     if (pwForm) pwForm.reset();
+    const meterFill = document.getElementById('dash-pw-bar-fill');
+    if (meterFill) meterFill.style.width = '0%';
+    const meterLabel = document.getElementById('dash-pw-strength-label');
+    if (meterLabel) meterLabel.textContent = 'Password strength: None';
 }
 
+// Global Keyboard Shortcut: Esc to close modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('auth-profile-modal');
+        if (modal && modal.classList.contains('active')) {
+            closeProfileModal();
+        }
+    }
+});
+
+// Live Military Zulu Clock
+function startDashZuluClock() {
+    if (dashZuluTimer) clearInterval(dashZuluTimer);
+    const updateTime = () => {
+        const clockEl = document.getElementById('dash-zulu-clock-text');
+        if (!clockEl) return;
+        const now = new Date();
+        const hrs = String(now.getUTCHours()).padStart(2, '0');
+        const mins = String(now.getUTCMinutes()).padStart(2, '0');
+        const secs = String(now.getUTCSeconds()).padStart(2, '0');
+        clockEl.textContent = `${hrs}:${mins}:${secs} UTC`;
+    };
+    updateTime();
+    dashZuluTimer = setInterval(updateTime, 1000);
+}
+
+// Switch Dashboard Navigation Tabs
 function switchProfileTab(tabName) {
-    // Update tab buttons
+    // Alias mappings
+    if (tabName === 'info') tabName = 'overview';
+    if (tabName === 'edit') tabName = 'dossier';
+
+    // Update Tab Buttons
     document.querySelectorAll('.profile-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.profileTab === tabName);
+        const btnTab = btn.dataset.profileTab;
+        const isMatch = (btnTab === tabName) || 
+                        (tabName === 'overview' && btnTab === 'info') ||
+                        (tabName === 'dossier' && btnTab === 'edit');
+        btn.classList.toggle('active', isMatch);
     });
 
-    // Update tab content
+    // Update Content Panes
     document.querySelectorAll('.profile-tab-content').forEach(content => {
         content.classList.remove('active');
     });
-    const target = document.getElementById(`profile-tab-${tabName}`);
+
+    let target = document.getElementById(`profile-tab-${tabName}`);
+    if (!target) {
+        if (tabName === 'overview') target = document.getElementById('profile-tab-info');
+        if (tabName === 'dossier') target = document.getElementById('profile-tab-edit');
+    }
     if (target) target.classList.add('active');
+
+    // Trigger specific tab refreshes
+    if (tabName === 'overview') {
+        renderUserOverviewTelemetry();
+    } else if (tabName === 'watchlist') {
+        renderUserWatchlistTab();
+    } else if (tabName === 'briefings') {
+        renderUserBriefingsTab();
+    }
+
+    // Play subtle tap sound
+    playTacticalSound('tab');
 }
 
+// Fetch Profile Data from API
 async function fetchProfileData() {
     const token = localStorage.getItem('gmi_token');
     const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
@@ -302,7 +448,6 @@ async function fetchProfileData() {
         });
 
         if (!res.ok) {
-            // Fallback to locally stored data if API fails
             populateProfileUI(user);
             return;
         }
@@ -311,25 +456,78 @@ async function fetchProfileData() {
         populateProfileUI(data);
     } catch (err) {
         console.error('Failed to fetch profile:', err);
-        // Fallback to local storage data
         populateProfileUI(user);
     }
 }
 
+// Populate Dashboard UI Elements
 function populateProfileUI(data) {
-    // Avatar initial
+    if (!data) return;
+
+    // Avatar
     const avatarEl = document.getElementById('profile-avatar-lg');
-    const initial = (data.displayName || data.username || 'U').charAt(0);
+    const cardAvatar = document.getElementById('dossier-card-avatar');
+    const initial = (data.displayName || data.username || 'U').charAt(0).toUpperCase();
     if (avatarEl) avatarEl.textContent = initial;
+    if (cardAvatar) cardAvatar.textContent = initial;
 
-    // Header
+    // Title / Callsign / Username
     const titleEl = document.getElementById('profile-display-title');
-    if (titleEl) titleEl.textContent = data.displayName || data.username || 'User';
+    const cardName = document.getElementById('dossier-card-name');
+    const dispName = data.displayName || data.username || 'Analyst';
+    if (titleEl) titleEl.textContent = dispName;
+    if (cardName) cardName.textContent = dispName.toUpperCase();
 
+    // Callsign
+    const callsignVal = data.callsign || (data.username ? `[${data.username.toUpperCase()}-ACTUAL]` : '[TACTICAL-1]');
+    const callsignBadge = document.getElementById('profile-callsign-badge');
+    const cardCallsign = document.getElementById('dossier-card-callsign');
+    const editCallsign = document.getElementById('profile-edit-callsign');
+    if (callsignBadge) callsignBadge.textContent = callsignVal;
+    if (cardCallsign) cardCallsign.textContent = `CALLSIGN: ${callsignVal.replace(/[\[\]]/g, '')}`;
+    if (editCallsign && !editCallsign.value) editCallsign.value = data.callsign || '';
+
+    // Role & Clearance
+    const roleStr = (data.role || 'user').toString().trim().toLowerCase();
+    const isAdmin = roleStr === 'admin';
     const badgeEl = document.getElementById('profile-role-badge');
-    if (badgeEl) badgeEl.textContent = data.role || 'User';
+    const clearanceLabel = document.getElementById('profile-clearance-label');
+    if (badgeEl) {
+        badgeEl.textContent = isAdmin ? 'SYS-ADMIN' : 'ANALYST';
+        badgeEl.style.color = isAdmin ? '#d4af37' : '#38bdf8';
+        badgeEl.style.borderColor = isAdmin ? 'rgba(212, 175, 55, 0.4)' : 'rgba(56, 189, 248, 0.35)';
+        badgeEl.style.background = isAdmin ? 'rgba(212, 175, 55, 0.15)' : 'rgba(56, 189, 248, 0.12)';
+    }
+    if (clearanceLabel) {
+        clearanceLabel.textContent = isAdmin ? 'TOP SECRET // COALITION COMMANDER' : 'SECRET // TIER-1 FIELD ANALYST';
+    }
 
-    // Info Tab
+    // Analyst UID
+    const uid = data.id || data._id || 'ANL-8942';
+    const shortUid = 'ANL-GMI-' + String(uid).slice(-4).toUpperCase();
+    const uidEl = document.getElementById('profile-analyst-uid');
+    const cardHash = document.getElementById('dossier-card-hash');
+    if (uidEl) uidEl.textContent = shortUid;
+    if (cardHash) cardHash.textContent = `SEC-HASH: ${shortUid}-${String(uid).slice(0, 4).toUpperCase()}`;
+
+    // Specialty & Regional Focus
+    const specialtyVal = data.specialty || 'Strategic Defense Intelligence';
+    const regionVal = data.regionalFocus || 'Global Theater';
+    const specChip = document.getElementById('profile-specialty-chip');
+    const regChip = document.getElementById('profile-region-chip');
+    const cardSpec = document.getElementById('dossier-card-specialty');
+    const editSpec = document.getElementById('profile-edit-specialty');
+    const editRegion = document.getElementById('profile-edit-region');
+    const editBio = document.getElementById('profile-edit-bio');
+
+    if (specChip) specChip.textContent = specialtyVal;
+    if (regChip) regChip.textContent = regionVal;
+    if (cardSpec) cardSpec.textContent = specialtyVal;
+    if (editSpec) editSpec.value = specialtyVal;
+    if (editRegion) editRegion.value = regionVal;
+    if (editBio && data.bio !== undefined) editBio.value = data.bio || '';
+
+    // Standard Info Items
     const setInfo = (id, value) => {
         const el = document.getElementById(id);
         if (el) el.textContent = value || '—';
@@ -337,9 +535,9 @@ function populateProfileUI(data) {
 
     setInfo('profile-info-username', data.username);
     setInfo('profile-info-email', data.email);
-    setInfo('profile-info-role', (data.role || 'user').charAt(0).toUpperCase() + (data.role || 'user').slice(1));
+    setInfo('profile-info-role', isAdmin ? 'System Administrator' : 'Defense Analyst');
 
-    // Format dates nicely
+    // Dates
     if (data.createdAt) {
         const joined = new Date(data.createdAt);
         setInfo('profile-info-joined', joined.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
@@ -362,27 +560,573 @@ function populateProfileUI(data) {
         setInfo('profile-info-lastlogin', lastLoginText);
     }
 
-    // Watchlist count (from in-memory state if available)
-    const watchlistCount = (typeof window.watchlistItems !== 'undefined' && Array.isArray(window.watchlistItems))
-        ? window.watchlistItems.length
-        : (typeof watchlistCache !== 'undefined' && Array.isArray(watchlistCache) ? watchlistCache.length : 0);
-    setInfo('profile-info-watchlist', watchlistCount.toString());
-
-    // Pre-fill the edit form
+    // Pre-fill Edit Display Name
     const displayNameInput = document.getElementById('profile-edit-displayname');
     if (displayNameInput) displayNameInput.value = data.displayName || '';
 
-    // Show/hide Admin shortcuts inside the profile modal
-    const roleStr = (data.role || 'user').toString().trim().toLowerCase();
-    const isAdmin = roleStr === 'admin';
+    // Admin Shortcuts & Banners
     const profileAdminShortcut = document.getElementById('profile-admin-shortcut-btn');
     const profileTabAdmin = document.getElementById('profile-tab-admin-btn');
     const profileAdminBanner = document.getElementById('profile-admin-banner');
     if (profileAdminShortcut) profileAdminShortcut.style.display = isAdmin ? 'inline-flex' : 'none';
     if (profileTabAdmin) profileTabAdmin.style.display = isAdmin ? 'inline-flex' : 'none';
     if (profileAdminBanner) profileAdminBanner.style.display = isAdmin ? 'flex' : 'none';
+
+    // Render Overview Telemetry
+    renderUserOverviewTelemetry();
 }
 
+// Render Mission Overview Telemetry
+function renderUserOverviewTelemetry() {
+    const list = (typeof watchlistCache !== 'undefined' && Array.isArray(watchlistCache)) ? watchlistCache : [];
+    const nations = list.filter(item => item.targetType === 'nation');
+    const conflicts = list.filter(item => item.targetType === 'conflict');
+
+    // Update Metric Badges
+    const nEl = document.getElementById('dash-metric-nations');
+    const cEl = document.getElementById('dash-metric-conflicts');
+    const rEl = document.getElementById('dash-metric-reports');
+    const totalWlEl = document.getElementById('profile-info-watchlist');
+    const badgeWl = document.getElementById('dash-badge-watchlist');
+    const tabWl = document.getElementById('dash-tab-watchlist-count');
+
+    if (nEl) nEl.textContent = nations.length;
+    if (cEl) cEl.textContent = conflicts.length;
+    if (totalWlEl) totalWlEl.textContent = list.length;
+    if (badgeWl) badgeWl.textContent = list.length;
+    if (tabWl) tabWl.textContent = list.length;
+
+    // DEFCON Threat Level Calculation
+    const defconEl = document.getElementById('dash-metric-defcon');
+    const defconSub = document.getElementById('dash-metric-defcon-sub');
+    if (defconEl && defconSub) {
+        if (conflicts.length >= 2) {
+            defconEl.textContent = 'DEFCON 2';
+            defconEl.style.color = '#ef4444';
+            defconSub.textContent = 'HOSTILITIES ACTIVE // RED ALERT';
+        } else if (conflicts.length === 1) {
+            defconEl.textContent = 'DEFCON 3';
+            defconEl.style.color = '#f59e0b';
+            defconSub.textContent = 'ELEVATED READINESS POSTURE';
+        } else {
+            defconEl.textContent = 'DEFCON 4';
+            defconEl.style.color = '#38bdf8';
+            defconSub.textContent = 'STRATEGIC SURVEILLANCE';
+        }
+    }
+
+    // Populate Radar List
+    const radarContainer = document.getElementById('dash-overview-radar-list');
+    if (radarContainer) {
+        if (nations.length === 0 && conflicts.length === 0) {
+            radarContainer.innerHTML = `
+                <div class="gmi-dash-radar-empty">
+                    <div class="gmi-radar-empty-icon">📡</div>
+                    <div class="gmi-radar-empty-title">Radar Offline: No Targets Locked</div>
+                    <div class="gmi-radar-empty-desc">Quick-deploy superpowers to your tactical radar to monitor their real-time force projection:</div>
+                    <div class="gmi-quick-deploy-strip">
+                        <button class="gmi-deploy-btn" onclick="quickAddSuperpower('USA')">+ 🇺🇸 USA</button>
+                        <button class="gmi-deploy-btn" onclick="quickAddSuperpower('Russia')">+ 🇷🇺 Russia</button>
+                        <button class="gmi-deploy-btn" onclick="quickAddSuperpower('China')">+ 🇨🇳 China</button>
+                        <button class="gmi-deploy-btn" onclick="quickAddSuperpower('India')">+ 🇮🇳 India</button>
+                        <button class="gmi-deploy-btn" onclick="quickAddSuperpower('UK')">+ 🇬🇧 UK</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            let html = '';
+            // Display top 4 nations followed
+            nations.slice(0, 4).forEach(item => {
+                const nData = (typeof nationsData !== 'undefined') ? nationsData[item.targetId] : null;
+                const flag = nData ? nData.flag : '🌐';
+                const name = nData ? nData.name : item.targetId;
+                const rank = nData ? `Rank #${nData.rank}` : 'Target';
+                const budget = nData ? nData.budget : '—';
+                const troops = nData && nData.personnel ? (nData.personnel.active ? nData.personnel.active.toLocaleString() : '—') : '—';
+
+                html += `
+                    <div class="gmi-dash-radar-card">
+                        <div class="gmi-radar-meta">
+                            <span class="gmi-radar-flag">${flag}</span>
+                            <div class="gmi-radar-details">
+                                <div class="gmi-radar-name-row">
+                                    <span class="gmi-radar-name">${name}</span>
+                                    <span class="gmi-radar-rank-pill">${rank}</span>
+                                </div>
+                                <div class="gmi-radar-submeta">
+                                    <span>Budget: ${budget}</span>
+                                    <span>•</span>
+                                    <span>Active: ${troops}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gmi-radar-actions">
+                            <button class="gmi-radar-inspect-btn" onclick="closeProfileModal(); if(typeof openNationModal==='function') openNationModal('${item.targetId}');">Inspect →</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Display conflicts followed
+            conflicts.slice(0, 2).forEach(item => {
+                html += `
+                    <div class="gmi-dash-radar-card" style="border-left: 3px solid #ef4444;">
+                        <div class="gmi-radar-meta">
+                            <span class="gmi-radar-flag">⚔️</span>
+                            <div class="gmi-radar-details">
+                                <div class="gmi-radar-name-row">
+                                    <span class="gmi-radar-name">${item.targetId}</span>
+                                    <span class="gmi-radar-rank-pill" style="color:#ef4444;background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);">COMBAT ZONE</span>
+                                </div>
+                                <div class="gmi-radar-submeta">
+                                    <span>High-Intensity Conflict Theater</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gmi-radar-actions">
+                            <button class="gmi-radar-inspect-btn" onclick="closeProfileModal(); showPage('conflicts');">Theater →</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            radarContainer.innerHTML = html;
+        }
+    }
+
+    // Populate Personalized Intel Preview
+    const intelContainer = document.getElementById('dash-overview-intel-list');
+    if (intelContainer) {
+        if (typeof newsData !== 'undefined' && Array.isArray(newsData) && newsData.length > 0) {
+            let stories = [];
+            // Match against followed nations
+            nations.forEach(n => {
+                const kw = String(n.targetId).toLowerCase();
+                const matched = newsData.filter(art => (art.title || '').toLowerCase().includes(kw));
+                stories = stories.concat(matched);
+            });
+            if (stories.length === 0) {
+                stories = newsData.slice(0, 3);
+            } else {
+                stories = stories.slice(0, 3);
+            }
+
+            let intelHtml = '';
+            stories.forEach(art => {
+                intelHtml += `
+                    <div class="gmi-dash-intel-item" onclick="closeProfileModal(); showPage('news');">
+                        <div class="gmi-intel-item-top">
+                            <span class="gmi-intel-item-tag">${art.category || 'DEFENSE INTEL'}</span>
+                            <span class="gmi-intel-item-time">${art.date || 'Recent Wire'}</span>
+                        </div>
+                        <div class="gmi-intel-item-title">${art.title || ''}</div>
+                    </div>
+                `;
+            });
+            intelContainer.innerHTML = intelHtml;
+        } else {
+            intelContainer.innerHTML = '<div style="color:#64748b;font-size:0.8rem;padding:8px 0;">Strategic wire feed synchronizing...</div>';
+        }
+    }
+
+    // Populate Session Activity Timeline
+    const timelineEl = document.getElementById('dash-overview-timeline');
+    if (timelineEl) {
+        const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        timelineEl.innerHTML = `
+            <div class="gmi-timeline-item">
+                <div class="gmi-timeline-dot"></div>
+                <div class="gmi-timeline-content">
+                    <span class="gmi-timeline-text">Terminal session verified with 256-bit JWT</span>
+                    <span class="gmi-timeline-time">${timeNow} • TLS 1.3 SECURE</span>
+                </div>
+            </div>
+            <div class="gmi-timeline-item">
+                <div class="gmi-timeline-dot" style="background:#38bdf8;box-shadow:0 0 8px #38bdf8;"></div>
+                <div class="gmi-timeline-content">
+                    <span class="gmi-timeline-text">Live telemetry synchronized with MongoDB Atlas cluster</span>
+                    <span class="gmi-timeline-time">SYSTEM STATUS: OPTIMAL</span>
+                </div>
+            </div>
+            <div class="gmi-timeline-item">
+                <div class="gmi-timeline-dot" style="background:#10b981;box-shadow:0 0 8px #10b981;"></div>
+                <div class="gmi-timeline-content">
+                    <span class="gmi-timeline-text">Radar surveillance tracking ${nations.length} nation(s) and ${conflicts.length} conflict(s)</span>
+                    <span class="gmi-timeline-time">ORBAT TELEMETRY ACTIVE</span>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// 1-Click Quick Deploy Superpowers to Watchlist
+async function quickAddSuperpower(nationKey) {
+    if (typeof toggleWatchlistItem === 'function') {
+        await toggleWatchlistItem('nation', nationKey);
+        playTacticalSound('success');
+        renderUserOverviewTelemetry();
+        renderUserWatchlistTab();
+    }
+}
+
+// Render Intel Watchlist Tab
+function renderUserWatchlistTab() {
+    const list = (typeof watchlistCache !== 'undefined' && Array.isArray(watchlistCache)) ? watchlistCache : [];
+    const nations = list.filter(item => item.targetType === 'nation');
+    const conflicts = list.filter(item => item.targetType === 'conflict');
+
+    // Update Counts
+    const cAll = document.getElementById('dash-wl-count-all');
+    const cNat = document.getElementById('dash-wl-count-nations');
+    const cConf = document.getElementById('dash-wl-count-conflicts');
+    if (cAll) cAll.textContent = list.length;
+    if (cNat) cNat.textContent = nations.length;
+    if (cConf) cConf.textContent = conflicts.length;
+
+    // Populate Quick Add Select dropdown if empty
+    populateWatchlistSelectOptions();
+
+    // Filter items
+    let filtered = list;
+    if (currentDashWatchlistFilter === 'nation') filtered = nations;
+    if (currentDashWatchlistFilter === 'conflict') filtered = conflicts;
+
+    const grid = document.getElementById('dash-watchlist-items-grid');
+    if (!grid) return;
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
+                <div style="font-size: 2.2rem; margin-bottom: 10px;">🌐</div>
+                <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #ffffff; margin-bottom: 6px;">No Monitored Targets in Filter</h4>
+                <p style="color: #94a3b8; font-size: 0.85rem; max-width: 440px; margin: 0 auto 16px;">
+                    Lock nations or combat theaters using the "+ Lock Target to Radar" dropdown above or browse the interactive world map.
+                </p>
+                <button class="gmi-btn-gold" onclick="closeProfileModal(); scrollToMap();" style="padding: 8px 18px; font-size: 0.82rem;">
+                    Browse Interactive World Map →
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    let cardsHtml = '';
+    filtered.forEach(item => {
+        if (item.targetType === 'nation') {
+            const nData = (typeof nationsData !== 'undefined') ? nationsData[item.targetId] : null;
+            const flag = nData ? nData.flag : '🌐';
+            const name = nData ? nData.name : item.targetId;
+            const rank = nData ? `Rank #${nData.rank}` : 'Target';
+            const budget = nData ? nData.budget : '—';
+            const troops = nData && nData.personnel ? (nData.personnel.active ? (nData.personnel.active / 1000).toFixed(0) + 'K' : '—') : '—';
+            const tanks = nData && nData.army ? (nData.army.tanks ? nData.army.tanks.toLocaleString() : '—') : '—';
+            const aircraft = nData && nData.airforce ? (nData.airforce.fighters ? nData.airforce.fighters.toLocaleString() : '—') : '—';
+            const nuclear = nData && nData.nuclear && nData.nuclear.status ? `☢️ ${nData.nuclear.warheads || 'Active'}` : 'Non-Nuclear';
+
+            cardsHtml += `
+                <div class="gmi-wl-card">
+                    <div class="gmi-wl-card-top">
+                        <div class="gmi-wl-identity">
+                            <span class="gmi-wl-flag">${flag}</span>
+                            <div class="gmi-wl-name-col">
+                                <span class="gmi-wl-title">${name}</span>
+                                <span class="gmi-wl-badge">${rank} • Defense Budget: ${budget}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gmi-wl-stats-grid">
+                        <div class="gmi-wl-stat-cell">
+                            <span class="gmi-wl-stat-lbl">TROOPS</span>
+                            <span class="gmi-wl-stat-val">${troops}</span>
+                        </div>
+                        <div class="gmi-wl-stat-cell">
+                            <span class="gmi-wl-stat-lbl">TANKS</span>
+                            <span class="gmi-wl-stat-val">${tanks}</span>
+                        </div>
+                        <div class="gmi-wl-stat-cell">
+                            <span class="gmi-wl-stat-lbl">AIRCRAFT</span>
+                            <span class="gmi-wl-stat-val">${aircraft}</span>
+                        </div>
+                    </div>
+                    <div class="gmi-wl-actions-strip">
+                        <button class="gmi-wl-btn-inspect" onclick="closeProfileModal(); if(typeof openNationModal==='function') openNationModal('${item.targetId}');">Inspect Nation Dossier →</button>
+                        <button class="gmi-wl-btn-remove" onclick="removeWatchlistFromDash('nation', '${item.targetId}')" title="Remove from Watchlist">✕ Remove</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            cardsHtml += `
+                <div class="gmi-wl-card" style="border-left: 3px solid #ef4444;">
+                    <div class="gmi-wl-card-top">
+                        <div class="gmi-wl-identity">
+                            <span class="gmi-wl-flag">⚔️</span>
+                            <div class="gmi-wl-name-col">
+                                <span class="gmi-wl-title">${item.targetId}</span>
+                                <span class="gmi-wl-badge" style="color:#f87171;">ACTIVE CONFLICT THEATER</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size:0.8rem; color:#94a3b8; line-height:1.4; padding: 4px 0;">
+                        Real-time battlefront analysis, territorial control updates, and casualty statistics monitored around the clock.
+                    </div>
+                    <div class="gmi-wl-actions-strip">
+                        <button class="gmi-wl-btn-inspect" onclick="closeProfileModal(); showPage('conflicts');">View Theater Report →</button>
+                        <button class="gmi-wl-btn-remove" onclick="removeWatchlistFromDash('conflict', '${item.targetId}')" title="Remove from Watchlist">✕ Remove</button>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    grid.innerHTML = cardsHtml;
+}
+
+// Populate Watchlist Add Dropdown Options
+function populateWatchlistSelectOptions() {
+    const spGroup = document.getElementById('dash-add-superpowers');
+    const natGroup = document.getElementById('dash-add-nations');
+    const confGroup = document.getElementById('dash-add-conflicts');
+
+    if (spGroup && spGroup.children.length === 0 && typeof nationsData !== 'undefined') {
+        const superpowers = ['USA', 'Russia', 'China', 'India', 'UK', 'France'];
+        superpowers.forEach(k => {
+            if (nationsData[k]) {
+                const opt = document.createElement('option');
+                opt.value = `nation:${k}`;
+                opt.textContent = `${nationsData[k].flag} ${nationsData[k].name} (Rank #${nationsData[k].rank})`;
+                spGroup.appendChild(opt);
+            }
+        });
+    }
+
+    if (natGroup && natGroup.children.length === 0 && typeof nationsData !== 'undefined') {
+        const superpowers = ['USA', 'Russia', 'China', 'India', 'UK', 'France'];
+        Object.keys(nationsData).sort().forEach(k => {
+            if (!superpowers.includes(k)) {
+                const opt = document.createElement('option');
+                opt.value = `nation:${k}`;
+                opt.textContent = `${nationsData[k].flag || ''} ${nationsData[k].name}`;
+                natGroup.appendChild(opt);
+            }
+        });
+    }
+
+    if (confGroup && confGroup.children.length === 0) {
+        const sampleConflicts = ['Russia-Ukraine War', 'Israel-Hamas Conflict', 'Taiwan Strait Tension', 'Red Sea Maritime Crisis', 'Korean Peninsula Confrontation'];
+        sampleConflicts.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = `conflict:${c}`;
+            opt.textContent = `⚔️ ${c}`;
+            confGroup.appendChild(opt);
+        });
+    }
+}
+
+// Filter Watchlist tab
+function filterDashWatchlist(type) {
+    currentDashWatchlistFilter = type;
+    document.querySelectorAll('.gmi-filter-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.dataset.filter === type);
+    });
+    renderUserWatchlistTab();
+}
+
+// Quick Add from Watchlist Select Dropdown
+async function handleDashWatchlistQuickAdd(selectEl) {
+    const val = selectEl.value;
+    if (!val) return;
+    const [targetType, targetId] = val.split(':');
+    if (targetType && targetId && typeof toggleWatchlistItem === 'function') {
+        await toggleWatchlistItem(targetType, targetId);
+        playTacticalSound('success');
+        selectEl.selectedIndex = 0;
+        renderUserWatchlistTab();
+        renderUserOverviewTelemetry();
+    }
+}
+
+// Remove item from Watchlist directly inside dashboard
+async function removeWatchlistFromDash(targetType, targetId) {
+    if (typeof toggleWatchlistItem === 'function') {
+        await toggleWatchlistItem(targetType, targetId);
+        playTacticalSound('click');
+        renderUserWatchlistTab();
+        renderUserOverviewTelemetry();
+    }
+}
+
+// Render Strategic Briefings Tab
+async function renderUserBriefingsTab() {
+    const token = localStorage.getItem('gmi_token');
+    const container = document.getElementById('dash-briefings-list');
+    if (!token || !container) return;
+
+    try {
+        const res = await fetch('/api/reports', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load reports');
+        const data = await res.json();
+        userBriefingsCache = data.reports || [];
+
+        const total = userBriefingsCache.length;
+        const pub = userBriefingsCache.filter(r => r.isPublic).length;
+        const priv = total - pub;
+
+        const totEl = document.getElementById('dash-briefs-total');
+        const pubEl = document.getElementById('dash-briefs-public');
+        const privEl = document.getElementById('dash-briefs-private');
+        const badgeRep = document.getElementById('dash-badge-reports');
+        const tabRep = document.getElementById('dash-tab-reports-count');
+        const metricRep = document.getElementById('dash-metric-reports');
+
+        if (totEl) totEl.textContent = total;
+        if (pubEl) pubEl.textContent = pub;
+        if (privEl) privEl.textContent = priv;
+        if (badgeRep) badgeRep.textContent = total;
+        if (tabRep) tabRep.textContent = total;
+        if (metricRep) metricRep.textContent = total;
+
+        if (userBriefingsCache.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding: 40px 20px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px;">
+                    <div style="font-size: 2.2rem; margin-bottom: 10px;">📝</div>
+                    <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: #ffffff; margin-bottom: 6px;">No Strategic Reports Authored Yet</h4>
+                    <p style="color: #94a3b8; font-size: 0.85rem; max-width: 440px; margin: 0 auto 16px;">
+                        Use the Defense Analyst Notebook to draft intelligence reports embedded with live database comparison charts and fleet statistics.
+                    </p>
+                    <button class="gmi-btn-gold" onclick="closeProfileModal(); openWatchlistDashboard(); switchDashboardTab('notebook'); if(typeof createNewReport==='function') createNewReport();">
+                        + Initialize First Intelligence Report
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        userBriefingsCache.forEach(report => {
+            const dateStr = report.updatedAt ? new Date(report.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+            const badgeClass = report.isPublic ? 'gmi-badge-public' : 'gmi-badge-private';
+            const badgeLabel = report.isPublic ? 'PUBLIC INTEL' : 'CLASSIFIED DRAFT';
+
+            html += `
+                <div class="gmi-briefing-card">
+                    <div class="gmi-briefing-info">
+                        <div class="gmi-briefing-title-row">
+                            <span class="gmi-briefing-title">${report.title || 'Untitled Strategic Analysis'}</span>
+                            <span class="gmi-briefing-badge ${badgeClass}">${badgeLabel}</span>
+                        </div>
+                        <div style="font-size:0.72rem; color:#64748b;">Last Updated: ${dateStr}</div>
+                    </div>
+                    <div class="gmi-briefing-actions">
+                        <button class="gmi-brief-act-btn" onclick="openReportInNotebook('${report._id}')">Edit in Notebook →</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+
+    } catch (e) {
+        container.innerHTML = '<div style="color:#ef4444;font-size:0.85rem;padding:12px;">Unable to fetch user briefings.</div>';
+    }
+}
+
+// Open existing report directly in notebook
+function openReportInNotebook(reportId) {
+    closeProfileModal();
+    openWatchlistDashboard();
+    switchDashboardTab('notebook');
+    if (typeof selectReport === 'function') {
+        selectReport(reportId);
+    }
+}
+
+// Interactive Password Strength Checker
+function checkPasswordStrength(password) {
+    const meterFill = document.getElementById('dash-pw-bar-fill');
+    const meterLabel = document.getElementById('dash-pw-strength-label');
+    if (!meterFill || !meterLabel) return;
+
+    if (!password) {
+        meterFill.style.width = '0%';
+        meterLabel.textContent = 'Password strength: None';
+        return;
+    }
+
+    let score = 0;
+    if (password.length >= 6) score += 20;
+    if (password.length >= 10) score += 25;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 20;
+    if (/[0-9]/.test(password)) score += 20;
+    if (/[^a-zA-Z0-9]/.test(password)) score += 15;
+
+    let color = '#ef4444';
+    let label = 'Weak';
+
+    if (score >= 80) {
+        color = '#10b981';
+        label = 'Military-Grade / Top-Secret (Robust)';
+    } else if (score >= 60) {
+        color = '#38bdf8';
+        label = 'Strong';
+    } else if (score >= 40) {
+        color = '#f59e0b';
+        label = 'Fair (Add symbols/caps)';
+    }
+
+    meterFill.style.width = score + '%';
+    meterFill.style.backgroundColor = color;
+    meterLabel.textContent = `Password strength: ${label}`;
+    meterLabel.style.color = color;
+}
+
+// Apply Tactical Theme Accent (Gold, Cyan, Emerald, Crimson)
+function applyTacticalTheme(themeName, playSnd = true) {
+    document.documentElement.setAttribute('data-user-theme', themeName);
+    localStorage.setItem('gmi_user_theme', themeName);
+
+    document.querySelectorAll('.gmi-theme-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.theme === themeName);
+    });
+
+    if (playSnd) playTacticalSound('chirp');
+}
+
+// Preferences toggles
+function toggleSoundPref(val) {
+    localStorage.setItem('gmi_pref_sound', val ? 'true' : 'false');
+    if (val) playTacticalSound('chirp');
+}
+
+function toggleAutoNewsPref(val) {
+    localStorage.setItem('gmi_pref_autonews', val ? 'true' : 'false');
+}
+
+function toggleRadarPref(val) {
+    localStorage.setItem('gmi_pref_radar', val ? 'true' : 'false');
+    document.querySelectorAll('.radar-sweep').forEach(el => {
+        el.style.display = val ? '' : 'none';
+    });
+}
+
+function initPreferencesUI() {
+    const savedTheme = localStorage.getItem('gmi_user_theme') || 'gold';
+    applyTacticalTheme(savedTheme, false);
+
+    const soundPref = localStorage.getItem('gmi_pref_sound') !== 'false';
+    const autoNewsPref = localStorage.getItem('gmi_pref_autonews') !== 'false';
+    const radarPref = localStorage.getItem('gmi_pref_radar') !== 'false';
+
+    const sEl = document.getElementById('dash-pref-sound');
+    const anEl = document.getElementById('dash-pref-autonews');
+    const rEl = document.getElementById('dash-pref-radar');
+
+    if (sEl) sEl.checked = soundPref;
+    if (anEl) anEl.checked = autoNewsPref;
+    if (rEl) rEl.checked = radarPref;
+}
+
+// Handle Profile Updates (Display Name, Callsign, Specialty, Region, Bio)
 async function handleProfileUpdate(event) {
     event.preventDefault();
 
@@ -393,12 +1137,15 @@ async function handleProfileUpdate(event) {
     const spinner = btn?.querySelector('.auth-btn-spinner');
     const label = btn?.querySelector('span');
 
-    // Loading state
     if (spinner) spinner.style.display = 'block';
     if (label) label.textContent = 'Saving...';
     if (btn) btn.disabled = true;
 
     const displayName = document.getElementById('profile-edit-displayname')?.value.trim();
+    const callsign = document.getElementById('profile-edit-callsign')?.value.trim();
+    const specialty = document.getElementById('profile-edit-specialty')?.value;
+    const regionalFocus = document.getElementById('profile-edit-region')?.value;
+    const bio = document.getElementById('profile-edit-bio')?.value.trim();
 
     try {
         const res = await fetch(`${AUTH_API}/profile`, {
@@ -407,7 +1154,7 @@ async function handleProfileUpdate(event) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ displayName })
+            body: JSON.stringify({ displayName, callsign, specialty, regionalFocus, bio })
         });
 
         const data = await res.json();
@@ -420,24 +1167,30 @@ async function handleProfileUpdate(event) {
         // Update local storage
         const user = JSON.parse(localStorage.getItem('gmi_user') || '{}');
         user.displayName = data.displayName;
+        user.callsign = data.callsign;
+        user.specialty = data.specialty;
+        user.regionalFocus = data.regionalFocus;
+        user.bio = data.bio;
         localStorage.setItem('gmi_user', JSON.stringify(user));
 
-        // Refresh UI everywhere
+        // Refresh UI
         updateAuthUI(user);
         populateProfileUI(data);
 
-        showToast('Profile updated successfully!', 'success');
+        playTacticalSound('success');
+        showToast('Analyst Dossier successfully updated!', 'success');
 
     } catch (err) {
         console.error('Profile update error:', err);
         showToast('Network error. Please try again.', 'error');
     } finally {
         if (spinner) spinner.style.display = 'none';
-        if (label) label.textContent = 'Save Changes';
+        if (label) label.textContent = 'Save Analyst Dossier';
         if (btn) btn.disabled = false;
     }
 }
 
+// Handle Password Change
 async function handlePasswordChange(event) {
     event.preventDefault();
 
@@ -448,7 +1201,6 @@ async function handlePasswordChange(event) {
     const newPassword = document.getElementById('profile-new-password')?.value;
     const confirmPassword = document.getElementById('profile-confirm-password')?.value;
 
-    // Validate
     if (newPassword !== confirmPassword) {
         showToast('New passwords do not match.', 'error');
         return;
@@ -468,7 +1220,6 @@ async function handlePasswordChange(event) {
     const spinner = btn?.querySelector('.auth-btn-spinner');
     const label = btn?.querySelector('span');
 
-    // Loading state
     if (spinner) spinner.style.display = 'block';
     if (label) label.textContent = 'Updating...';
     if (btn) btn.disabled = true;
@@ -490,9 +1241,10 @@ async function handlePasswordChange(event) {
             return;
         }
 
-        // Clear form and show success
         document.getElementById('profile-password-form')?.reset();
-        showToast('Password changed successfully!', 'success');
+        checkPasswordStrength('');
+        playTacticalSound('success');
+        showToast('Terminal access code updated successfully!', 'success');
 
     } catch (err) {
         console.error('Password change error:', err);

@@ -22,6 +22,26 @@ const adminSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    callsign: {
+        type: String,
+        default: ''
+    },
+    specialty: {
+        type: String,
+        default: 'High Command & Administration'
+    },
+    regionalFocus: {
+        type: String,
+        default: 'Global Theater'
+    },
+    bio: {
+        type: String,
+        default: ''
+    },
+    preferences: {
+        type: Object,
+        default: {}
+    },
     lastLogin: {
         type: Date,
         default: null

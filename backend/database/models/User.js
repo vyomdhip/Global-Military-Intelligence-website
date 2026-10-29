@@ -23,6 +23,26 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    callsign: {
+        type: String,
+        default: ''
+    },
+    specialty: {
+        type: String,
+        default: 'Strategic Defense Intelligence'
+    },
+    regionalFocus: {
+        type: String,
+        default: 'Global Defense'
+    },
+    bio: {
+        type: String,
+        default: ''
+    },
+    preferences: {
+        type: Object,
+        default: {}
+    },
     lastLogin: {
         type: Date,
         default: null

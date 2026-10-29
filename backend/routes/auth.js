@@ -167,7 +167,7 @@ router.post('/admin/login', async (req, res) => {
 router.get('/profile', authMiddleware, async (req, res) => {
     try {
         const Model = req.user.role === 'admin' ? Admin : User;
-        const user = await Model.findById(req.user.id).select('username email displayName createdAt lastLogin');
+        const user = await Model.findById(req.user.id).select('username email displayName callsign specialty regionalFocus bio preferences createdAt lastLogin');
 
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
@@ -178,6 +178,11 @@ router.get('/profile', authMiddleware, async (req, res) => {
             username: user.username,
             email: user.email,
             displayName: user.displayName,
+            callsign: user.callsign || '',
+            specialty: user.specialty || 'Strategic Defense Intelligence',
+            regionalFocus: user.regionalFocus || 'Global Theater',
+            bio: user.bio || '',
+            preferences: user.preferences || {},
             createdAt: user.createdAt,
             lastLogin: user.lastLogin,
             role: req.user.role
@@ -194,12 +199,19 @@ router.get('/profile', authMiddleware, async (req, res) => {
 // ============================================
 router.put('/profile', authMiddleware, async (req, res) => {
     try {
-        const { displayName, currentPassword, newPassword } = req.body;
+        const { displayName, callsign, specialty, regionalFocus, bio, preferences, currentPassword, newPassword } = req.body;
         const Model = req.user.role === 'admin' ? Admin : User;
 
-        // Update display name if provided
-        if (displayName !== undefined) {
-            await Model.findByIdAndUpdate(req.user.id, { displayName });
+        const updateData = {};
+        if (displayName !== undefined) updateData.displayName = displayName;
+        if (callsign !== undefined) updateData.callsign = callsign;
+        if (specialty !== undefined) updateData.specialty = specialty;
+        if (regionalFocus !== undefined) updateData.regionalFocus = regionalFocus;
+        if (bio !== undefined) updateData.bio = bio;
+        if (preferences !== undefined) updateData.preferences = preferences;
+
+        if (Object.keys(updateData).length > 0) {
+            await Model.findByIdAndUpdate(req.user.id, updateData);
         }
 
         // Handle password change if requested
@@ -219,17 +231,22 @@ router.put('/profile', authMiddleware, async (req, res) => {
             console.log(`🔐 User ${req.user.username} changed their password`);
         }
 
-        const user = await Model.findById(req.user.id).select('username email displayName createdAt lastLogin');
+        const user = await Model.findById(req.user.id).select('username email displayName callsign specialty regionalFocus bio preferences createdAt lastLogin');
 
         res.json({
             id: user._id,
             username: user.username,
             email: user.email,
             displayName: user.displayName,
+            callsign: user.callsign || '',
+            specialty: user.specialty || 'Strategic Defense Intelligence',
+            regionalFocus: user.regionalFocus || 'Global Theater',
+            bio: user.bio || '',
+            preferences: user.preferences || {},
             createdAt: user.createdAt,
             lastLogin: user.lastLogin,
             role: req.user.role,
-            message: 'Profile updated.'
+            message: 'Profile updated successfully.'
         });
 
     } catch (err) {
