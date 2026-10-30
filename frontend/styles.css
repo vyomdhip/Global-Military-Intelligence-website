@@ -5910,21 +5910,43 @@ body {
 /* ============================================================================
    GMI DEFENSE ANALYST COMMAND DASHBOARD (PRODUCTION UI)
    ============================================================================ */
+/* Dashboard Modal Frame: Placed strictly below the fixed top navbar with breathing room */
 .gmi-user-dashboard-modal {
-    z-index: 1050;
+    position: fixed;
+    top: 84px; /* Positions dashboard strictly below the 84px persistent navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 8990; /* Right below the sticky navbar (z-index: 9000), above all page content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px 24px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.gmi-dashboard-backdrop {
-    background: rgba(3, 7, 18, 0.82);
+.gmi-user-dashboard-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.gmi-user-dashboard-modal .gmi-dashboard-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.84);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
 
 .profile-modal-content.gmi-user-dashboard-shell {
-    max-width: 1140px;
+    max-width: 1180px;
     width: 95vw;
-    height: 88vh;
-    max-height: 860px;
+    height: 100%;
+    max-height: calc(100vh - 124px); /* Guarantees comfortable top & bottom margins from navbar */
+    margin: 0 auto;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -5934,6 +5956,12 @@ body {
     box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(212, 175, 55, 0.08);
     overflow: hidden;
     position: relative;
+    transform: scale(0.96) translateY(12px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gmi-user-dashboard-modal.active .profile-modal-content.gmi-user-dashboard-shell {
+    transform: scale(1) translateY(0);
 }
 
 /* Subtle tactical grid background pattern */
@@ -7630,9 +7658,15 @@ input:checked + .gmi-slider:before {
 
 /* Responsive Styles */
 @media (max-width: 992px) {
+    .gmi-user-dashboard-modal {
+        top: 76px;
+        padding: 12px 16px 18px;
+    }
+
     .profile-modal-content.gmi-user-dashboard-shell {
-        height: 92vh;
-        max-height: 92vh;
+        width: 96vw;
+        height: 100%;
+        max-height: calc(100vh - 105px);
     }
 
     .gmi-dash-metrics-grid {
@@ -7657,8 +7691,20 @@ input:checked + .gmi-slider:before {
 }
 
 @media (max-width: 640px) {
+    .gmi-user-dashboard-modal {
+        top: 70px;
+        padding: 8px 8px 12px;
+    }
+
+    .profile-modal-content.gmi-user-dashboard-shell {
+        width: 98vw;
+        height: 100%;
+        max-height: calc(100vh - 86px);
+        border-radius: 12px;
+    }
+
     .gmi-dash-header {
-        padding: 16px;
+        padding: 14px 16px;
     }
 
     .gmi-dash-header-left {

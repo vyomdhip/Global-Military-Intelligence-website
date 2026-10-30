@@ -105,6 +105,9 @@ function initNavigation() {
                 mobileMenuBtn.classList.remove('active');
                 nav.classList.remove('active');
             }
+            if (typeof closeProfileModal === 'function') {
+                closeProfileModal();
+            }
         });
     });
 
