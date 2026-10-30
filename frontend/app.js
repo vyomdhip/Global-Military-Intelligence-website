@@ -108,6 +108,12 @@ function initNavigation() {
             if (typeof closeProfileModal === 'function') {
                 closeProfileModal();
             }
+            if (typeof closeModal === 'function') {
+                closeModal();
+            }
+            if (typeof closeNewsModal === 'function') {
+                closeNewsModal();
+            }
         });
     });
 
