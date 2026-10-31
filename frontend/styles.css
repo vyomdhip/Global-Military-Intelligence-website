@@ -7303,9 +7303,15 @@ body {
 
 /* Security Tab */
 .gmi-dash-security-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    max-width: 540px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.gmi-security-card {
+    background: rgba(13, 22, 38, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 12px;
 }
 
 .gmi-pw-meter-wrap {
@@ -7336,57 +7342,31 @@ body {
     font-weight: 600;
 }
 
-.gmi-dash-diagnostics-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.gmi-diag-item {
+.gmi-dash-session-footer {
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.82rem;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.gmi-diag-label {
+.gmi-session-info-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
     color: #94a3b8;
 }
 
-.gmi-diag-val {
-    color: #ffffff;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 600;
-}
-
-.gmi-text-green { color: #34d399 !important; }
-.gmi-text-blue { color: #38bdf8 !important; }
-.gmi-text-gold { color: #d4af37 !important; }
-
-.gmi-dash-logout-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 8px;
-    color: #f87171;
-    font-family: var(--font-display, 'Rajdhani', sans-serif);
-    font-size: 0.88rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.gmi-dash-logout-btn:hover {
-    background: rgba(239, 68, 68, 0.22);
-    border-color: #ef4444;
-    color: #ffffff;
+.gmi-session-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
 /* Preferences Tab */
