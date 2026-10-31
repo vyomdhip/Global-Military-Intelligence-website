@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.1.3">
+    <link rel="stylesheet" href="styles.css?v=2.2.0">
 </head>
 
 <body>
@@ -1562,7 +1562,7 @@
     <!-- ============================================ -->
     <!-- GMI DEFENSE ANALYST COMMAND DASHBOARD -->
     <!-- ============================================ -->
-    <div id="auth-profile-modal" class="auth-modal gmi-user-dashboard-modal" role="dialog" aria-modal="true" aria-label="GMI Defense Analyst Command Dashboard">
+        <div id="auth-profile-modal" class="auth-modal gmi-user-dashboard-modal" role="dialog" aria-modal="true" aria-label="GMI User Dashboard">
         <div class="auth-modal-overlay gmi-dashboard-backdrop" onclick="closeProfileModal()"></div>
         <div class="auth-modal-content profile-modal-content gmi-user-dashboard-shell">
             <!-- Modal Close Action -->
@@ -1578,36 +1578,29 @@
                 <div class="gmi-dash-header-left">
                     <div class="gmi-dash-avatar-cluster">
                         <div class="profile-avatar-lg gmi-dash-avatar" id="profile-avatar-lg">V</div>
-                        <div class="gmi-dash-avatar-radar-ring"></div>
-                        <span class="gmi-dash-live-badge" title="Telemetry Synchronized"></span>
+                        <span class="gmi-dash-live-badge" title="Active Session"></span>
                     </div>
                     <div class="gmi-dash-identity-meta">
                         <div class="gmi-dash-crumb-strip">
-                            <span class="gmi-dash-unit-tag">GMI DEFENSE INTELLIGENCE PORTAL</span>
+                            <span class="gmi-dash-unit-tag">GMI INTELLIGENCE PLATFORM</span>
                             <span class="gmi-dash-crumb-sep">/</span>
                             <span class="gmi-dash-clearance-pill" id="profile-clearance-pill">
                                 <span class="gmi-clearance-dot"></span>
-                                <span id="profile-clearance-label">SECRET // LEVEL-2 FIELD ANALYST</span>
+                                <span id="profile-clearance-label">VERIFIED ANALYST</span>
                             </span>
                         </div>
                         <div class="gmi-dash-name-line">
                             <h2 class="auth-modal-title gmi-dash-display-name" id="profile-display-title">Username</h2>
-                            <span class="gmi-dash-callsign-badge" id="profile-callsign-badge">[VIPER-ACTUAL]</span>
-                            <span class="profile-role-badge gmi-dash-role-badge" id="profile-role-badge">User</span>
+                            <span class="profile-role-badge gmi-dash-role-badge" id="profile-role-badge">Analyst</span>
                         </div>
                         <div class="gmi-dash-submeta-line">
-                            <span class="gmi-dash-meta-item" title="Unique Analyst ID Code">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
-                                <span id="profile-analyst-uid">ANL-GMI-8942</span>
-                            </span>
-                            <span class="gmi-dash-meta-sep">•</span>
                             <span class="gmi-dash-meta-item">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                                 <span id="profile-specialty-chip">Strategic Defense Intelligence</span>
                             </span>
                             <span class="gmi-dash-meta-sep">•</span>
                             <span class="gmi-dash-meta-item">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
                                 <span id="profile-region-chip">Global Theater</span>
                             </span>
                         </div>
@@ -1615,7 +1608,7 @@
                 </div>
 
                 <div class="gmi-dash-header-right">
-                    <!-- Military Zulu Clock -->
+                    <!-- Universal Coordinated Time (UTC) -->
                     <div class="gmi-dash-clock-pill" id="dash-zulu-clock-pill" title="Universal Coordinated Time (UTC)">
                         <span class="gmi-clock-radar-pulse"></span>
                         <span class="gmi-dash-clock-text" id="dash-zulu-clock-text">00:00:00 UTC</span>
@@ -1675,7 +1668,7 @@
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                     </svg>
-                    <span>Analyst Dossier</span>
+                    <span>Analyst Profile</span>
                 </button>
 
                 <button class="profile-tab gmi-dash-tab" data-profile-tab="security" onclick="switchProfileTab('security')">
@@ -1691,7 +1684,7 @@
                         <circle cx="12" cy="12" r="3" />
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                     </svg>
-                    <span>Tactical Settings</span>
+                    <span>Display Preferences</span>
                 </button>
 
                 <button class="profile-tab profile-tab-admin gmi-dash-tab gmi-dash-tab-admin" id="profile-tab-admin-btn" onclick="closeProfileModal(); openAdminPanel('overview');" style="display:none;" title="Open Enterprise Command Center">
@@ -1709,13 +1702,13 @@
                 <!-- TAB 1: MISSION OVERVIEW -->
                 <!-- ============================================ -->
                 <div class="profile-tab-content active" id="profile-tab-overview" data-tab-name="overview">
-                    <!-- Hero Telemetry Metric Strip -->
+                    <!-- Metric Strip -->
                     <div class="gmi-dash-metrics-grid">
                         <div class="gmi-dash-metric-card" onclick="switchProfileTab('watchlist')">
                             <div class="gmi-metric-card-top">
                                 <span class="gmi-metric-card-label">MONITORED POWERS</span>
                                 <div class="gmi-metric-icon-wrap gmi-icon-blue">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1-4-10z"/></svg>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
                                 </div>
                             </div>
                             <div class="gmi-metric-card-val" id="dash-metric-nations">0</div>
@@ -1748,23 +1741,22 @@
                             </div>
                             <div class="gmi-metric-card-val" id="dash-metric-reports">0</div>
                             <div class="gmi-metric-card-footer">
-                                <span class="gmi-metric-sub">Analyst Reports Authored</span>
+                                <span class="gmi-metric-sub">Authored Reports</span>
                                 <span class="gmi-metric-link">Read →</span>
                             </div>
                         </div>
 
-                        <div class="gmi-dash-metric-card gmi-metric-defcon-card">
+                        <div class="gmi-dash-metric-card" onclick="switchProfileTab('watchlist')">
                             <div class="gmi-metric-card-top">
-                                <span class="gmi-metric-card-label">DEFENSE POSTURE</span>
-                                <div class="gmi-metric-icon-wrap gmi-icon-red">
-                                    <span class="gmi-defcon-dot-pulse"></span>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                <span class="gmi-metric-card-label">TOTAL WATCHLIST</span>
+                                <div class="gmi-metric-icon-wrap gmi-icon-gold">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                                 </div>
                             </div>
-                            <div class="gmi-metric-card-val" id="dash-metric-defcon">DEFCON 3</div>
+                            <div class="gmi-metric-card-val" id="dash-metric-total-wl">0</div>
                             <div class="gmi-metric-card-footer">
-                                <span class="gmi-metric-sub" id="dash-metric-defcon-sub">ELEVATED READINESS</span>
-                                <span class="gmi-defcon-pill-tag">ROUND-THE-CLOCK</span>
+                                <span class="gmi-metric-sub">Monitored Targets</span>
+                                <span class="gmi-metric-link">Manage →</span>
                             </div>
                         </div>
                     </div>
@@ -1773,7 +1765,7 @@
                     <div class="gmi-dash-overview-layout">
                         <!-- Left Column: Active Radar & Live Threat Feed -->
                         <div class="gmi-dash-overview-left">
-                            <!-- Currently Monitored Theaters Card -->
+                            <!-- Currently Monitored Targets Card -->
                             <div class="gmi-dash-panel-card">
                                 <div class="gmi-panel-card-header">
                                     <div class="gmi-panel-title-group">
@@ -1806,54 +1798,9 @@
                             </div>
                         </div>
 
-                        <!-- Right Column: Quick Launchpad, Account Telemetry & Activity -->
+                        <!-- Right Column: Account Credentials & Quick Navigation -->
                         <div class="gmi-dash-overview-right">
-                            <!-- Tactical Quick Actions Launchpad -->
-                            <div class="gmi-dash-panel-card">
-                                <div class="gmi-panel-card-header">
-                                    <div class="gmi-panel-title-group">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                                        <h3 class="gmi-panel-title">Operational Quick Actions</h3>
-                                    </div>
-                                </div>
-                                <div class="gmi-panel-card-body">
-                                    <div class="gmi-dash-quick-grid">
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); scrollToMap();">
-                                            <div class="gmi-quick-icon gmi-icon-blue">🗺️</div>
-                                            <div class="gmi-quick-meta">
-                                                <span class="gmi-quick-label">Global Theater Map</span>
-                                                <span class="gmi-quick-desc">Interactive defense map & bases</span>
-                                            </div>
-                                        </button>
-
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('compare');">
-                                            <div class="gmi-quick-icon gmi-icon-amber">⚖️</div>
-                                            <div class="gmi-quick-meta">
-                                                <span class="gmi-quick-label">Bilateral Comparison</span>
-                                                <span class="gmi-quick-desc">Head-to-head superpower audit</span>
-                                            </div>
-                                        </button>
-
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); openWatchlistDashboard(); switchDashboardTab('notebook');">
-                                            <div class="gmi-quick-icon gmi-icon-emerald">✍️</div>
-                                            <div class="gmi-quick-meta">
-                                                <span class="gmi-quick-label">Draft Intel Briefing</span>
-                                                <span class="gmi-quick-desc">Analyst notebook with live data</span>
-                                            </div>
-                                        </button>
-
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('news');">
-                                            <div class="gmi-quick-icon gmi-icon-red">📡</div>
-                                            <div class="gmi-quick-meta">
-                                                <span class="gmi-quick-label">Strategic News Wire</span>
-                                                <span class="gmi-quick-desc">Global military developments</span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Account Credentials HUD -->
+                            <!-- Account Credentials Card -->
                             <div class="gmi-dash-panel-card">
                                 <div class="gmi-panel-card-header">
                                     <div class="gmi-panel-title-group">
@@ -1882,7 +1829,7 @@
                                         <div class="profile-info-item">
                                             <div class="profile-info-label">
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                                COMMISSIONED
+                                                MEMBER SINCE
                                             </div>
                                             <div class="profile-info-value" id="profile-info-joined">—</div>
                                         </div>
@@ -1890,7 +1837,7 @@
                                         <div class="profile-info-item">
                                             <div class="profile-info-label">
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                                LAST TERMINAL LOGIN
+                                                LAST LOGIN
                                             </div>
                                             <div class="profile-info-value" id="profile-info-lastlogin">—</div>
                                         </div>
@@ -1898,7 +1845,7 @@
                                         <div class="profile-info-item">
                                             <div class="profile-info-label">
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                                CLEARANCE ROLE
+                                                ACCOUNT ROLE
                                             </div>
                                             <div class="profile-info-value" id="profile-info-role">—</div>
                                         </div>
@@ -1914,17 +1861,47 @@
                                 </div>
                             </div>
 
-                            <!-- Field Log / Activity Timeline -->
+                            <!-- Platform Quick Navigation Launchpad -->
                             <div class="gmi-dash-panel-card">
                                 <div class="gmi-panel-card-header">
                                     <div class="gmi-panel-title-group">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                        <h3 class="gmi-panel-title">Analyst Audit & Session Trail</h3>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                        <h3 class="gmi-panel-title">Platform Quick Navigation</h3>
                                     </div>
                                 </div>
                                 <div class="gmi-panel-card-body">
-                                    <div class="gmi-dash-timeline" id="dash-overview-timeline">
-                                        <!-- Rendered by JS -->
+                                    <div class="gmi-dash-quick-grid">
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); scrollToMap();">
+                                            <div class="gmi-quick-icon gmi-icon-blue">🗺️</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Global Theater Map</span>
+                                                <span class="gmi-quick-desc">Interactive defense map & military bases</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('compare');">
+                                            <div class="gmi-quick-icon gmi-icon-amber">⚖️</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Bilateral Comparison</span>
+                                                <span class="gmi-quick-desc">Head-to-head nation audit</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); openWatchlistDashboard(); switchDashboardTab('notebook');">
+                                            <div class="gmi-quick-icon gmi-icon-emerald">✍️</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Draft Intel Briefing</span>
+                                                <span class="gmi-quick-desc">Analyst notebook with live datasets</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('news');">
+                                            <div class="gmi-quick-icon gmi-icon-red">📡</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Strategic News Wire</span>
+                                                <span class="gmi-quick-desc">Global defense developments</span>
+                                            </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1980,32 +1957,33 @@
                 </div>
 
                 <!-- ============================================ -->
-                <!-- TAB 4: ANALYST DOSSIER & PROFILE -->
+                <!-- TAB 4: ANALYST PROFILE -->
                 <!-- ============================================ -->
                 <div class="profile-tab-content" id="profile-tab-dossier" data-tab-name="dossier">
                     <div class="gmi-dash-dossier-layout">
-                        <!-- Left: Tactical Identity ID Card -->
+                        <!-- Left: Analyst Profile Summary Card -->
                         <div class="gmi-dossier-card-col">
-                            <div class="gmi-military-id-card">
-                                <div class="gmi-id-card-header">
-                                    <span class="gmi-id-card-dept">GMI / DEFENSE COALITION</span>
-                                    <span class="gmi-id-card-level">TIER 1 ACCESS</span>
-                                </div>
-                                <div class="gmi-id-card-body">
-                                    <div class="gmi-id-avatar-wrap">
-                                        <div class="gmi-id-avatar" id="dossier-card-avatar">V</div>
-                                        <div class="gmi-id-barcode"></div>
-                                    </div>
-                                    <div class="gmi-id-meta">
-                                        <div class="gmi-id-name" id="dossier-card-name">VYOM</div>
-                                        <div class="gmi-id-callsign" id="dossier-card-callsign">CALLSIGN: VIPER-ACTUAL</div>
-                                        <div class="gmi-id-specialty" id="dossier-card-specialty">Strategic Defense Intelligence</div>
-                                        <div class="gmi-id-status">STATUS: COMMISSIONED & ACTIVE</div>
+                            <div class="gmi-profile-summary-card">
+                                <div class="gmi-summary-avatar-block">
+                                    <div class="profile-avatar-lg gmi-summary-avatar" id="dossier-card-avatar">V</div>
+                                    <div class="gmi-summary-user-details">
+                                        <h3 class="gmi-summary-name" id="dossier-card-name">VYOM</h3>
+                                        <span class="gmi-summary-role" id="dossier-card-role">Verified Analyst</span>
                                     </div>
                                 </div>
-                                <div class="gmi-id-card-footer">
-                                    <span class="gmi-id-hash" id="dossier-card-hash">SEC-HASH: 78B4-9F21-E830</span>
-                                    <span class="gmi-id-seal">AUTHENTICATED</span>
+                                <div class="gmi-summary-meta-list">
+                                    <div class="gmi-summary-meta-row">
+                                        <span class="gmi-summary-label">Primary Specialty</span>
+                                        <span class="gmi-summary-val" id="dossier-card-specialty">Strategic Defense Intelligence</span>
+                                    </div>
+                                    <div class="gmi-summary-meta-row">
+                                        <span class="gmi-summary-label">Theater Focus</span>
+                                        <span class="gmi-summary-val" id="dossier-card-region">Global Theater</span>
+                                    </div>
+                                    <div class="gmi-summary-meta-row">
+                                        <span class="gmi-summary-label">Account Status</span>
+                                        <span class="gmi-summary-val gmi-text-green">Active & Authenticated</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -2013,27 +1991,18 @@
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
                                 </svg>
-                                <span>Security Protocol: Username and registered email address are cryptographically bound to your clearance. Contact Sys-Admin for credential transfers.</span>
+                                <span>Account Security: Primary username and registered email address are managed under system credentials. Contact support for credential transfers.</span>
                             </div>
                         </div>
 
-                        <!-- Right: Dossier Edit Form -->
+                        <!-- Right: Profile Edit Form -->
                         <div class="gmi-dossier-form-col">
                             <form id="profile-edit-form" onsubmit="handleProfileUpdate(event)">
-                                <div class="gmi-dash-form-row">
-                                    <div class="auth-input-group">
-                                        <label for="profile-edit-displayname">Analyst Display Name</label>
-                                        <div class="auth-input-wrap">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                            <input type="text" id="profile-edit-displayname" placeholder="Enter display name" autocomplete="name">
-                                        </div>
-                                    </div>
-                                    <div class="auth-input-group">
-                                        <label for="profile-edit-callsign">Tactical Callsign</label>
-                                        <div class="auth-input-wrap">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                            <input type="text" id="profile-edit-callsign" placeholder="e.g. VIPER-1, RECON-ACTUAL" maxlength="32">
-                                        </div>
+                                <div class="auth-input-group">
+                                    <label for="profile-edit-displayname">Display Name</label>
+                                    <div class="auth-input-wrap">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        <input type="text" id="profile-edit-displayname" placeholder="Enter your full display name" autocomplete="name">
                                     </div>
                                 </div>
 
@@ -2076,7 +2045,7 @@
 
                                 <button type="submit" class="auth-submit-btn gmi-btn-gold" id="profile-edit-btn" style="margin-top:10px;">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                                    <span>Save Analyst Dossier</span>
+                                    <span>Save Profile Changes</span>
                                     <div class="auth-btn-spinner" style="display:none;"></div>
                                 </button>
                             </form>
@@ -2094,13 +2063,13 @@
                             <div class="gmi-panel-card-header">
                                 <div class="gmi-panel-title-group">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                    <h3 class="gmi-panel-title">Update Terminal Password</h3>
+                                    <h3 class="gmi-panel-title">Change Account Password</h3>
                                 </div>
                             </div>
                             <div class="gmi-panel-card-body">
                                 <form id="profile-password-form" onsubmit="handlePasswordChange(event)">
                                     <div class="auth-input-group">
-                                        <label for="profile-current-password">Current Access Code</label>
+                                        <label for="profile-current-password">Current Password</label>
                                         <div class="auth-input-wrap">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                             <input type="password" id="profile-current-password" placeholder="Enter current password" required minlength="6" autocomplete="current-password">
@@ -2108,7 +2077,7 @@
                                     </div>
 
                                     <div class="auth-input-group">
-                                        <label for="profile-new-password">New Military-Grade Password</label>
+                                        <label for="profile-new-password">New Password</label>
                                         <div class="auth-input-wrap">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                             <input type="password" id="profile-new-password" placeholder="Min 6 characters (Letters, numbers, symbols)" required minlength="6" autocomplete="new-password" oninput="checkPasswordStrength(this.value)">
@@ -2139,12 +2108,12 @@
                             </div>
                         </div>
 
-                        <!-- Session & Infrastructure Diagnostics -->
+                        <!-- Session Security & Diagnostics -->
                         <div class="gmi-dash-panel-card">
                             <div class="gmi-panel-card-header">
                                 <div class="gmi-panel-title-group">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                    <h3 class="gmi-panel-title">Session Telemetry & Access Diagnostics</h3>
+                                    <h3 class="gmi-panel-title">Session Security & Status</h3>
                                 </div>
                             </div>
                             <div class="gmi-panel-card-body">
@@ -2155,26 +2124,26 @@
                                     </div>
                                     <div class="gmi-diag-item">
                                         <span class="gmi-diag-label">Database Cluster:</span>
-                                        <span class="gmi-diag-val gmi-text-blue">MongoDB Atlas Cloud (Operational)</span>
+                                        <span class="gmi-diag-val gmi-text-blue">MongoDB Atlas Cloud (Connected)</span>
                                     </div>
                                     <div class="gmi-diag-item">
                                         <span class="gmi-diag-label">Session Lifetime:</span>
                                         <span class="gmi-diag-val">7 Days Rolling Expiry</span>
                                     </div>
                                     <div class="gmi-diag-item">
-                                        <span class="gmi-diag-label">Client Host Agent:</span>
-                                        <span class="gmi-diag-val" id="dash-diag-browser">Secure Web Browser Terminal</span>
+                                        <span class="gmi-diag-label">Client Browser:</span>
+                                        <span class="gmi-diag-val" id="dash-diag-browser">Secure Web Browser</span>
                                     </div>
                                     <div class="gmi-diag-item">
-                                        <span class="gmi-diag-label">Security Clearance State:</span>
-                                        <span class="gmi-diag-val gmi-text-gold">Verified Analyst Session</span>
+                                        <span class="gmi-diag-label">Account State:</span>
+                                        <span class="gmi-diag-val gmi-text-gold">Active Session</span>
                                     </div>
                                 </div>
 
                                 <div class="gmi-dash-session-actions" style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);">
                                     <button class="gmi-dash-logout-btn" onclick="closeProfileModal(); logoutUser();">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                                        <span>Terminate Active Session & Sign Out</span>
+                                        <span>Sign Out & Terminate Session</span>
                                     </button>
                                 </div>
                             </div>
@@ -2183,7 +2152,7 @@
                 </div>
 
                 <!-- ============================================ -->
-                <!-- TAB 6: TACTICAL PREFERENCES -->
+                <!-- TAB 6: DISPLAY & PREFERENCES -->
                 <!-- ============================================ -->
                 <div class="profile-tab-content" id="profile-tab-preferences" data-tab-name="preferences">
                     <div class="gmi-dash-prefs-layout">
@@ -2192,11 +2161,11 @@
                             <div class="gmi-panel-card-header">
                                 <div class="gmi-panel-title-group">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg>
-                                    <h3 class="gmi-panel-title">Command HUD Theme Accent</h3>
+                                    <h3 class="gmi-panel-title">Interface Accent Theme</h3>
                                 </div>
                             </div>
                             <div class="gmi-panel-card-body">
-                                <p class="gmi-dash-desc">Select the visual tactical color scheme for your analyst workspace and telemetry displays:</p>
+                                <p class="gmi-dash-desc">Select the primary accent color scheme for your analyst workspace and telemetry displays:</p>
                                 <div class="gmi-theme-picker-grid">
                                     <button class="gmi-theme-card active" data-theme="gold" onclick="applyTacticalTheme('gold')">
                                         <span class="gmi-theme-preview gmi-theme-gold"></span>
@@ -2215,33 +2184,22 @@
                                     </button>
                                     <button class="gmi-theme-card" data-theme="crimson" onclick="applyTacticalTheme('crimson')">
                                         <span class="gmi-theme-preview gmi-theme-crimson"></span>
-                                        <span class="gmi-theme-title">DEFCON 1 Red</span>
-                                        <span class="gmi-theme-tag">Combat Alert</span>
+                                        <span class="gmi-theme-title">Alert Crimson</span>
+                                        <span class="gmi-theme-tag">Contrast Red</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Operational Sound & Radar Toggles -->
+                        <!-- Telemetry & Animation Preferences -->
                         <div class="gmi-dash-panel-card">
                             <div class="gmi-panel-card-header">
                                 <div class="gmi-panel-title-group">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                                    <h3 class="gmi-panel-title">Interface Ergonomics</h3>
+                                    <h3 class="gmi-panel-title">Display & Telemetry Preferences</h3>
                                 </div>
                             </div>
                             <div class="gmi-panel-card-body">
-                                <div class="gmi-toggle-row">
-                                    <div class="gmi-toggle-meta">
-                                        <span class="gmi-toggle-title">Tactical Sound Synthesizer</span>
-                                        <span class="gmi-toggle-desc">Synthesize authentic high-tech UI feedback chirps and radar sonar pings</span>
-                                    </div>
-                                    <label class="gmi-switch">
-                                        <input type="checkbox" id="dash-pref-sound" onchange="toggleSoundPref(this.checked)" checked>
-                                        <span class="gmi-slider"></span>
-                                    </label>
-                                </div>
-
                                 <div class="gmi-toggle-row">
                                     <div class="gmi-toggle-meta">
                                         <span class="gmi-toggle-title">Real-Time News Wire Auto-Ticker</span>
@@ -2255,8 +2213,8 @@
 
                                 <div class="gmi-toggle-row">
                                     <div class="gmi-toggle-meta">
-                                        <span class="gmi-toggle-title">Radar Pulse Sweep Animation</span>
-                                        <span class="gmi-toggle-desc">Enable smooth animated radar sweep beams on interactive map tiles</span>
+                                        <span class="gmi-toggle-title">Background Radar Animation</span>
+                                        <span class="gmi-toggle-desc">Enable smooth animated radar sweep beams on hero and map sections (disable to reduce GPU/battery usage)</span>
                                     </div>
                                     <label class="gmi-switch">
                                         <input type="checkbox" id="dash-pref-radar" onchange="toggleRadarPref(this.checked)" checked>
@@ -2811,7 +2769,7 @@
 
     <!-- Main JavaScript -->
     <script src="data.js"></script>
-    <script src="auth.js?v=2.1.0"></script>
+    <script src="auth.js?v=2.2.0"></script>
     <script src="admin.js?v=2.0.5"></script>
     <script src="app.js?v=1.2.5"></script>
 </body>

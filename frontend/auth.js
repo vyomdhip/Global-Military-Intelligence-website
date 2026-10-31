@@ -247,65 +247,8 @@ let currentDashWatchlistFilter = 'all';
 let userBriefingsCache = [];
 let audioCtxInstance = null;
 
-// Tactical Web Audio Synthesizer (Zero dependencies, pure Web Audio API)
-function playTacticalSound(type = 'chirp') {
-    try {
-        const soundEnabled = localStorage.getItem('gmi_pref_sound') !== 'false';
-        if (!soundEnabled) return;
-
-        if (!audioCtxInstance) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) audioCtxInstance = new AudioContext();
-        }
-        if (!audioCtxInstance) return;
-        if (audioCtxInstance.state === 'suspended') {
-            audioCtxInstance.resume();
-        }
-
-        const now = audioCtxInstance.currentTime;
-        const osc = audioCtxInstance.createOscillator();
-        const gain = audioCtxInstance.createGain();
-
-        osc.connect(gain);
-        gain.connect(audioCtxInstance.destination);
-
-        if (type === 'tab' || type === 'click') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, now);
-            osc.frequency.exponentialRampToValueAtTime(1400, now + 0.04);
-            gain.gain.setValueAtTime(0.04, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-            osc.start(now);
-            osc.stop(now + 0.05);
-        } else if (type === 'open') {
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(440, now);
-            osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-            gain.gain.setValueAtTime(0.06, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-            osc.start(now);
-            osc.stop(now + 0.12);
-        } else if (type === 'success') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(587.33, now); // D5
-            osc.frequency.setValueAtTime(880, now + 0.06); // A5
-            gain.gain.setValueAtTime(0.06, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-            osc.start(now);
-            osc.stop(now + 0.18);
-        } else if (type === 'chirp') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200, now);
-            osc.frequency.exponentialRampToValueAtTime(1800, now + 0.06);
-            gain.gain.setValueAtTime(0.05, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-            osc.start(now);
-            osc.stop(now + 0.07);
-        }
-    } catch (e) {
-        // Audio errors fail silently
-    }
-}
+// Sound synthesizer disabled for clean professional interface
+function playTacticalSound() {}
 
 // Show Profile / Analyst Dashboard
 function showProfile(targetTab = 'overview') {
@@ -337,7 +280,7 @@ function openProfileModal(targetTab = 'overview') {
     startDashZuluClock();
 
     // Play subtle tactical audio chime
-    playTacticalSound('open');
+    
 
     // Fetch fresh profile data and render workspace
     fetchProfileData();
@@ -433,7 +376,7 @@ function switchProfileTab(tabName) {
     }
 
     // Play subtle tap sound
-    playTacticalSound('tab');
+    
 }
 
 // Fetch Profile Data from API
@@ -471,44 +414,32 @@ function populateProfileUI(data) {
     if (avatarEl) avatarEl.textContent = initial;
     if (cardAvatar) cardAvatar.textContent = initial;
 
-    // Title / Callsign / Username
+    // Title & Display Name
     const titleEl = document.getElementById('profile-display-title');
     const cardName = document.getElementById('dossier-card-name');
     const dispName = data.displayName || data.username || 'Analyst';
     if (titleEl) titleEl.textContent = dispName;
     if (cardName) cardName.textContent = dispName.toUpperCase();
 
-    // Callsign
-    const callsignVal = data.callsign || (data.username ? `[${data.username.toUpperCase()}-ACTUAL]` : '[TACTICAL-1]');
-    const callsignBadge = document.getElementById('profile-callsign-badge');
-    const cardCallsign = document.getElementById('dossier-card-callsign');
-    const editCallsign = document.getElementById('profile-edit-callsign');
-    if (callsignBadge) callsignBadge.textContent = callsignVal;
-    if (cardCallsign) cardCallsign.textContent = `CALLSIGN: ${callsignVal.replace(/[\[\]]/g, '')}`;
-    if (editCallsign && !editCallsign.value) editCallsign.value = data.callsign || '';
-
-    // Role & Clearance
+    // Role & Clearance State
     const roleStr = (data.role || 'user').toString().trim().toLowerCase();
     const isAdmin = roleStr === 'admin';
     const badgeEl = document.getElementById('profile-role-badge');
     const clearanceLabel = document.getElementById('profile-clearance-label');
+    const cardRole = document.getElementById('dossier-card-role');
+
     if (badgeEl) {
-        badgeEl.textContent = isAdmin ? 'SYS-ADMIN' : 'ANALYST';
+        badgeEl.textContent = isAdmin ? 'ADMINISTRATOR' : 'ANALYST';
         badgeEl.style.color = isAdmin ? '#d4af37' : '#38bdf8';
         badgeEl.style.borderColor = isAdmin ? 'rgba(212, 175, 55, 0.4)' : 'rgba(56, 189, 248, 0.35)';
         badgeEl.style.background = isAdmin ? 'rgba(212, 175, 55, 0.15)' : 'rgba(56, 189, 248, 0.12)';
     }
     if (clearanceLabel) {
-        clearanceLabel.textContent = isAdmin ? 'TOP SECRET // COALITION COMMANDER' : 'SECRET // TIER-1 FIELD ANALYST';
+        clearanceLabel.textContent = isAdmin ? 'SYSTEM ADMINISTRATOR' : 'VERIFIED ANALYST';
     }
-
-    // Analyst UID
-    const uid = data.id || data._id || 'ANL-8942';
-    const shortUid = 'ANL-GMI-' + String(uid).slice(-4).toUpperCase();
-    const uidEl = document.getElementById('profile-analyst-uid');
-    const cardHash = document.getElementById('dossier-card-hash');
-    if (uidEl) uidEl.textContent = shortUid;
-    if (cardHash) cardHash.textContent = `SEC-HASH: ${shortUid}-${String(uid).slice(0, 4).toUpperCase()}`;
+    if (cardRole) {
+        cardRole.textContent = isAdmin ? 'System Administrator' : 'Verified Analyst';
+    }
 
     // Specialty & Regional Focus
     const specialtyVal = data.specialty || 'Strategic Defense Intelligence';
@@ -516,6 +447,7 @@ function populateProfileUI(data) {
     const specChip = document.getElementById('profile-specialty-chip');
     const regChip = document.getElementById('profile-region-chip');
     const cardSpec = document.getElementById('dossier-card-specialty');
+    const cardRegion = document.getElementById('dossier-card-region');
     const editSpec = document.getElementById('profile-edit-specialty');
     const editRegion = document.getElementById('profile-edit-region');
     const editBio = document.getElementById('profile-edit-bio');
@@ -523,6 +455,7 @@ function populateProfileUI(data) {
     if (specChip) specChip.textContent = specialtyVal;
     if (regChip) regChip.textContent = regionVal;
     if (cardSpec) cardSpec.textContent = specialtyVal;
+    if (cardRegion) cardRegion.textContent = regionVal;
     if (editSpec) editSpec.value = specialtyVal;
     if (editRegion) editRegion.value = regionVal;
     if (editBio && data.bio !== undefined) editBio.value = data.bio || '';
@@ -586,34 +519,17 @@ function renderUserOverviewTelemetry() {
     const nEl = document.getElementById('dash-metric-nations');
     const cEl = document.getElementById('dash-metric-conflicts');
     const rEl = document.getElementById('dash-metric-reports');
-    const totalWlEl = document.getElementById('profile-info-watchlist');
+    const totalWlEl = document.getElementById('dash-metric-total-wl');
+    const totalWlInfoEl = document.getElementById('profile-info-watchlist');
     const badgeWl = document.getElementById('dash-badge-watchlist');
     const tabWl = document.getElementById('dash-tab-watchlist-count');
 
     if (nEl) nEl.textContent = nations.length;
     if (cEl) cEl.textContent = conflicts.length;
     if (totalWlEl) totalWlEl.textContent = list.length;
+    if (totalWlInfoEl) totalWlInfoEl.textContent = list.length;
     if (badgeWl) badgeWl.textContent = list.length;
     if (tabWl) tabWl.textContent = list.length;
-
-    // DEFCON Threat Level Calculation
-    const defconEl = document.getElementById('dash-metric-defcon');
-    const defconSub = document.getElementById('dash-metric-defcon-sub');
-    if (defconEl && defconSub) {
-        if (conflicts.length >= 2) {
-            defconEl.textContent = 'DEFCON 2';
-            defconEl.style.color = '#ef4444';
-            defconSub.textContent = 'HOSTILITIES ACTIVE // RED ALERT';
-        } else if (conflicts.length === 1) {
-            defconEl.textContent = 'DEFCON 3';
-            defconEl.style.color = '#f59e0b';
-            defconSub.textContent = 'ELEVATED READINESS POSTURE';
-        } else {
-            defconEl.textContent = 'DEFCON 4';
-            defconEl.style.color = '#38bdf8';
-            defconSub.textContent = 'STRATEGIC SURVEILLANCE';
-        }
-    }
 
     // Populate Radar List
     const radarContainer = document.getElementById('dash-overview-radar-list');
@@ -622,8 +538,8 @@ function renderUserOverviewTelemetry() {
             radarContainer.innerHTML = `
                 <div class="gmi-dash-radar-empty">
                     <div class="gmi-radar-empty-icon">📡</div>
-                    <div class="gmi-radar-empty-title">Radar Offline: No Targets Locked</div>
-                    <div class="gmi-radar-empty-desc">Quick-deploy superpowers to your tactical radar to monitor their real-time force projection:</div>
+                    <div class="gmi-radar-empty-title">No Targets Monitored</div>
+                    <div class="gmi-radar-empty-desc">Quick-deploy superpowers or frontline hotspots to your active intelligence radar:</div>
                     <div class="gmi-quick-deploy-strip">
                         <button class="gmi-deploy-btn" onclick="quickAddSuperpower('USA')">+ 🇺🇸 USA</button>
                         <button class="gmi-deploy-btn" onclick="quickAddSuperpower('Russia')">+ 🇷🇺 Russia</button>
@@ -679,7 +595,7 @@ function renderUserOverviewTelemetry() {
                                     <span class="gmi-radar-rank-pill" style="color:#ef4444;background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);">COMBAT ZONE</span>
                                 </div>
                                 <div class="gmi-radar-submeta">
-                                    <span>High-Intensity Conflict Theater</span>
+                                    <span>Active Conflict Theater</span>
                                 </div>
                             </div>
                         </div>
@@ -728,42 +644,13 @@ function renderUserOverviewTelemetry() {
             intelContainer.innerHTML = '<div style="color:#64748b;font-size:0.8rem;padding:8px 0;">Strategic wire feed synchronizing...</div>';
         }
     }
-
-    // Populate Session Activity Timeline
-    const timelineEl = document.getElementById('dash-overview-timeline');
-    if (timelineEl) {
-        const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        timelineEl.innerHTML = `
-            <div class="gmi-timeline-item">
-                <div class="gmi-timeline-dot"></div>
-                <div class="gmi-timeline-content">
-                    <span class="gmi-timeline-text">Terminal session verified with 256-bit JWT</span>
-                    <span class="gmi-timeline-time">${timeNow} • TLS 1.3 SECURE</span>
-                </div>
-            </div>
-            <div class="gmi-timeline-item">
-                <div class="gmi-timeline-dot" style="background:#38bdf8;box-shadow:0 0 8px #38bdf8;"></div>
-                <div class="gmi-timeline-content">
-                    <span class="gmi-timeline-text">Live telemetry synchronized with MongoDB Atlas cluster</span>
-                    <span class="gmi-timeline-time">SYSTEM STATUS: OPTIMAL</span>
-                </div>
-            </div>
-            <div class="gmi-timeline-item">
-                <div class="gmi-timeline-dot" style="background:#10b981;box-shadow:0 0 8px #10b981;"></div>
-                <div class="gmi-timeline-content">
-                    <span class="gmi-timeline-text">Radar surveillance tracking ${nations.length} nation(s) and ${conflicts.length} conflict(s)</span>
-                    <span class="gmi-timeline-time">ORBAT TELEMETRY ACTIVE</span>
-                </div>
-            </div>
-        `;
-    }
 }
 
 // 1-Click Quick Deploy Superpowers to Watchlist
 async function quickAddSuperpower(nationKey) {
     if (typeof toggleWatchlistItem === 'function') {
         await toggleWatchlistItem('nation', nationKey);
-        playTacticalSound('success');
+        
         renderUserOverviewTelemetry();
         renderUserWatchlistTab();
     }
@@ -938,7 +825,7 @@ async function handleDashWatchlistQuickAdd(selectEl) {
     const [targetType, targetId] = val.split(':');
     if (targetType && targetId && typeof toggleWatchlistItem === 'function') {
         await toggleWatchlistItem(targetType, targetId);
-        playTacticalSound('success');
+        
         selectEl.selectedIndex = 0;
         renderUserWatchlistTab();
         renderUserOverviewTelemetry();
@@ -949,7 +836,7 @@ async function handleDashWatchlistQuickAdd(selectEl) {
 async function removeWatchlistFromDash(targetType, targetId) {
     if (typeof toggleWatchlistItem === 'function') {
         await toggleWatchlistItem(targetType, targetId);
-        playTacticalSound('click');
+        
         renderUserWatchlistTab();
         renderUserOverviewTelemetry();
     }
@@ -1080,24 +967,17 @@ function checkPasswordStrength(password) {
     meterLabel.style.color = color;
 }
 
-// Apply Tactical Theme Accent (Gold, Cyan, Emerald, Crimson)
-function applyTacticalTheme(themeName, playSnd = true) {
+// Apply Interface Theme Accent (Gold, Cyan, Emerald, Crimson)
+function applyTacticalTheme(themeName) {
     document.documentElement.setAttribute('data-user-theme', themeName);
     localStorage.setItem('gmi_user_theme', themeName);
 
     document.querySelectorAll('.gmi-theme-card').forEach(card => {
         card.classList.toggle('active', card.dataset.theme === themeName);
     });
-
-    if (playSnd) playTacticalSound('chirp');
 }
 
 // Preferences toggles
-function toggleSoundPref(val) {
-    localStorage.setItem('gmi_pref_sound', val ? 'true' : 'false');
-    if (val) playTacticalSound('chirp');
-}
-
 function toggleAutoNewsPref(val) {
     localStorage.setItem('gmi_pref_autonews', val ? 'true' : 'false');
 }
@@ -1111,22 +991,19 @@ function toggleRadarPref(val) {
 
 function initPreferencesUI() {
     const savedTheme = localStorage.getItem('gmi_user_theme') || 'gold';
-    applyTacticalTheme(savedTheme, false);
+    applyTacticalTheme(savedTheme);
 
-    const soundPref = localStorage.getItem('gmi_pref_sound') !== 'false';
     const autoNewsPref = localStorage.getItem('gmi_pref_autonews') !== 'false';
     const radarPref = localStorage.getItem('gmi_pref_radar') !== 'false';
 
-    const sEl = document.getElementById('dash-pref-sound');
     const anEl = document.getElementById('dash-pref-autonews');
     const rEl = document.getElementById('dash-pref-radar');
 
-    if (sEl) sEl.checked = soundPref;
     if (anEl) anEl.checked = autoNewsPref;
     if (rEl) rEl.checked = radarPref;
 }
 
-// Handle Profile Updates (Display Name, Callsign, Specialty, Region, Bio)
+// Handle Profile Updates (Display Name, Specialty, Region, Bio)
 async function handleProfileUpdate(event) {
     event.preventDefault();
 
@@ -1142,7 +1019,6 @@ async function handleProfileUpdate(event) {
     if (btn) btn.disabled = true;
 
     const displayName = document.getElementById('profile-edit-displayname')?.value.trim();
-    const callsign = document.getElementById('profile-edit-callsign')?.value.trim();
     const specialty = document.getElementById('profile-edit-specialty')?.value;
     const regionalFocus = document.getElementById('profile-edit-region')?.value;
     const bio = document.getElementById('profile-edit-bio')?.value.trim();
@@ -1154,7 +1030,7 @@ async function handleProfileUpdate(event) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ displayName, callsign, specialty, regionalFocus, bio })
+            body: JSON.stringify({ displayName, specialty, regionalFocus, bio })
         });
 
         const data = await res.json();
@@ -1167,7 +1043,6 @@ async function handleProfileUpdate(event) {
         // Update local storage
         const user = JSON.parse(localStorage.getItem('gmi_user') || '{}');
         user.displayName = data.displayName;
-        user.callsign = data.callsign;
         user.specialty = data.specialty;
         user.regionalFocus = data.regionalFocus;
         user.bio = data.bio;
@@ -1177,15 +1052,13 @@ async function handleProfileUpdate(event) {
         updateAuthUI(user);
         populateProfileUI(data);
 
-        playTacticalSound('success');
-        showToast('Analyst Dossier successfully updated!', 'success');
-
+        showToast('Profile updated successfully.', 'success');
     } catch (err) {
         console.error('Profile update error:', err);
-        showToast('Network error. Please try again.', 'error');
+        showToast('Network error while updating profile.', 'error');
     } finally {
         if (spinner) spinner.style.display = 'none';
-        if (label) label.textContent = 'Save Analyst Dossier';
+        if (label) label.textContent = 'Save Profile Changes';
         if (btn) btn.disabled = false;
     }
 }
@@ -1243,7 +1116,7 @@ async function handlePasswordChange(event) {
 
         document.getElementById('profile-password-form')?.reset();
         checkPasswordStrength('');
-        playTacticalSound('success');
+        
         showToast('Terminal access code updated successfully!', 'success');
 
     } catch (err) {
