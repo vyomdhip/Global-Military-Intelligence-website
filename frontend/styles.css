@@ -6356,6 +6356,8 @@ body {
     padding: 24px 28px;
     scrollbar-width: thin;
     scrollbar-color: rgba(212, 175, 55, 0.3) rgba(10, 16, 28, 0.5);
+    display: flex;
+    flex-direction: column;
 }
 
 .gmi-dash-body-scroll::-webkit-scrollbar {
@@ -7302,9 +7304,18 @@ body {
 }
 
 /* Security Tab */
+#profile-tab-security.active {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .gmi-dash-security-layout {
-    max-width: 540px;
-    margin: 0 auto;
+    max-width: 520px;
+    margin: auto;
     width: 100%;
 }
 
@@ -7312,6 +7323,29 @@ body {
     background: rgba(13, 22, 38, 0.7);
     border: 1px solid rgba(148, 163, 184, 0.15);
     border-radius: 12px;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.gmi-security-card .gmi-panel-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    background: rgba(10, 16, 28, 0.45);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    text-align: center;
+}
+
+.gmi-security-card .gmi-panel-title-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gmi-security-card .gmi-panel-card-body {
+    padding: 24px 28px 28px 28px;
 }
 
 .gmi-pw-meter-wrap {
@@ -7343,8 +7377,9 @@ body {
 }
 
 .gmi-dash-session-footer {
-    margin-top: 26px;
-    padding-top: 18px;
+    margin-top: 24px;
+    padding-top: 20px;
+    padding-bottom: 4px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
