@@ -7369,6 +7369,47 @@ body {
     box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
+.gmi-dash-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 8px;
+    color: #f87171;
+    font-family: var(--font-display, 'Rajdhani', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    white-space: nowrap;
+}
+
+.gmi-dash-logout-btn svg {
+    flex-shrink: 0;
+    stroke: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.gmi-dash-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.28);
+}
+
+.gmi-dash-logout-btn:hover svg {
+    transform: translateX(2px);
+}
+
+.gmi-dash-logout-btn:active {
+    transform: scale(0.97);
+}
+
 /* Preferences Tab */
 .gmi-dash-prefs-layout {
     display: flex;
