@@ -3662,64 +3662,290 @@ body {
 }
 
 /* News Date Filter Dropdown */
+/* ============================================
+   NEWS INTERACTIVE CALENDAR DATE PICKER
+   ============================================ */
 .news-date-filter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.news-date-icon {
-    color: var(--color-accent-gold);
-    flex-shrink: 0;
-    pointer-events: none;
-    position: absolute;
-    left: 12px;
-    z-index: 1;
-}
-
-.news-date-filter select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    padding: 8px 36px 8px 34px;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
-    font-family: var(--font-display);
-    font-size: 0.875rem;
+.news-calendar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px 8px 12px;
+    background: var(--color-bg-tertiary, #162d4a);
+    border: 1px solid var(--color-border, rgba(148, 163, 184, 0.2));
+    border-radius: var(--radius-md, 8px);
+    color: var(--color-text-secondary, #94a3b8);
+    font-family: var(--font-display, 'Rajdhani', sans-serif);
+    font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-base);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    min-width: 160px;
-}
-
-.news-date-filter select:hover {
-    border-color: var(--color-accent-gold);
-    color: var(--color-text-primary);
-}
-
-.news-date-filter select:focus {
+    transition: all 0.2s ease;
     outline: none;
-    border-color: var(--color-accent-gold);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
-    color: var(--color-text-primary);
+    user-select: none;
+    min-width: 145px;
+    justify-content: space-between;
 }
 
-.news-date-filter select option {
-    background: var(--color-bg-secondary);
-    color: var(--color-text-primary);
-    padding: 8px;
-    font-family: var(--font-display);
+.news-calendar-btn:hover {
+    border-color: var(--color-accent-gold, #d4af37);
+    color: var(--color-text-primary, #ffffff);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
 }
 
-.news-date-filter select:not([value="all"]):valid {
-    border-color: var(--color-accent-gold);
-    color: var(--color-accent-gold);
+.news-calendar-btn.active,
+.news-calendar-btn.has-filter {
+    border-color: var(--color-accent-gold, #d4af37);
+    color: var(--color-accent-gold, #d4af37);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.news-calendar-btn .news-date-icon {
+    color: var(--color-accent-gold, #d4af37);
+    flex-shrink: 0;
+}
+
+.news-calendar-chevron {
+    flex-shrink: 0;
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+}
+
+.news-calendar-btn.active .news-calendar-chevron {
+    transform: rotate(180deg);
+}
+
+.news-calendar-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 6px;
+    color: #f87171;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.news-calendar-clear:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+/* Calendar Popover */
+.news-calendar-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 290px;
+    background: linear-gradient(180deg, #0d1a30 0%, #080f1d 100%);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(212, 175, 55, 0.1);
+    padding: 16px;
+    z-index: 100;
+    display: none;
+    animation: calFadeIn 0.2s ease;
+    backdrop-filter: blur(12px);
+}
+
+.news-calendar-popover.open {
+    display: block;
+}
+
+@keyframes calFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cal-pop-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cal-month-title {
+    font-family: var(--font-display, 'Rajdhani', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    user-select: none;
+}
+
+.cal-nav-btn {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #cbd5e1;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    line-height: 1;
+}
+
+.cal-nav-btn:hover {
+    background: rgba(212, 175, 55, 0.18);
+    border-color: #d4af37;
+    color: #d4af37;
+}
+
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.cal-weekdays span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 0;
+}
+
+.cal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-bottom: 12px;
+}
+
+.cal-day-cell {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display, 'Rajdhani', sans-serif);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    padding: 0;
+}
+
+.cal-day-cell:hover:not(.cal-day-empty) {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.cal-day-empty {
+    cursor: default;
+    opacity: 0.25;
+    color: #475569;
+}
+
+.cal-day-today {
+    border-color: rgba(56, 189, 248, 0.5) !important;
+    color: #38bdf8;
+}
+
+/* Day has news reports */
+.cal-day-has-news {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cal-day-has-news::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: #d4af37;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+}
+
+.cal-day-has-news:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.15) !important;
+}
+
+/* Selected Day */
+.cal-day-selected {
+    background: #d4af37 !important;
+    color: #080c14 !important;
+    font-weight: 800 !important;
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.cal-day-selected::after {
+    background: #080c14 !important;
+    box-shadow: none !important;
+}
+
+/* Popover Footer */
+.cal-pop-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.75rem;
+}
+
+.cal-quick-btn {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: #94a3b8;
+    font-family: var(--font-display, 'Rajdhani', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.cal-quick-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #d4af37;
+    color: #d4af37;
+}
+
+.cal-intel-count {
+    font-size: 0.72rem;
+    color: #64748b;
 }
 
 .refresh-btn {
@@ -4039,9 +4265,17 @@ body {
         width: 100%;
     }
 
-    .news-date-filter select {
+    .news-date-filter select,
+    .news-calendar-btn {
         width: 100%;
         min-width: unset;
+    }
+
+    .news-calendar-popover {
+        right: auto;
+        left: 0;
+        width: 100%;
+        max-width: 310px;
     }
 }
 

@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.2.3">
+    <link rel="stylesheet" href="styles.css?v=2.3.0">
 </head>
 
 <body>
@@ -410,17 +410,44 @@
                             <button class="category-btn" data-category="tech">Military Tech</button>
                         </div>
                         <div class="news-controls-right">
-                            <div class="news-date-filter">
-                                <svg class="news-date-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                </svg>
-                                <select id="news-date-select" onchange="filterNewsByDate()">
-                                    <option value="all">All Dates</option>
-                                </select>
+                            <div class="news-date-filter" id="news-calendar-wrapper">
+                                <button type="button" class="news-calendar-btn" id="news-calendar-btn" onclick="toggleNewsCalendar(event)" aria-expanded="false" aria-label="Choose date from calendar">
+                                    <svg class="news-date-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                        <line x1="16" y1="2" x2="16" y2="6" />
+                                        <line x1="8" y1="2" x2="8" y2="6" />
+                                        <line x1="3" y1="10" x2="21" y2="10" />
+                                    </svg>
+                                    <span id="news-calendar-label">All Dates</span>
+                                    <svg class="news-calendar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg>
+                                </button>
+                                <button type="button" class="news-calendar-clear" id="news-calendar-clear" onclick="clearNewsDateFilter(event)" title="Clear date filter" style="display:none;">✕</button>
+
+                                <!-- Interactive Calendar Popover -->
+                                <div class="news-calendar-popover" id="news-calendar-popover" role="dialog" aria-label="Select Date">
+                                    <div class="cal-pop-header">
+                                        <button type="button" class="cal-nav-btn" onclick="navigateNewsCalendarMonth(-1)" title="Previous Month">‹</button>
+                                        <div class="cal-month-title" id="cal-month-title">October 2026</div>
+                                        <button type="button" class="cal-nav-btn" onclick="navigateNewsCalendarMonth(1)" title="Next Month">›</button>
+                                    </div>
+
+                                    <div class="cal-weekdays">
+                                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                    </div>
+
+                                    <div class="cal-days-grid" id="cal-days-grid">
+                                        <!-- Generated dynamically by JS -->
+                                    </div>
+
+                                    <div class="cal-pop-footer">
+                                        <button type="button" class="cal-quick-btn" onclick="clearNewsDateFilter(event)">All Dates</button>
+                                        <span class="cal-intel-count" id="cal-intel-count">Select a date</span>
+                                        <button type="button" class="cal-quick-btn" onclick="selectNewsToday(event)">Today</button>
+                                    </div>
+                                </div>
                             </div>
                             <button class="refresh-btn" onclick="refreshNews()">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2742,7 +2769,7 @@
     <script src="data.js"></script>
     <script src="auth.js?v=2.2.0"></script>
     <script src="admin.js?v=2.0.5"></script>
-    <script src="app.js?v=1.2.5"></script>
+    <script src="app.js?v=1.3.0"></script>
 </body>
 
 </html>

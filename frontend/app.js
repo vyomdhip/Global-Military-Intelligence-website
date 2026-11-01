@@ -1503,6 +1503,7 @@ function initNews() {
     });
 
     // Load news on init
+    initNewsCalendar();
     fetchNews();
 }
 
@@ -1882,61 +1883,251 @@ function filterNews() {
     renderNews();
 }
 
-// Populate the date dropdown with unique dates from newsData
-function populateDateDropdown() {
-    const dateSelect = document.getElementById('news-date-select');
-    if (!dateSelect) return;
+// ============================================
+// NEWS INTERACTIVE CALENDAR STATE & CONTROLS
+// ============================================
+let newsCalendarViewDate = new Date();
+let newsArticlesByDate = new Map();
+let isNewsCalendarInitialized = false;
 
-    // Extract unique dates from newsData
-    const dateMap = new Map();
+function initNewsCalendar() {
+    if (isNewsCalendarInitialized) return;
+    isNewsCalendarInitialized = true;
+
+    // Close calendar popover on outside click
+    document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('news-calendar-wrapper');
+        const popover = document.getElementById('news-calendar-popover');
+        if (wrapper && popover && !wrapper.contains(e.target)) {
+            closeNewsCalendar();
+        }
+    });
+
+    // Close calendar popover on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeNewsCalendar();
+        }
+    });
+}
+
+// Build date indexing map from newsData
+function buildNewsDateMap() {
+    newsArticlesByDate.clear();
     newsData.forEach(article => {
         const d = new Date(article.publishedAt);
         if (isNaN(d.getTime())) return;
-
-        // Use the exact same formatting as the cards
-        const label = d.toLocaleDateString('en-US', {
+        const key = d.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
         });
-
-        // Sort key: YYYY-MM-DD for correct chronological sorting
-        const sortKey = d.getFullYear() + '-' +
-            String(d.getMonth() + 1).padStart(2, '0') + '-' +
-            String(d.getDate()).padStart(2, '0');
-
-        if (!dateMap.has(label)) {
-            dateMap.set(label, sortKey);
+        if (!newsArticlesByDate.has(key)) {
+            newsArticlesByDate.set(key, []);
         }
+        newsArticlesByDate.get(key).push(article);
     });
 
-    // Sort by the YYYY-MM-DD key (newest first)
-    const sortedDates = Array.from(dateMap.entries()).sort((a, b) => b[1].localeCompare(a[1]));
-
-    // Rebuild options
-    const prevValue = dateSelect.value;
-    dateSelect.innerHTML = '<option value="all">All Dates</option>';
-    sortedDates.forEach(([label, sortKey]) => {
-        const opt = document.createElement('option');
-        opt.value = label; // Use formatted label (e.g. "Jul 15, 2026") as the filter value
-        opt.textContent = label;
-        dateSelect.appendChild(opt);
-    });
-
-    // Restore previous selection if it still exists
-    if (prevValue && dateSelect.querySelector('option[value="' + prevValue + '"]')) {
-        dateSelect.value = prevValue;
-    } else {
-        dateSelect.value = 'all';
-        currentNewsDate = 'all';
+    // Set initial calendar view to latest article's month
+    if (newsData.length > 0) {
+        const latest = new Date(newsData[0].publishedAt);
+        if (!isNaN(latest.getTime())) {
+            newsCalendarViewDate = new Date(latest.getFullYear(), latest.getMonth(), 1);
+        }
     }
 }
 
-// Handle date dropdown change
+// Populate / Refresh Calendar Data
+function populateDateDropdown() {
+    buildNewsDateMap();
+    renderNewsCalendarGrid();
+    updateNewsCalendarUI(currentNewsDate);
+}
+
+function toggleNewsCalendar(event) {
+    if (event) event.stopPropagation();
+    const popover = document.getElementById('news-calendar-popover');
+    if (!popover) return;
+    if (popover.classList.contains('open')) {
+        closeNewsCalendar();
+    } else {
+        openNewsCalendar();
+    }
+}
+
+function openNewsCalendar() {
+    const popover = document.getElementById('news-calendar-popover');
+    const btn = document.getElementById('news-calendar-btn');
+    if (!popover || !btn) return;
+
+    // If currently filtered, focus on that month
+    if (currentNewsDate && currentNewsDate !== 'all') {
+        const parsed = new Date(currentNewsDate);
+        if (!isNaN(parsed.getTime())) {
+            newsCalendarViewDate = new Date(parsed.getFullYear(), parsed.getMonth(), 1);
+        }
+    }
+
+    renderNewsCalendarGrid();
+    popover.classList.add('open');
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+}
+
+function closeNewsCalendar() {
+    const popover = document.getElementById('news-calendar-popover');
+    const btn = document.getElementById('news-calendar-btn');
+    if (popover) popover.classList.remove('open');
+    if (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+    }
+}
+
+function navigateNewsCalendarMonth(delta) {
+    newsCalendarViewDate.setMonth(newsCalendarViewDate.getMonth() + delta);
+    renderNewsCalendarGrid();
+}
+
+function renderNewsCalendarGrid() {
+    const titleEl = document.getElementById('cal-month-title');
+    const gridEl = document.getElementById('cal-days-grid');
+    const countEl = document.getElementById('cal-intel-count');
+    if (!titleEl || !gridEl) return;
+
+    const year = newsCalendarViewDate.getFullYear();
+    const month = newsCalendarViewDate.getMonth();
+
+    titleEl.textContent = newsCalendarViewDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric'
+    });
+
+    const firstDayIndex = new Date(year, month, 1).getDay(); // 0 is Sunday
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    const todayStr = new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
+    let html = '';
+
+    // Previous month filler days
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+        const prevDay = daysInPrevMonth - i;
+        const prevDate = new Date(year, month - 1, prevDay);
+        const dateKey = prevDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        const hasNews = newsArticlesByDate.has(dateKey);
+        const isSelected = (currentNewsDate === dateKey);
+
+        html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
+            onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${prevDay}</button>`;
+    }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const thisDate = new Date(year, month, day);
+        const dateKey = thisDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        const hasNews = newsArticlesByDate.has(dateKey);
+        const count = hasNews ? newsArticlesByDate.get(dateKey).length : 0;
+        const isSelected = (currentNewsDate === dateKey);
+        const isToday = (dateKey === todayStr);
+
+        let classes = ['cal-day-cell'];
+        if (hasNews) classes.push('cal-day-has-news');
+        if (isSelected) classes.push('cal-day-selected');
+        if (isToday) classes.push('cal-day-today');
+
+        const titleTip = hasNews ? `${dateKey} (${count} report${count > 1 ? 's' : ''})` : dateKey;
+
+        html += `<button type="button" class="${classes.join(' ')}" onclick="selectNewsCalendarDate('${dateKey}')" title="${titleTip}">${day}</button>`;
+    }
+
+    // Next month filler days to complete grid cleanly
+    const totalCells = firstDayIndex + daysInMonth;
+    const nextDays = (7 - (totalCells % 7)) % 7;
+    for (let j = 1; j <= nextDays; j++) {
+        const nextDate = new Date(year, month + 1, j);
+        const dateKey = nextDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        const hasNews = newsArticlesByDate.has(dateKey);
+        const isSelected = (currentNewsDate === dateKey);
+
+        html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
+            onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${j}</button>`;
+    }
+
+    gridEl.innerHTML = html;
+
+    // Status counter in calendar footer
+    if (countEl) {
+        if (currentNewsDate && currentNewsDate !== 'all') {
+            const count = newsArticlesByDate.get(currentNewsDate)?.length || 0;
+            countEl.textContent = `${count} report${count === 1 ? '' : 's'}`;
+        } else {
+            countEl.textContent = `${newsData.length} total reports`;
+        }
+    }
+}
+
+function selectNewsCalendarDate(dateKey) {
+    currentNewsDate = dateKey;
+    updateNewsCalendarUI(dateKey);
+    renderNews();
+    closeNewsCalendar();
+}
+
+function selectNewsToday(event) {
+    if (event) event.stopPropagation();
+    const today = new Date();
+    const todayKey = today.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+    selectNewsCalendarDate(todayKey);
+}
+
+function clearNewsDateFilter(event) {
+    if (event) event.stopPropagation();
+    currentNewsDate = 'all';
+    updateNewsCalendarUI('all');
+    renderNews();
+    closeNewsCalendar();
+}
+
+function updateNewsCalendarUI(dateKey) {
+    const label = document.getElementById('news-calendar-label');
+    const clearBtn = document.getElementById('news-calendar-clear');
+    const calBtn = document.getElementById('news-calendar-btn');
+
+    if (label) {
+        label.textContent = (dateKey === 'all') ? 'All Dates' : dateKey;
+    }
+    if (clearBtn) {
+        clearBtn.style.display = (dateKey === 'all') ? 'none' : 'inline-flex';
+    }
+    if (calBtn) {
+        calBtn.classList.toggle('has-filter', dateKey !== 'all');
+    }
+}
+
+// Backward-compatibility alias
 function filterNewsByDate() {
-    const dateSelect = document.getElementById('news-date-select');
-    if (!dateSelect) return;
-    currentNewsDate = dateSelect.value;
     renderNews();
 }
 
@@ -2321,8 +2512,7 @@ function refreshNews() {
     currentNewsDate = 'all';
     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
     document.querySelector('.category-btn[data-category="all"]')?.classList.add('active');
-    const dateSelect = document.getElementById('news-date-select');
-    if (dateSelect) dateSelect.value = 'all';
+    updateNewsCalendarUI('all');
     fetchNews();
 }
 
