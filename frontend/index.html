@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.3.0">
+    <link rel="stylesheet" href="styles.css?v=2.3.2">
 </head>
 
 <body>
@@ -1914,6 +1914,22 @@
                                             </div>
                                         </button>
 
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('conflicts'), 50);">
+                                            <div class="gmi-quick-icon gmi-icon-red">⚔️</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Active Conflicts</span>
+                                                <span class="gmi-quick-desc">Frontline war zones & live updates</span>
+                                            </div>
+                                        </button>
+
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('news'), 50);">
+                                            <div class="gmi-quick-icon gmi-icon-purple">📡</div>
+                                            <div class="gmi-quick-meta">
+                                                <span class="gmi-quick-label">Strategic News Wire</span>
+                                                <span class="gmi-quick-desc">Global defense developments</span>
+                                            </div>
+                                        </button>
+
                                         <button class="gmi-quick-btn" onclick="closeProfileModal(); openWatchlistDashboard(); switchDashboardTab('notebook');">
                                             <div class="gmi-quick-icon gmi-icon-emerald">✍️</div>
                                             <div class="gmi-quick-meta">
@@ -1922,11 +1938,11 @@
                                             </div>
                                         </button>
 
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('news'), 50);">
-                                            <div class="gmi-quick-icon gmi-icon-red">📡</div>
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('history'), 50);">
+                                            <div class="gmi-quick-icon gmi-icon-gold">📜</div>
                                             <div class="gmi-quick-meta">
-                                                <span class="gmi-quick-label">Strategic News Wire</span>
-                                                <span class="gmi-quick-desc">Global defense developments</span>
+                                                <span class="gmi-quick-label">Military History</span>
+                                                <span class="gmi-quick-desc">Historical campaigns & doctrine</span>
                                             </div>
                                         </button>
                                     </div>
@@ -2036,8 +2052,7 @@
                                 <div class="gmi-dash-form-row">
                                     <div class="auth-input-group">
                                         <label for="profile-edit-specialty">Operational Specialty</label>
-                                        <div class="auth-input-wrap">
-                                            <select id="profile-edit-specialty" class="gmi-dash-form-select">
+                                        <select id="profile-edit-specialty" class="gmi-dash-form-select">
                                                 <option value="Strategic Defense Intelligence">Strategic Defense Intelligence</option>
                                                 <option value="Armor & Mechanized Warfare">Armor & Mechanized Warfare</option>
                                                 <option value="Naval Power Projection & Carriers">Naval Power Projection & Carriers</option>
@@ -2046,12 +2061,10 @@
                                                 <option value="Cyber & Electronic Reconnaissance">Cyber & Electronic Reconnaissance</option>
                                                 <option value="Geopolitical & Alliance Strategy">Geopolitical & Alliance Strategy</option>
                                             </select>
-                                        </div>
                                     </div>
                                     <div class="auth-input-group">
                                         <label for="profile-edit-region">Regional Theater Focus</label>
-                                        <div class="auth-input-wrap">
-                                            <select id="profile-edit-region" class="gmi-dash-form-select">
+                                        <select id="profile-edit-region" class="gmi-dash-form-select">
                                                 <option value="Global Theater">Global Theater</option>
                                                 <option value="Indo-Pacific Command">Indo-Pacific Command</option>
                                                 <option value="European Theater & NATO Flank">European Theater & NATO Flank</option>
@@ -2059,15 +2072,12 @@
                                                 <option value="Eurasian Heartland">Eurasian Heartland</option>
                                                 <option value="Arctic & Maritime Chokepoints">Arctic & Maritime Chokepoints</option>
                                             </select>
-                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="auth-input-group">
                                     <label for="profile-edit-bio">Field Notes / Analyst Bio</label>
-                                    <div class="auth-input-wrap">
-                                        <textarea id="profile-edit-bio" class="gmi-dash-textarea" rows="3" placeholder="Document your analytical focus, mission observations, and areas of strategic tracking..."></textarea>
-                                    </div>
+                                    <textarea id="profile-edit-bio" class="gmi-dash-textarea" rows="3" placeholder="Document your analytical focus, mission observations, and areas of strategic tracking..."></textarea>
                                 </div>
 
                                 <button type="submit" class="auth-submit-btn gmi-btn-gold" id="profile-edit-btn" style="margin-top:10px;">
@@ -2767,7 +2777,7 @@
 
     <!-- Main JavaScript -->
     <script src="data.js"></script>
-    <script src="auth.js?v=2.2.1"></script>
+    <script src="auth.js?v=2.2.2"></script>
     <script src="admin.js?v=2.0.5"></script>
     <script src="app.js?v=1.3.1"></script>
 </body>

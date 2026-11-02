@@ -6675,6 +6675,8 @@ body {
 .gmi-icon-amber { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.25); }
 .gmi-icon-emerald { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); }
 .gmi-icon-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+.gmi-icon-purple { background: rgba(168, 85, 247, 0.12); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.25); }
+.gmi-icon-gold { background: rgba(212, 175, 55, 0.12); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.25); }
 
 .gmi-metric-card-val {
     font-family: var(--font-display, 'Rajdhani', sans-serif);
@@ -6738,6 +6740,18 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.gmi-dash-overview-right .gmi-dash-panel-card:last-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.gmi-dash-overview-right .gmi-dash-panel-card:last-child .gmi-panel-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Panel Card */
@@ -6965,7 +6979,9 @@ body {
 .gmi-dash-quick-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-auto-rows: 1fr;
+    gap: 12px;
+    flex: 1;
 }
 
 .gmi-quick-btn {
@@ -6979,6 +6995,8 @@ body {
     text-align: left;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    height: 100%;
 }
 
 .gmi-quick-btn:hover {
@@ -7503,38 +7521,58 @@ body {
     gap: 16px;
 }
 
-.gmi-dash-form-select {
+.gmi-dash-form-select,
+.gmi-dash-textarea {
     width: 100%;
+    box-sizing: border-box;
     padding: 12px 14px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 0.88rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--color-text-primary, #ffffff);
+    font-family: var(--font-body, inherit);
+    font-size: 0.92rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
+    color-scheme: dark;
 }
 
-.gmi-dash-form-select:focus {
-    border-color: #d4af37;
+.gmi-dash-form-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+}
+
+.gmi-dash-form-select option {
+    background: #0b1329;
+    color: #ffffff;
+    padding: 8px;
 }
 
 .gmi-dash-textarea {
-    width: 100%;
-    padding: 12px 14px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 0.88rem;
-    outline: none;
     resize: vertical;
-    font-family: inherit;
-    line-height: 1.5;
+    min-height: 100px;
+    line-height: 1.55;
 }
 
+.gmi-dash-form-select:focus,
 .gmi-dash-textarea:focus {
-    border-color: #d4af37;
+    border-color: var(--color-accent-gold, #d4af37);
+    background-color: rgba(212, 175, 55, 0.04);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+}
+
+/* Redundant outer wrapper safety reset */
+.auth-input-wrap:has(> .gmi-dash-form-select),
+.auth-input-wrap:has(> .gmi-dash-textarea) {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
 }
 
 /* Security Tab */
@@ -7990,6 +8028,7 @@ input:checked + .gmi-slider:before {
 
     .gmi-dash-quick-grid {
         grid-template-columns: 1fr;
+        grid-auto-rows: auto;
     }
 
     .gmi-dash-form-row {
@@ -13461,4 +13500,4 @@ input:checked + .gmi-slider:before {
         flex-direction: column;
         align-items: flex-start;
     }
-}
+}
