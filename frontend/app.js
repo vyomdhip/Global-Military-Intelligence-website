@@ -1255,10 +1255,42 @@ function toggleEquipmentDetail(cardId) {
 // UTILITY FUNCTIONS
 // ============================================
 function showPage(page) {
-    if (page === 'compare') {
-        document.getElementById('compare-section').scrollIntoView({ behavior: 'smooth' });
+    const pageMap = {
+        'home': 'hero',
+        'hero': 'hero',
+        'nations': 'map-section',
+        'map': 'map-section',
+        'compare': 'compare-section',
+        'news': 'news-section',
+        'conflicts': 'conflicts-section',
+        'history': 'history-section',
+        'about': 'about-section'
+    };
+
+    const targetId = pageMap[page] || (document.getElementById(page) ? page : page + '-section');
+    const targetEl = document.getElementById(targetId);
+
+    if (targetEl) {
+        // Account for persistent 84px header height
+        const headerOffset = 84;
+        const elementPosition = targetEl.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: 'smooth'
+        });
+
+        // Update active navigation link in header
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + targetId || link.dataset.page === page) {
+                link.classList.add('active');
+            }
+        });
     }
-    console.log('Switching to page:', page);
+
+    console.log('Navigated to page section:', page);
 }
 
 function showBranchInfo(branch) {

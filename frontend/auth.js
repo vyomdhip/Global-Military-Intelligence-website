@@ -600,7 +600,7 @@ function renderUserOverviewTelemetry() {
                             </div>
                         </div>
                         <div class="gmi-radar-actions">
-                            <button class="gmi-radar-inspect-btn" onclick="closeProfileModal(); showPage('conflicts');">Theater →</button>
+                            <button class="gmi-radar-inspect-btn" onclick="closeProfileModal(); setTimeout(() => showPage('conflicts'), 50);">Theater →</button>
                         </div>
                     </div>
                 `;
@@ -630,7 +630,7 @@ function renderUserOverviewTelemetry() {
             let intelHtml = '';
             stories.forEach(art => {
                 intelHtml += `
-                    <div class="gmi-dash-intel-item" onclick="closeProfileModal(); showPage('news');">
+                    <div class="gmi-dash-intel-item" onclick="closeProfileModal(); setTimeout(() => showPage('news'), 50);">
                         <div class="gmi-intel-item-top">
                             <span class="gmi-intel-item-tag">${art.category || 'DEFENSE INTEL'}</span>
                             <span class="gmi-intel-item-time">${art.date || 'Recent Wire'}</span>
@@ -757,7 +757,7 @@ function renderUserWatchlistTab() {
                         Real-time battlefront analysis, territorial control updates, and casualty statistics monitored around the clock.
                     </div>
                     <div class="gmi-wl-actions-strip">
-                        <button class="gmi-wl-btn-inspect" onclick="closeProfileModal(); showPage('conflicts');">View Theater Report →</button>
+                        <button class="gmi-wl-btn-inspect" onclick="closeProfileModal(); setTimeout(() => showPage('conflicts'), 50);">View Theater Report →</button>
                         <button class="gmi-wl-btn-remove" onclick="removeWatchlistFromDash('conflict', '${item.targetId}')" title="Remove from Watchlist">✕ Remove</button>
                     </div>
                 </div>

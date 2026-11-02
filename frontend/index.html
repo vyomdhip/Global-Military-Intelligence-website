@@ -1906,7 +1906,7 @@
                                             </div>
                                         </button>
 
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('compare');">
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('compare'), 50);">
                                             <div class="gmi-quick-icon gmi-icon-amber">⚖️</div>
                                             <div class="gmi-quick-meta">
                                                 <span class="gmi-quick-label">Bilateral Comparison</span>
@@ -1922,7 +1922,7 @@
                                             </div>
                                         </button>
 
-                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); showPage('news');">
+                                        <button class="gmi-quick-btn" onclick="closeProfileModal(); setTimeout(() => showPage('news'), 50);">
                                             <div class="gmi-quick-icon gmi-icon-red">📡</div>
                                             <div class="gmi-quick-meta">
                                                 <span class="gmi-quick-label">Strategic News Wire</span>
@@ -2767,9 +2767,9 @@
 
     <!-- Main JavaScript -->
     <script src="data.js"></script>
-    <script src="auth.js?v=2.2.0"></script>
+    <script src="auth.js?v=2.2.1"></script>
     <script src="admin.js?v=2.0.5"></script>
-    <script src="app.js?v=1.3.0"></script>
+    <script src="app.js?v=1.3.1"></script>
 </body>
 
 </html>
