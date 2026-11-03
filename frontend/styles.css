@@ -6742,12 +6742,14 @@ body {
     gap: 20px;
 }
 
+.gmi-dash-overview-left .gmi-dash-panel-card:last-child,
 .gmi-dash-overview-right .gmi-dash-panel-card:last-child {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
+.gmi-dash-overview-left .gmi-dash-panel-card:last-child .gmi-panel-card-body,
 .gmi-dash-overview-right .gmi-dash-panel-card:last-child .gmi-panel-card-body {
     flex: 1;
     display: flex;
@@ -7044,48 +7046,60 @@ body {
 .gmi-dash-intel-preview-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    flex: 1;
+    justify-content: space-between;
 }
 
 .gmi-dash-intel-item {
-    padding: 10px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 14px 16px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-left: 3px solid #d4af37;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    min-height: 70px;
 }
 
 .gmi-dash-intel-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(212, 175, 55, 0.05);
     border-left-color: #f59e0b;
+    transform: translateX(4px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .gmi-intel-item-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 4px;
-    font-size: 0.7rem;
+    margin-bottom: 6px;
+    font-size: 0.72rem;
 }
 
 .gmi-intel-item-tag {
     color: #d4af37;
     font-weight: 700;
     font-family: var(--font-display, 'Rajdhani', sans-serif);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .gmi-intel-item-time {
     color: #64748b;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
 }
 
 .gmi-intel-item-title {
-    font-size: 0.82rem;
+    font-size: 0.86rem;
     color: #e2e8f0;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 /* Timeline */
