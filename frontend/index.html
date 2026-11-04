@@ -29,7 +29,7 @@
     </script>
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.3.3">
+    <link rel="stylesheet" href="styles.css?v=2.3.6">
 </head>
 
 <body>
@@ -74,90 +74,92 @@
                     <a href="/history" class="nav-link" data-page="history">History</a>
                     <a href="/about" class="nav-link" data-page="about">About</a>
                 </nav>
-                <div class="search-container">
-                    <div class="search-box">
-                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="M21 21l-4.35-4.35" />
-                        </svg>
-                        <input type="text" id="nation-search" class="search-input" placeholder="Search nations..."
-                            autocomplete="off">
-                        <button class="search-clear" id="search-clear" aria-label="Clear search">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 6L6 18M6 6l12 12" />
+                <div class="header-right">
+                    <div class="search-container">
+                        <div class="search-box">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="M21 21l-4.35-4.35" />
                             </svg>
-                        </button>
-                    </div>
-                    <div class="search-results" id="search-results"></div>
-                </div>
-                <!-- Auth Buttons (logged out) -->
-                <div class="auth-buttons" id="auth-buttons-guest">
-                    <button class="auth-btn auth-btn-signup" onclick="openSignupModal()">Sign Up</button>
-                    <button class="auth-btn auth-btn-login" onclick="openLoginModal()">Login</button>
-                </div>
-                <!-- User Menu (logged in) -->
-                <div class="auth-user-menu" id="auth-user-menu" style="display:none;">
-                    <button class="auth-user-btn" onclick="toggleUserDropdown(event)" id="auth-user-btn" aria-label="User Account Menu">
-                        <div class="auth-avatar" id="auth-avatar">U</div>
-                        <span class="auth-username" id="auth-username">User</span>
-                        <svg class="auth-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2.5">
-                            <path d="M6 9l6 6 6-6" />
-                        </svg>
-                    </button>
-                    <div class="auth-dropdown" id="auth-dropdown">
-                        <div class="auth-dropdown-header">
-                            <span class="auth-dropdown-name" id="auth-dropdown-name">Username</span>
-                            <span class="auth-dropdown-role" id="auth-dropdown-role">User</span>
+                            <input type="text" id="nation-search" class="search-input" placeholder="Search nations..."
+                                autocomplete="off">
+                            <button class="search-clear" id="search-clear" aria-label="Clear search">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 6L6 18M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
-                        <div class="auth-dropdown-divider"></div>
-                        <button class="auth-dropdown-item auth-dropdown-dash-btn" onclick="showProfile('overview')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                            </svg>
-                            <span>Analyst Dashboard</span>
-                            <span class="auth-dropdown-dash-pill">CMD</span>
-                        </button>
-                        <button class="auth-dropdown-item" onclick="showProfile('watchlist')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                            </svg>
-                            <span>Intel Watchlist</span>
-                        </button>
-                        <button class="auth-dropdown-item" onclick="openWatchlistDashboard()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                            </svg>
-                            <span>Analyst Notebook</span>
-                        </button>
-                        <div class="auth-dropdown-divider auth-admin-divider" id="auth-admin-divider" style="display:none;"></div>
-                        <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin"
-                            onclick="openAdminPanel('overview')" style="display:none;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                            </svg>
-                            Admin Command Center
-                        </button>
-                        <button class="auth-dropdown-item auth-dropdown-logout" onclick="logoutUser()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                <polyline points="16 17 21 12 16 7" />
-                                <line x1="21" y1="12" x2="9" y2="12" />
-                            </svg>
-                            Logout
-                        </button>
+                        <div class="search-results" id="search-results"></div>
                     </div>
+                    <!-- Auth Buttons (logged out) -->
+                    <div class="auth-buttons" id="auth-buttons-guest">
+                        <button class="auth-btn auth-btn-signup" onclick="openSignupModal()">Sign Up</button>
+                        <button class="auth-btn auth-btn-login" onclick="openLoginModal()">Login</button>
+                    </div>
+                    <!-- User Menu (logged in) -->
+                    <div class="auth-user-menu" id="auth-user-menu" style="display:none;">
+                        <button class="auth-user-btn" onclick="toggleUserDropdown(event)" id="auth-user-btn" aria-label="User Account Menu">
+                            <div class="auth-avatar" id="auth-avatar">U</div>
+                            <span class="auth-username" id="auth-username">User</span>
+                            <svg class="auth-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                        <div class="auth-dropdown" id="auth-dropdown">
+                            <div class="auth-dropdown-header">
+                                <span class="auth-dropdown-name" id="auth-dropdown-name">Username</span>
+                                <span class="auth-dropdown-role" id="auth-dropdown-role">User</span>
+                            </div>
+                            <div class="auth-dropdown-divider"></div>
+                            <button class="auth-dropdown-item auth-dropdown-dash-btn" onclick="showProfile('overview')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                                </svg>
+                                <span>Analyst Dashboard</span>
+                                <span class="auth-dropdown-dash-pill">CMD</span>
+                            </button>
+                            <button class="auth-dropdown-item" onclick="showProfile('watchlist')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                </svg>
+                                <span>Intel Watchlist</span>
+                            </button>
+                            <button class="auth-dropdown-item" onclick="openWatchlistDashboard()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                </svg>
+                                <span>Analyst Notebook</span>
+                            </button>
+                            <div class="auth-dropdown-divider auth-admin-divider" id="auth-admin-divider" style="display:none;"></div>
+                            <button class="auth-dropdown-item auth-dropdown-admin" id="auth-dropdown-admin"
+                                onclick="openAdminPanel('overview')" style="display:none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                                Admin Command Center
+                            </button>
+                            <button class="auth-dropdown-item auth-dropdown-logout" onclick="logoutUser()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" y1="12" x2="9" y2="12" />
+                                </svg>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                    <button class="mobile-menu-btn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
-                <button class="mobile-menu-btn" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
         </header>
 
