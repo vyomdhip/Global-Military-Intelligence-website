@@ -1515,6 +1515,8 @@ function renderCompareBar(label, value1, value2) {
 // ============================================
 // LIVE NEWS FUNCTIONALITY
 // ============================================
+const NEWS_PAGE_SIZE = 9;
+let visibleNewsCount = NEWS_PAGE_SIZE;
 let currentNewsCategory = 'all';
 let currentNewsDate = 'all';
 let newsData = [];
@@ -1530,6 +1532,7 @@ function initNews() {
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentNewsCategory = this.dataset.category;
+            visibleNewsCount = NEWS_PAGE_SIZE;
             filterNews();
         });
     });
@@ -1816,8 +1819,14 @@ async function fetchNews() {
             }
         }
 
+        buildNewsDateMap();
+        if (currentNewsDate === 'all' || !currentNewsDate) {
+            selectInitialNewsDate();
+        }
+        visibleNewsCount = NEWS_PAGE_SIZE;
         renderNews();
-        populateDateDropdown();
+        renderNewsCalendarGrid();
+        updateNewsCalendarUI(currentNewsDate);
         updateTimestamp();
         if (refreshBtn) refreshBtn.classList.remove('loading');
 
@@ -1826,8 +1835,14 @@ async function fetchNews() {
         // Resilient fallback: ensure news is rendered even if unexpected error happens
         try {
             newsData = getSampleNews();
+            buildNewsDateMap();
+            if (currentNewsDate === 'all' || !currentNewsDate) {
+                selectInitialNewsDate();
+            }
+            visibleNewsCount = NEWS_PAGE_SIZE;
             renderNews();
-            populateDateDropdown();
+            renderNewsCalendarGrid();
+            updateNewsCalendarUI(currentNewsDate);
             updateTimestamp();
         } catch (innerError) {
             if (newsGrid) {
@@ -2116,7 +2131,57 @@ function renderNewsCalendarGrid() {
     }
 }
 
+function selectInitialNewsDate() {
+    const today = new Date();
+    const todayKey = today.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+    // Check if today has news
+    if (newsArticlesByDate.has(todayKey) && newsArticlesByDate.get(todayKey).length > 0) {
+        currentNewsDate = todayKey;
+        return;
+    }
+    // Otherwise fallback to the latest date that has articles in newsData
+    if (newsData.length > 0) {
+        const latestDate = new Date(newsData[0].publishedAt);
+        if (!isNaN(latestDate.getTime())) {
+            currentNewsDate = latestDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            return;
+        }
+    }
+    currentNewsDate = 'all';
+}
+
+function getFilteredNews() {
+    let filteredNews = currentNewsCategory === 'all'
+        ? newsData
+        : newsData.filter(article => article.category === currentNewsCategory || article.category === 'all');
+
+    // Apply date filter
+    if (currentNewsDate !== 'all') {
+        filteredNews = filteredNews.filter(article => {
+            const articleDate = new Date(article.publishedAt);
+            if (isNaN(articleDate.getTime())) return false;
+            const dateStr = articleDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            return dateStr === currentNewsDate;
+        });
+    }
+
+    return filteredNews;
+}
+
 function selectNewsCalendarDate(dateKey) {
+    visibleNewsCount = NEWS_PAGE_SIZE;
     currentNewsDate = dateKey;
     updateNewsCalendarUI(dateKey);
     renderNews();
@@ -2136,6 +2201,7 @@ function selectNewsToday(event) {
 
 function clearNewsDateFilter(event) {
     if (event) event.stopPropagation();
+    visibleNewsCount = NEWS_PAGE_SIZE;
     currentNewsDate = 'all';
     updateNewsCalendarUI('all');
     renderNews();
@@ -2160,51 +2226,47 @@ function updateNewsCalendarUI(dateKey) {
 
 // Backward-compatibility alias
 function filterNewsByDate() {
+    visibleNewsCount = NEWS_PAGE_SIZE;
     renderNews();
 }
 
-function renderNews() {
+function loadMoreNews() {
+    const prevCount = visibleNewsCount;
+    visibleNewsCount += NEWS_PAGE_SIZE;
+    renderNews(true, prevCount);
+}
+
+function renderNews(isAppend = false, prevCount = 0) {
     const newsGrid = document.getElementById('news-grid');
+    const moreContainer = document.getElementById('news-more-container');
+    const loadMoreText = document.getElementById('news-load-more-text');
     if (!newsGrid) return;
 
     // Reset image tracker so each render gets fresh distribution
     usedImageTracker.clear();
 
     try {
-        let filteredNews = currentNewsCategory === 'all'
-            ? newsData
-            : newsData.filter(article => article.category === currentNewsCategory || article.category === 'all');
-
-        // Apply date filter
-        if (currentNewsDate !== 'all') {
-            filteredNews = filteredNews.filter(article => {
-                const articleDate = new Date(article.publishedAt);
-                if (isNaN(articleDate.getTime())) return false;
-                const dateStr = articleDate.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-                return dateStr === currentNewsDate;
-            });
-        }
+        const filteredNews = getFilteredNews();
 
         if (filteredNews.length === 0) {
+            if (moreContainer) moreContainer.style.display = 'none';
             newsGrid.innerHTML = `
                 <div class="news-error">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                     </svg>
-                    <p>No news found for this category</p>
-                    <button class="retry-btn" onclick="refreshNews()">Try All News</button>
+                    <p>No news found for ${currentNewsDate !== 'all' ? currentNewsDate : 'this category'}</p>
+                    <button class="retry-btn" onclick="clearNewsDateFilter(event)">View All Dates</button>
                 </div>
             `;
             return;
         }
 
+        const countToDisplay = Math.min(filteredNews.length, visibleNewsCount);
+
         // Render each card individually with error handling
         let cardsHtml = '';
-        for (let i = 0; i < filteredNews.length; i++) {
+        for (let i = 0; i < countToDisplay; i++) {
             try {
                 cardsHtml += renderNewsCard(filteredNews[i], i);
             } catch (cardError) {
@@ -2214,19 +2276,38 @@ function renderNews() {
 
         newsGrid.innerHTML = cardsHtml;
 
-        // Simple fade-in using CSS instead of GSAP (GSAP opacity:0 was making cards invisible)
+        // Show/hide More News button
+        if (moreContainer) {
+            if (filteredNews.length > visibleNewsCount) {
+                moreContainer.style.display = 'flex';
+                const remaining = filteredNews.length - visibleNewsCount;
+                if (loadMoreText) {
+                    loadMoreText.textContent = `More News (${remaining} remaining)`;
+                }
+            } else {
+                moreContainer.style.display = 'none';
+            }
+        }
+
+        // Simple fade-in using CSS
         const cards = newsGrid.querySelectorAll('.news-card');
         cards.forEach((card, i) => {
+            if (isAppend && i < prevCount) {
+                card.style.opacity = '1';
+                card.style.transform = 'none';
+                return;
+            }
             card.style.opacity = '0';
             card.style.transform = 'translateY(20px)';
             setTimeout(() => {
                 card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
-            }, i * 50);
+            }, Math.min(i - (isAppend ? prevCount : 0), 8) * 45);
         });
     } catch (error) {
         console.error('renderNews error:', error);
+        if (moreContainer) moreContainer.style.display = 'none';
         newsGrid.innerHTML = '<div class="news-error"><p>Error displaying news</p><button class="retry-btn" onclick="refreshNews()">Retry</button></div>';
     }
 }
@@ -2540,6 +2621,7 @@ function updateTimestamp() {
 }
 
 function refreshNews() {
+    visibleNewsCount = NEWS_PAGE_SIZE;
     currentNewsCategory = 'all';
     currentNewsDate = 'all';
     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -2552,24 +2634,7 @@ function refreshNews() {
 // NEWS MODAL FUNCTIONALITY
 // ============================================
 function openNewsModal(index) {
-    let filteredNews = currentNewsCategory === 'all'
-        ? newsData
-        : newsData.filter(article => article.category === currentNewsCategory || article.category === 'all');
-
-    // Apply date filter (must match renderNews logic)
-    if (currentNewsDate !== 'all') {
-        filteredNews = filteredNews.filter(article => {
-            const articleDate = new Date(article.publishedAt);
-            if (isNaN(articleDate.getTime())) return false;
-            const dateStr = articleDate.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            });
-            return dateStr === currentNewsDate;
-        });
-    }
-
+    const filteredNews = getFilteredNews();
     const article = filteredNews[index];
     if (!article) return;
 
@@ -5682,6 +5747,7 @@ initHistory = function () {
 
 function filterNewsCards(query) {
     const newsGrid = document.getElementById('news-grid');
+    const moreContainer = document.getElementById('news-more-container');
     if (!newsGrid) return;
 
     const cards = newsGrid.querySelectorAll('.news-card');
@@ -5690,10 +5756,19 @@ function filterNewsCards(query) {
     // Remove existing no-results message
     if (noResultsEl) noResultsEl.remove();
 
-    // If empty query, show all
+    // If empty query, show all rendered cards and restore More News button if needed
     if (!query) {
         cards.forEach(function (card) { card.classList.remove('search-hidden'); });
+        if (moreContainer && typeof getFilteredNews === 'function') {
+            const filteredNews = getFilteredNews();
+            moreContainer.style.display = (filteredNews.length > visibleNewsCount) ? 'flex' : 'none';
+        }
         return;
+    }
+
+    // Hide More News button while search query is active
+    if (moreContainer) {
+        moreContainer.style.display = 'none';
     }
 
     const terms = query.toLowerCase().split(/\s+/);

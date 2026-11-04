@@ -4020,11 +4020,19 @@ body {
     gap: var(--space-xl);
 }
 
+.news-more-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--space-2xl);
+    padding: var(--space-md) 0;
+}
+
 .show-more-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 32px;
+    gap: 10px;
+    padding: 12px 36px;
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
     border: 1px solid var(--color-accent-gold);
     border-radius: var(--radius-full);
@@ -4034,13 +4042,22 @@ body {
     font-size: 0.95rem;
     cursor: pointer;
     transition: all var(--transition-normal);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .show-more-btn:hover {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1));
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.12));
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
     transform: translateY(-2px);
+}
+
+.show-more-btn svg {
+    transition: transform var(--transition-base);
+}
+
+.show-more-btn:hover svg {
+    transform: translateY(3px);
 }
 
 .news-loading {
