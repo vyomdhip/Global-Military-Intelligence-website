@@ -96,9 +96,15 @@ function initNavigation() {
 
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
+            e.preventDefault();
+
             // Update active state
             navLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
+
+            const page = this.dataset.page || (this.getAttribute('href') || '').replace(/^\/+/, '').replace(/^#/, '');
+            showPage(page);
+            updateUrlPath(page);
 
             // Close mobile menu on link click
             if (mobileMenuBtn && nav) {
@@ -117,8 +123,33 @@ function initNavigation() {
         });
     });
 
-    // Update active link on scroll
-    const sections = ['hero', 'map-section', 'compare-section', 'news-section', 'conflicts-section', 'history-section', 'about-section'];
+    // Handle logo click for clean /home navigation
+    const logoLink = document.querySelector('.logo');
+    if (logoLink) {
+        logoLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            showPage('home');
+            updateUrlPath('home');
+        });
+    }
+
+    // Handle footer navigation links for clean routing
+    document.querySelectorAll('.footer-links a').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const clean = href.replace(/^\/+/, '').replace(/^#/, '').toLowerCase();
+        const validSections = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+        if (validSections.includes(clean)) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                showPage(clean);
+                updateUrlPath(clean);
+            });
+        }
+    });
+
+    // Update active link and URL on scroll (no # in address bar)
+    const sections = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+    let scrollUrlTimeout = null;
 
     window.addEventListener('scroll', () => {
         const scrollPos = window.scrollY + 100;
@@ -132,14 +163,87 @@ function initNavigation() {
                 if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
                     navLinks.forEach(link => {
                         link.classList.remove('active');
-                        if (link.getAttribute('href') === '#' + sectionId) {
+                        const linkTarget = (link.dataset.page || link.getAttribute('href') || '').replace(/^\/+/, '').replace(/^#/, '');
+                        if (linkTarget === sectionId) {
                             link.classList.add('active');
                         }
                     });
+
+                    // Update URL path cleanly to /name without #
+                    if (window.location.protocol.startsWith('http')) {
+                        clearTimeout(scrollUrlTimeout);
+                        scrollUrlTimeout = setTimeout(() => {
+                            const targetPath = '/' + sectionId;
+                            if (window.location.pathname !== targetPath) {
+                                try {
+                                    window.history.replaceState({ page: sectionId }, '', targetPath);
+                                } catch (e) {}
+                            }
+                        }, 150);
+                    }
                 }
             }
         });
     });
+
+    // Handle URL path on page load, refresh, or back/forward (supports clean names e.g. /home, /compare)
+    const handleRoute = () => {
+        let rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+
+        // If URL has a legacy hash (e.g. #home or #hero), convert it to clean path
+        if (window.location.hash) {
+            rawPath = window.location.hash.replace(/^#/, '').toLowerCase();
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    window.history.replaceState(null, '', '/' + rawPath);
+                }
+            } catch (e) {}
+        }
+
+        if (!rawPath || rawPath === 'index.html') {
+            rawPath = 'home';
+        }
+
+        const aliasMap = {
+            'hero': 'home',
+            'nation': 'nations',
+            'map': 'nations',
+            'map-section': 'nations',
+            'compare-section': 'compare',
+            'news-section': 'news',
+            'conflicts-section': 'conflicts',
+            'history-section': 'history',
+            'about-section': 'about'
+        };
+
+        const targetPage = aliasMap[rawPath] || rawPath;
+        const validPages = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+
+        if (validPages.includes(targetPage)) {
+            showPage(targetPage);
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    window.history.replaceState({ page: targetPage }, '', '/' + targetPage);
+                }
+            } catch (e) {}
+        }
+    };
+
+    window.addEventListener('popstate', handleRoute);
+    window.addEventListener('hashchange', handleRoute);
+    setTimeout(handleRoute, 300);
+}
+
+function updateUrlPath(page) {
+    if (!page) return;
+    try {
+        if (window.location.protocol.startsWith('http')) {
+            const newPath = '/' + page;
+            if (window.location.pathname !== newPath) {
+                window.history.pushState({ page }, '', newPath);
+            }
+        }
+    } catch (err) {}
 }
 
 // ============================================
@@ -618,9 +722,12 @@ function getMarkerColor(rank) {
 }
 
 function scrollToMap() {
-    document.getElementById('map-section').scrollIntoView({
-        behavior: 'smooth'
-    });
+    const target = document.getElementById('nations') || document.getElementById('map-section');
+    if (target) {
+        target.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
 }
 
 // ============================================
@@ -1256,19 +1363,26 @@ function toggleEquipmentDetail(cardId) {
 // ============================================
 function showPage(page) {
     const pageMap = {
-        'home': 'hero',
-        'hero': 'hero',
-        'nations': 'map-section',
-        'map': 'map-section',
-        'compare': 'compare-section',
-        'news': 'news-section',
-        'conflicts': 'conflicts-section',
-        'history': 'history-section',
-        'about': 'about-section'
+        'home': 'home',
+        'hero': 'home',
+        'nations': 'nations',
+        'nation': 'nations',
+        'map': 'nations',
+        'map-section': 'nations',
+        'compare': 'compare',
+        'compare-section': 'compare',
+        'news': 'news',
+        'news-section': 'news',
+        'conflicts': 'conflicts',
+        'conflicts-section': 'conflicts',
+        'history': 'history',
+        'history-section': 'history',
+        'about': 'about',
+        'about-section': 'about'
     };
 
-    const targetId = pageMap[page] || (document.getElementById(page) ? page : page + '-section');
-    const targetEl = document.getElementById(targetId);
+    const targetId = pageMap[page] || page;
+    const targetEl = document.getElementById(targetId) || document.getElementById(targetId + '-section');
 
     if (targetEl) {
         // Account for persistent 84px header height
@@ -1284,7 +1398,8 @@ function showPage(page) {
         // Update active navigation link in header
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + targetId || link.dataset.page === page) {
+            const linkHref = (link.getAttribute('href') || '').replace(/^\/+/, '').replace(/^#/, '');
+            if (linkHref === targetId || link.dataset.page === page || link.dataset.page === targetId) {
                 link.classList.add('active');
             }
         });
@@ -1889,7 +2004,7 @@ function showNewsNotification(headline, count, link, description) {
 
 function goToNotifyArticle() {
     // Scroll to news section
-    const newsSection = document.getElementById('news-section');
+    const newsSection = document.getElementById('news') || document.getElementById('news-section');
     if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth' });
 
     // Open the article in a new tab if we have a link
@@ -4353,7 +4468,7 @@ const conflictKeywords = {
 
 async function refreshConflicts() {
     const grid = document.getElementById('conflicts-grid');
-    const refreshBtn = document.querySelector('#conflicts-section .refresh-btn');
+    const refreshBtn = document.querySelector('#conflicts .refresh-btn') || document.querySelector('#conflicts-section .refresh-btn');
     if (!grid) return;
 
     // Show loading state on button and grid
