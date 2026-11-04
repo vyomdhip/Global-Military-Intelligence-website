@@ -186,11 +186,11 @@ function initNavigation() {
         });
     });
 
-    // Handle URL path on page load, refresh, or back/forward (supports clean names e.g. /home, /compare)
+    // Handle URL path on page load, refresh, or back/forward (supports clean names e.g. /home, /compare, /privacy, /terms)
     const handleRoute = () => {
         let rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
 
-        // If URL has a legacy hash (e.g. #home or #hero), convert it to clean path
+        // If URL has a legacy hash (e.g. #home or #privacy), convert it to clean path
         if (window.location.hash) {
             rawPath = window.location.hash.replace(/^#/, '').toLowerCase();
             try {
@@ -213,11 +213,50 @@ function initNavigation() {
             'news-section': 'news',
             'conflicts-section': 'conflicts',
             'history-section': 'history',
-            'about-section': 'about'
+            'about-section': 'about',
+            'privacy-policy': 'privacy',
+            'terms-conditions': 'terms',
+            'terms-and-conditions': 'terms'
         };
 
         const targetPage = aliasMap[rawPath] || rawPath;
         const validPages = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+
+        if (targetPage === 'privacy') {
+            if (typeof openPrivacyPolicy === 'function') {
+                openPrivacyPolicy(false);
+            }
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    window.history.replaceState({ page: 'privacy', overlay: 'privacy' }, '', '/privacy');
+                }
+            } catch (e) {}
+            return;
+        }
+
+        if (targetPage === 'terms') {
+            if (typeof openTermsConditions === 'function') {
+                openTermsConditions(false);
+            }
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    window.history.replaceState({ page: 'terms', overlay: 'terms' }, '', '/terms');
+                }
+            } catch (e) {}
+            return;
+        }
+
+        // If navigating to a standard page, ensure overlays are closed
+        const privacyOverlay = document.getElementById('privacy-policy-overlay');
+        if (privacyOverlay && privacyOverlay.classList.contains('active')) {
+            privacyOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        const termsOverlay = document.getElementById('terms-conditions-overlay');
+        if (termsOverlay && termsOverlay.classList.contains('active')) {
+            termsOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
         if (validPages.includes(targetPage)) {
             showPage(targetPage);
@@ -7275,7 +7314,7 @@ function renderCommunityMarkdown(md) {
 // ============================================
 // PRIVACY POLICY OVERLAY CONTROLLER
 // ============================================
-function openPrivacyPolicy() {
+function openPrivacyPolicy(updateHistory = true) {
     const overlay = document.getElementById('privacy-policy-overlay');
     if (!overlay) return;
 
@@ -7283,29 +7322,44 @@ function openPrivacyPolicy() {
     document.body.style.overflow = 'hidden';
     overlay.scrollTop = 0;
 
-    // Sync URL hash without triggering double open
-    if (window.location.hash !== '#privacy') {
+    // Close terms overlay if active
+    const termsOverlay = document.getElementById('terms-conditions-overlay');
+    if (termsOverlay && termsOverlay.classList.contains('active')) {
+        termsOverlay.classList.remove('active');
+    }
+
+    if (updateHistory) {
         try {
-            history.pushState({ overlay: 'privacy' }, '', '#privacy');
-        } catch (e) {
-            window.location.hash = 'privacy';
-        }
+            if (window.location.protocol.startsWith('http')) {
+                if (window.location.pathname !== '/privacy' || window.location.hash) {
+                    window.history.pushState({ page: 'privacy', overlay: 'privacy' }, '', '/privacy');
+                }
+            } else {
+                window.location.hash = 'privacy';
+            }
+        } catch (e) {}
     }
 }
 
-function closePrivacyPolicy() {
+function closePrivacyPolicy(updateHistory = true) {
     const overlay = document.getElementById('privacy-policy-overlay');
     if (!overlay) return;
 
     overlay.classList.remove('active');
     document.body.style.overflow = '';
 
-    // Clear hash if it is #privacy
-    if (window.location.hash === '#privacy') {
-        try {
-            history.pushState(null, '', window.location.pathname + window.location.search);
-        } catch (e) {
-            window.location.hash = '';
+    if (updateHistory) {
+        if (window.history.state && window.history.state.overlay === 'privacy' && window.history.length > 1) {
+            window.history.back();
+        } else {
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    const returnPage = window.currentPage || 'home';
+                    window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                } else {
+                    window.location.hash = '';
+                }
+            } catch (e) {}
         }
     }
 }
@@ -7332,80 +7386,12 @@ document.addEventListener('DOMContentLoaded', () => {
             closePrivacyPolicy();
         }
     });
-
-    // Check if directly loaded with #privacy
-    if (window.location.hash === '#privacy') {
-        openPrivacyPolicy();
-    }
-});
-
-// Support browser Back/Forward buttons and hash navigation
-window.addEventListener('popstate', () => {
-    const privacyOverlay = document.getElementById('privacy-policy-overlay');
-    const termsOverlay = document.getElementById('terms-conditions-overlay');
-
-    if (privacyOverlay) {
-        if (window.location.hash === '#privacy') {
-            if (!privacyOverlay.classList.contains('active')) {
-                privacyOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        } else {
-            if (privacyOverlay.classList.contains('active')) {
-                privacyOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-    }
-
-    if (termsOverlay) {
-        if (window.location.hash === '#terms') {
-            if (!termsOverlay.classList.contains('active')) {
-                termsOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        } else {
-            if (termsOverlay.classList.contains('active')) {
-                termsOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-    }
-});
-
-window.addEventListener('hashchange', () => {
-    const privacyOverlay = document.getElementById('privacy-policy-overlay');
-    const termsOverlay = document.getElementById('terms-conditions-overlay');
-
-    if (privacyOverlay) {
-        if (window.location.hash === '#privacy') {
-            if (!privacyOverlay.classList.contains('active')) {
-                privacyOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        } else if (privacyOverlay.classList.contains('active')) {
-            privacyOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    }
-
-    if (termsOverlay) {
-        if (window.location.hash === '#terms') {
-            if (!termsOverlay.classList.contains('active')) {
-                termsOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        } else if (termsOverlay.classList.contains('active')) {
-            termsOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    }
 });
 
 // ============================================
 // TERMS & CONDITIONS OVERLAY CONTROLLER
 // ============================================
-function openTermsConditions() {
+function openTermsConditions(updateHistory = true) {
     const overlay = document.getElementById('terms-conditions-overlay');
     if (!overlay) return;
 
@@ -7413,29 +7399,44 @@ function openTermsConditions() {
     document.body.style.overflow = 'hidden';
     overlay.scrollTop = 0;
 
-    // Sync URL hash without triggering double open
-    if (window.location.hash !== '#terms') {
+    // Close privacy overlay if active
+    const privacyOverlay = document.getElementById('privacy-policy-overlay');
+    if (privacyOverlay && privacyOverlay.classList.contains('active')) {
+        privacyOverlay.classList.remove('active');
+    }
+
+    if (updateHistory) {
         try {
-            history.pushState({ overlay: 'terms' }, '', '#terms');
-        } catch (e) {
-            window.location.hash = 'terms';
-        }
+            if (window.location.protocol.startsWith('http')) {
+                if (window.location.pathname !== '/terms' || window.location.hash) {
+                    window.history.pushState({ page: 'terms', overlay: 'terms' }, '', '/terms');
+                }
+            } else {
+                window.location.hash = 'terms';
+            }
+        } catch (e) {}
     }
 }
 
-function closeTermsConditions() {
+function closeTermsConditions(updateHistory = true) {
     const overlay = document.getElementById('terms-conditions-overlay');
     if (!overlay) return;
 
     overlay.classList.remove('active');
     document.body.style.overflow = '';
 
-    // Clear hash if it is #terms
-    if (window.location.hash === '#terms') {
-        try {
-            history.pushState(null, '', window.location.pathname + window.location.search);
-        } catch (e) {
-            window.location.hash = '';
+    if (updateHistory) {
+        if (window.history.state && window.history.state.overlay === 'terms' && window.history.length > 1) {
+            window.history.back();
+        } else {
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    const returnPage = window.currentPage || 'home';
+                    window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                } else {
+                    window.location.hash = '';
+                }
+            } catch (e) {}
         }
     }
 }
@@ -7462,10 +7463,40 @@ document.addEventListener('DOMContentLoaded', () => {
             closeTermsConditions();
         }
     });
+});
 
-    // Check if directly loaded with #terms
-    if (window.location.hash === '#terms') {
-        openTermsConditions();
+// Synchronize browser history and popstate for overlays
+window.addEventListener('popstate', () => {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+    const isPrivacy = (path === 'privacy' || path === 'privacy-policy' || hash === 'privacy');
+    const isTerms = (path === 'terms' || path === 'terms-conditions' || path === 'terms-and-conditions' || hash === 'terms');
+
+    const privacyOverlay = document.getElementById('privacy-policy-overlay');
+    const termsOverlay = document.getElementById('terms-conditions-overlay');
+
+    if (privacyOverlay) {
+        if (isPrivacy) {
+            if (!privacyOverlay.classList.contains('active')) {
+                privacyOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else if (privacyOverlay.classList.contains('active')) {
+            privacyOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (termsOverlay) {
+        if (isTerms) {
+            if (!termsOverlay.classList.contains('active')) {
+                termsOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        } else if (termsOverlay.classList.contains('active')) {
+            termsOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 });
 

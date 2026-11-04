@@ -662,9 +662,9 @@
             </section>
         </main>
 
-        <!-- Privacy Policy Overlay -->
-        <div id="privacy-policy-overlay" class="privacy-overlay">
-            <div class="privacy-page">
+        <!-- Privacy Policy Section / Overlay -->
+        <div id="privacy-policy-overlay" class="privacy-overlay" data-page="privacy">
+            <section id="privacy" class="privacy-page">
                 <div class="privacy-header">
                     <button class="privacy-back-btn" onclick="closePrivacyPolicy()" aria-label="Close Privacy Policy">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -915,12 +915,12 @@
                         </div>
                     </section>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Terms & Conditions Overlay -->
-        <div id="terms-conditions-overlay" class="privacy-overlay">
-            <div class="privacy-page">
+        <!-- Terms & Conditions Section / Overlay -->
+        <div id="terms-conditions-overlay" class="privacy-overlay" data-page="terms">
+            <section id="terms" class="privacy-page">
                 <div class="privacy-header">
                     <button class="privacy-back-btn" onclick="closeTermsConditions()" aria-label="Close Terms & Conditions">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1259,7 +1259,7 @@
                         </div>
                     </section>
                 </div>
-            </div>
+            </section>
         </div>
 
         <!-- Nation Detail Modal -->
@@ -1444,8 +1444,8 @@
                     <div class="footer-col">
                         <h4 class="footer-heading">Legal</h4>
                         <ul class="footer-links">
-                            <li><a href="#" onclick="openPrivacyPolicy(); return false;">Privacy Policy</a></li>
-                            <li><a href="#" onclick="openTermsConditions(); return false;">Terms &amp; Conditions</a></li>
+                            <li><a href="/privacy" onclick="openPrivacyPolicy(); return false;">Privacy Policy</a></li>
+                            <li><a href="/terms" onclick="openTermsConditions(); return false;">Terms &amp; Conditions</a></li>
                         </ul>
                     </div>
                 </div>
@@ -2797,7 +2797,7 @@
     <script src="data.js"></script>
     <script src="auth.js?v=2.2.2"></script>
     <script src="admin.js?v=2.0.5"></script>
-    <script src="app.js?v=1.3.1"></script>
+    <script src="app.js?v=1.3.2"></script>
 </body>
 
 </html>
