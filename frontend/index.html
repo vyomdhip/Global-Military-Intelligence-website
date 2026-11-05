@@ -1392,10 +1392,10 @@
                         <h4>📁 Data Sources</h4>
                         <ul>
                             <li>GlobalFirepower (GFP) — Annual military rankings</li>
-                            <li>IISS Military Balance — Equipment & personnel data</li>
+                            <li>IISS Military Balance — Equipment &amp; personnel data</li>
                             <li>SIPRI — Defense expenditure database</li>
                             <li>Federation of American Scientists — Nuclear arsenals</li>
-                            <li>ACLED — Armed conflict & event tracking</li>
+                            <li>ACLED — Armed conflict &amp; event tracking</li>
                             <li>Official government defense publications</li>
                         </ul>
                     </div>
@@ -1405,6 +1405,10 @@
                             compiled from publicly available sources and may not reflect classified or real-time
                             operational details. Military statistics are approximate and updated periodically. This
                             website is not affiliated with any government or military organization.</p>
+                    </div>
+                    <div class="about-info-card">
+                        <h4>📷 Media &amp; Fair Use</h4>
+                        <p>Military insignia, national flags, and equipment imagery are compiled from open public domain archives (such as Wikimedia Commons and official defense department public affairs releases) or utilized under <strong>Fair Use</strong> for non-commercial educational analysis. All trademarks and insignia remain property of their respective holders.</p>
                     </div>
                 </div>
 
@@ -1456,17 +1460,18 @@
                         rights reserved.
                     </p>
                     <p class="footer-disclaimer">All data is derived from publicly available open-source intelligence
-                        (OSINT). This platform is for informational and educational purposes only.</p>
+                        (OSINT). This platform is for informational and educational purposes only. Equipment imagery and
+                        trademarks remain property of their respective holders.</p>
                 </div>
             </div>
         </footer>
     </div>
 
     <!-- Login Modal -->
-    <div id="auth-login-modal" class="auth-modal">
+    <div id="auth-login-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="login-form-title">
         <div class="auth-modal-overlay" onclick="closeLoginModal()"></div>
         <div class="auth-modal-content">
-            <button class="auth-modal-close" onclick="closeLoginModal()">
+            <button class="auth-modal-close" onclick="closeLoginModal()" aria-label="Close Login Modal">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
@@ -1520,7 +1525,7 @@
                                 <circle cx="12" cy="7" r="4" />
                             </svg>
                             <input type="text" id="login-username" placeholder="Enter username or email" required
-                                autocomplete="username">
+                                autocomplete="username" aria-required="true">
                         </div>
                     </div>
                     <div class="auth-input-group">
@@ -1532,7 +1537,7 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                             <input type="password" id="login-password" placeholder="Enter password" required
-                                autocomplete="current-password">
+                                autocomplete="current-password" aria-required="true">
                         </div>
                     </div>
                     <button type="submit" class="auth-submit-btn" id="login-submit-btn">
@@ -1547,15 +1552,15 @@
     </div>
 
     <!-- Sign Up Modal -->
-    <div id="auth-signup-modal" class="auth-modal">
+    <div id="auth-signup-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
         <div class="auth-modal-overlay" onclick="closeSignupModal()"></div>
         <div class="auth-modal-content">
-            <button class="auth-modal-close" onclick="closeSignupModal()">
+            <button class="auth-modal-close" onclick="closeSignupModal()" aria-label="Close Sign Up Modal">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
             </button>
-            <h2 class="auth-modal-title">Create Account</h2>
+            <h2 class="auth-modal-title" id="signup-modal-title">Create Account</h2>
             <p class="auth-modal-subtitle">Join Global Military Intelligence</p>
             <form id="signup-form" onsubmit="handleSignup(event)">
                 <div class="auth-input-group">
@@ -1567,7 +1572,7 @@
                             <circle cx="12" cy="7" r="4" />
                         </svg>
                         <input type="text" id="signup-username" placeholder="Choose a username" required minlength="3"
-                            autocomplete="username">
+                            autocomplete="username" aria-required="true">
                     </div>
                 </div>
                 <div class="auth-input-group">
@@ -1579,7 +1584,7 @@
                             <polyline points="22,6 12,13 2,6" />
                         </svg>
                         <input type="email" id="signup-email" placeholder="Enter your email" required
-                            autocomplete="email">
+                            autocomplete="email" aria-required="true">
                     </div>
                 </div>
                 <div class="auth-input-group">
@@ -1591,13 +1596,19 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                         </svg>
                         <input type="password" id="signup-password" placeholder="Min 6 characters" required
-                            minlength="6" autocomplete="new-password">
+                            minlength="6" autocomplete="new-password" aria-required="true">
                     </div>
                 </div>
                 <button type="submit" class="auth-submit-btn" id="signup-submit-btn">
                     <span>Create Account</span>
                     <div class="auth-btn-spinner" style="display:none;"></div>
                 </button>
+                <p class="auth-consent-notice">
+                    By creating an account, you agree to our 
+                    <a href="/terms" onclick="closeSignupModal(); openTermsConditions(); return false;">Terms &amp; Conditions</a> 
+                    and 
+                    <a href="/privacy" onclick="closeSignupModal(); openPrivacyPolicy(); return false;">Privacy Policy</a>.
+                </p>
             </form>
             <p class="auth-switch-text">Already have an account? <a href="#"
                     onclick="closeSignupModal();openLoginModal();return false;">Login</a></p>

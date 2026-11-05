@@ -314,6 +314,26 @@ body {
     color: var(--color-bg-primary);
 }
 
+/* Accessibility: Keyboard Navigation Focus Rings */
+:focus-visible {
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: 2px;
+}
+
+/* Avoid duplicate outline on input elements inside styled wrappers */
+.auth-input-wrap input:focus-visible {
+    outline: none;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
@@ -2853,7 +2873,7 @@ body {
 /* Info Row */
 .about-info-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--space-xl);
 }
 
@@ -5879,6 +5899,27 @@ body {
 
 .auth-switch-text a:hover {
     text-decoration: underline;
+}
+
+/* Consent Notice on Registration */
+.auth-consent-notice {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+    margin-top: 14px;
+    line-height: 1.45;
+}
+
+.auth-consent-notice a {
+    color: var(--color-accent-gold);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.auth-consent-notice a:hover {
+    color: #ffffff;
 }
 
 /* ============================================
