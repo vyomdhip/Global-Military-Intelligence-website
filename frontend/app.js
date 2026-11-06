@@ -68,7 +68,72 @@ document.addEventListener('DOMContentLoaded', function () {
     try { initNavigation(); } catch (e) { console.error('initNavigation error:', e); }
     try { initSearch(); } catch (e) { console.error('initSearch error:', e); }
     try { initHistory(); dismissLoader('history-loader'); } catch (e) { console.error('initHistory error:', e); }
+    try { initFrontpageClock(); } catch (e) { console.error('initFrontpageClock error:', e); }
 });
+
+// ============================================
+// EXECUTIVE FRONT PAGE GATEWAY LOGIC
+// ============================================
+let frontpageClockInterval = null;
+
+function initFrontpageClock() {
+    const clockEl = document.getElementById('frontpage-utc-clock');
+    if (!clockEl) return;
+    
+    function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getUTCHours()).padStart(2, '0');
+        const mins = String(now.getUTCMinutes()).padStart(2, '0');
+        const secs = String(now.getUTCSeconds()).padStart(2, '0');
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        const dayName = days[now.getUTCDay()];
+        const day = String(now.getUTCDate()).padStart(2, '0');
+        const month = months[now.getUTCMonth()];
+        const year = now.getUTCFullYear();
+        clockEl.textContent = `${hrs}:${mins}:${secs} UTC // ${dayName} ${day} ${month} ${year} // ZULU`;
+    }
+    
+    updateClock();
+    if (!frontpageClockInterval) {
+        frontpageClockInterval = setInterval(updateClock, 1000);
+    }
+}
+
+function showFrontPage() {
+    const gate = document.getElementById('frontpage-gate');
+    if (!gate) return;
+    gate.style.display = 'flex';
+    void gate.offsetHeight;
+    gate.classList.remove('dismissed');
+    document.body.style.overflow = 'hidden';
+    initFrontpageClock();
+}
+
+function hideFrontPage(animated = false) {
+    const gate = document.getElementById('frontpage-gate');
+    if (!gate) return;
+    if (animated) {
+        gate.classList.add('dismissed');
+        setTimeout(() => {
+            gate.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 450);
+    } else {
+        gate.classList.add('dismissed');
+        gate.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function proceedToPortal(targetPage = 'home') {
+    hideFrontPage(true);
+    sessionStorage.setItem('gmi_frontpage_passed', 'true');
+    const validSections = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+    const dest = validSections.includes(targetPage) ? targetPage : 'home';
+    showPage(dest);
+    updateUrlPath(dest);
+}
 
 // ============================================
 // NAVIGATION
@@ -200,9 +265,15 @@ function initNavigation() {
             } catch (e) {}
         }
 
-        if (!rawPath || rawPath === 'index.html') {
-            rawPath = 'home';
+        // Root path, index.html, or explicit welcome/gateway/frontpage routes show the front page
+        const isFrontpagePath = !rawPath || rawPath === 'index.html' || rawPath === 'welcome' || rawPath === 'gateway' || rawPath === 'frontpage';
+        if (isFrontpagePath) {
+            showFrontPage();
+            return;
         }
+
+        // Deep links or direct routes hide the frontpage
+        hideFrontPage(false);
 
         const aliasMap = {
             'hero': 'home',
