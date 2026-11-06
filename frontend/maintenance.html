@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Global Military Intelligence is currently undergoing scheduled maintenance.">
+    <title>System Maintenance | Global Military Intelligence</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <!-- Google Fonts (same as main site) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ============================================
+           GMI MAINTENANCE PAGE — SELF-CONTAINED STYLES
+           ============================================ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-bg-primary: #0a1628;
+            --color-bg-secondary: #0f2237;
+            --color-bg-tertiary: #162d4a;
+            --color-accent-gold: #d4af37;
+            --color-accent-amber: #f59e0b;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #94a3b8;
+            --color-text-muted: #64748b;
+            --color-border: rgba(148, 163, 184, 0.15);
+            --font-display: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(212, 175, 55, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridShift 30s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(15, 34, 55, 0.8) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridShift {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
+        .maint-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 580px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        /* ============================================
+           LOGO & BRANDING
+           ============================================ */
+        .maint-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .maint-logo-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 16px rgba(212, 175, 55, 0.15);
+        }
+
+        .maint-logo-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .maint-logo-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--color-text-primary);
+            line-height: 1.1;
+        }
+
+        .maint-logo-subtitle {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 5px;
+            color: var(--color-accent-gold);
+            line-height: 1;
+        }
+
+        /* ============================================
+           STATUS INDICATOR
+           ============================================ */
+        .maint-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 20px;
+            font-family: var(--font-display);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--color-accent-amber);
+            margin-bottom: 28px;
+        }
+
+        .maint-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-accent-amber);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+            }
+        }
+
+        /* ============================================
+           SHIELD ICON
+           ============================================ */
+        .maint-shield {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .maint-shield svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+        }
+
+        .maint-shield-pulse {
+            position: absolute;
+            inset: -8px;
+            border: 1.5px solid rgba(212, 175, 55, 0.15);
+            border-radius: 50%;
+            animation: shieldPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           CONTENT
+           ============================================ */
+        .maint-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .maint-description {
+            font-size: 0.92rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: 32px;
+            max-width: 460px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================================
+           INFO CARD
+           ============================================ */
+        .maint-card {
+            background: rgba(22, 45, 74, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .maint-card-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .maint-card-row + .maint-card-row {
+            border-top: 1px solid rgba(148, 163, 184, 0.08);
+        }
+
+        .maint-card-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(212, 175, 55, 0.08);
+            flex-shrink: 0;
+        }
+
+        .maint-card-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--color-accent-gold);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .maint-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .maint-card-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .maint-card-value {
+            font-size: 0.88rem;
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .maint-card-value a {
+            color: var(--color-accent-gold);
+            text-decoration: none;
+            transition: color 150ms ease;
+        }
+
+        .maint-card-value a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* ETA highlight */
+        .maint-eta-value {
+            color: var(--color-accent-amber);
+            font-weight: 600;
+        }
+
+        /* Hidden when no ETA */
+        .maint-eta-row.hidden {
+            display: none;
+        }
+
+        /* ============================================
+           ADMIN LOGIN LINK
+           ============================================ */
+        .maint-admin-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--color-accent-gold);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 200ms ease;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .maint-admin-link:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.4);
+            color: #ffffff;
+        }
+
+        .maint-admin-link svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .maint-footer {
+            margin-top: 16px;
+            font-size: 0.72rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .maint-footer-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--color-border);
+            margin: 16px auto;
+        }
+
+        /* ============================================
+           ADMIN LOGIN MODAL (inline, minimal)
+           ============================================ */
+        .maint-login-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .maint-login-overlay.active {
+            display: flex;
+        }
+
+        .maint-login-box {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+        }
+
+        .maint-login-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 150ms ease;
+        }
+
+        .maint-login-close:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .maint-login-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .maint-login-subtitle {
+            font-size: 0.82rem;
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+        }
+
+        .maint-login-input {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 200ms ease;
+            margin-bottom: 12px;
+        }
+
+        .maint-login-input:focus {
+            border-color: var(--color-accent-gold);
+            background: rgba(212, 175, 55, 0.04);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+        }
+
+        .maint-login-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .maint-login-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 4px;
+            background: linear-gradient(135deg, var(--color-accent-gold), #b8860b);
+            border: none;
+            border-radius: 8px;
+            color: #0a1628;
+            font-family: var(--font-display);
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 200ms ease;
+        }
+
+        .maint-login-btn:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+        }
+
+        .maint-login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .maint-login-error {
+            display: none;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: #f87171;
+        }
+
+        .maint-login-error.visible {
+            display: block;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 600px) {
+            .maint-container {
+                padding: 20px 16px;
+            }
+
+            .maint-title {
+                font-size: 1.45rem;
+            }
+
+            .maint-description {
+                font-size: 0.85rem;
+            }
+
+            .maint-card {
+                padding: 18px 16px;
+            }
+
+            .maint-logo-title {
+                font-size: 0.95rem;
+                letter-spacing: 2px;
+            }
+
+            .maint-logo-subtitle {
+                font-size: 0.65rem;
+                letter-spacing: 3px;
+            }
+
+            .maint-shield {
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="maint-container">
+        <!-- Logo -->
+        <div class="maint-logo">
+            <img src="/logo.png" alt="GMI Logo" class="maint-logo-img"
+                onerror="this.style.display='none'">
+            <div class="maint-logo-text">
+                <span class="maint-logo-title">GLOBAL MILITARY</span>
+                <span class="maint-logo-subtitle">INTELLIGENCE</span>
+            </div>
+        </div>
+
+        <!-- Status Badge -->
+        <div class="maint-status-badge">
+            <div class="maint-status-dot"></div>
+            SYSTEM MAINTENANCE
+        </div>
+
+        <!-- Shield Icon -->
+        <div class="maint-shield">
+            <div class="maint-shield-pulse"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M12 8v4M12 16h.01" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <!-- Title & Description -->
+        <h1 class="maint-title">Scheduled Maintenance</h1>
+        <p class="maint-description" id="maint-message">
+            We are performing scheduled system upgrades to improve platform performance and security.
+            All services will be restored shortly.
+        </p>
+
+        <!-- Info Card -->
+        <div class="maint-card">
+            <!-- ETA Row (hidden if no ETA configured) -->
+            <div class="maint-card-row maint-eta-row hidden" id="maint-eta-row">
+                <div class="maint-card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                </div>
+                <div class="maint-card-info">
+                    <div class="maint-card-label">Estimated Return</div>
+                    <div class="maint-card-value maint-eta-value" id="maint-eta-text">—</div>
+                </div>
+            </div>
+
+            <!-- Status Row -->
+            <div class="maint-card-row">
+                <div class="maint-card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>
+                </div>
+                <div class="maint-card-info">
+                    <div class="maint-card-label">Current Status</div>
+                    <div class="maint-card-value">System upgrade in progress</div>
+                </div>
+            </div>
+
+            <!-- Contact Row -->
+            <div class="maint-card-row">
+                <div class="maint-card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                </div>
+                <div class="maint-card-info">
+                    <div class="maint-card-label">Contact</div>
+                    <div class="maint-card-value">
+                        <a href="mailto:vyomdhip1132003@gmail.com">vyomdhip1132003@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Login Link -->
+        <a class="maint-admin-link" onclick="openMaintLogin()" role="button" tabindex="0">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Administrator Access
+        </a>
+
+        <!-- Footer -->
+        <div class="maint-footer-divider"></div>
+        <div class="maint-footer">
+            &copy; <script>document.write(new Date().getFullYear())</script> Global Military Intelligence.
+            All rights reserved.
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="maint-login-overlay" id="maint-login-overlay">
+        <div class="maint-login-box">
+            <button class="maint-login-close" onclick="closeMaintLogin()" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="maint-login-title">Admin Override</h3>
+            <p class="maint-login-subtitle">Authenticate to bypass maintenance mode</p>
+            <form id="maint-login-form" onsubmit="handleMaintLogin(event)">
+                <input type="text" class="maint-login-input" id="maint-username"
+                    placeholder="Admin username or email" required autocomplete="username">
+                <input type="password" class="maint-login-input" id="maint-password"
+                    placeholder="Password" required autocomplete="current-password">
+                <button type="submit" class="maint-login-btn" id="maint-login-btn">
+                    Authenticate
+                </button>
+            </form>
+            <div class="maint-login-error" id="maint-login-error"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // MAINTENANCE PAGE — DYNAMIC CONTENT & LOGIN
+        // ============================================
+
+        // Fetch maintenance status from API (unauthenticated — will get 503 JSON)
+        (async function loadMaintenanceInfo() {
+            try {
+                const res = await fetch('/api/auth/profile');
+                // If this succeeds, we're not actually in maintenance — API returned 200
+                // This shouldn't normally happen since the middleware blocks it
+            } catch (e) {
+                // Expected — API is blocked during maintenance
+            }
+
+            // Try to get maintenance info from the 503 response
+            try {
+                const res = await fetch('/api/news');
+                if (res.status === 503) {
+                    const data = await res.json();
+                    if (data.message) {
+                        document.getElementById('maint-message').textContent = data.message;
+                    }
+                    if (data.eta) {
+                        document.getElementById('maint-eta-text').textContent = data.eta;
+                        document.getElementById('maint-eta-row').classList.remove('hidden');
+                    }
+                }
+            } catch (e) {
+                // Use defaults from HTML
+            }
+        })();
+
+        // Admin Login Modal
+        function openMaintLogin() {
+            document.getElementById('maint-login-overlay').classList.add('active');
+            document.getElementById('maint-username').focus();
+        }
+
+        function closeMaintLogin() {
+            document.getElementById('maint-login-overlay').classList.remove('active');
+            document.getElementById('maint-login-error').classList.remove('visible');
+            document.getElementById('maint-login-form').reset();
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMaintLogin();
+        });
+
+        // Close on backdrop click
+        document.getElementById('maint-login-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeMaintLogin();
+        });
+
+        // Handle Admin Login
+        async function handleMaintLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('maint-username').value.trim();
+            const password = document.getElementById('maint-password').value;
+            const btn = document.getElementById('maint-login-btn');
+            const errorEl = document.getElementById('maint-login-error');
+
+            btn.disabled = true;
+            btn.textContent = 'Authenticating...';
+            errorEl.classList.remove('visible');
+
+            try {
+                const res = await fetch('/api/auth/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorEl.textContent = data.error || 'Authentication failed. Admin credentials required.';
+                    errorEl.classList.add('visible');
+                    return;
+                }
+
+                // Store credentials in localStorage and cookie
+                localStorage.setItem('gmi_token', data.token);
+                localStorage.setItem('gmi_user', JSON.stringify(data.user));
+                document.cookie = 'gmi_admin_token=' + encodeURIComponent(data.token) + '; path=/; max-age=604800; SameSite=Lax';
+
+                // Redirect to home with admin_token to bypass maintenance middleware
+                window.location.href = '/?admin_token=' + encodeURIComponent(data.token);
+
+            } catch (err) {
+                errorEl.textContent = 'Connection error. Please try again.';
+                errorEl.classList.add('visible');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Authenticate';
+            }
+        }
+    </script>
+</body>
+
+</html>
+

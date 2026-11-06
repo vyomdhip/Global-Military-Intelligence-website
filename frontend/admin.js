@@ -1302,9 +1302,13 @@ async function loadSystemHealth() {
     `;
 
     try {
-        const res = await fetch(`${ADMIN_API}/system-health`, { headers: adminHeaders() });
-        if (!res.ok) throw new Error('Failed to retrieve system health metrics');
-        const data = await res.json();
+        const [healthRes, maintRes] = await Promise.all([
+            fetch(`${ADMIN_API}/system-health`, { headers: adminHeaders() }),
+            fetch(`${ADMIN_API}/maintenance`, { headers: adminHeaders() })
+        ]);
+        if (!healthRes.ok) throw new Error('Failed to retrieve system health metrics');
+        const data = await healthRes.json();
+        const maintData = maintRes.ok ? await maintRes.json() : { active: false, message: '', eta: '' };
 
         const pingMs = data.database?.pingLatencyMs;
         let pingColor = 'green';
@@ -1456,7 +1460,47 @@ async function loadSystemHealth() {
                     </div>
                 </div>
 
-                <!-- Card 4: Live API Endpoint Diagnostics -->
+                <!-- Card 4: System Maintenance Mode Control -->
+                <div class="gmi-health-card gmi-health-card-wide" style="border: 1px solid ${maintData.active ? 'rgba(245, 158, 11, 0.45)' : 'var(--color-border)'}; background: ${maintData.active ? 'rgba(245, 158, 11, 0.04)' : 'var(--color-bg-card)'};">
+                    <div class="gmi-health-card-head">
+                        <div class="gmi-hcard-icon ${maintData.active ? 'gmi-color-amber' : 'gmi-color-gold'}">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>System Maintenance Mode</h3>
+                            <span class="gmi-sub-tag">Public Traffic Gate &amp; HTTP 503 Enforcer</span>
+                        </div>
+                        <span class="gmi-badge-status ${maintData.active ? 'yellow' : 'green'}">
+                            ${maintData.active ? '⚠️ MAINTENANCE ACTIVE' : 'NORMAL OPERATION'}
+                        </span>
+                    </div>
+
+                    <div style="padding: 16px 0 6px;">
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 16px; line-height: 1.6;">
+                            When active, public visitors are served the GMI tactical Maintenance Page with HTTP 503 Service Unavailable headers. Authenticated administrators retain unrestricted access.
+                        </p>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 14px;">
+                            <div>
+                                <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 6px;">Announcement Message</label>
+                                <input type="text" id="admin-maint-message" class="gmi-input" style="width: 100%;" value="${adminEscape(maintData.message || 'We are performing scheduled system upgrades to improve platform performance and security.')}">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 6px;">Estimated Return (ETA)</label>
+                                <input type="text" id="admin-maint-eta" class="gmi-input" style="width: 100%;" placeholder="e.g. 2 hours / 18:00 UTC" value="${adminEscape(maintData.eta || '')}">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                            <button class="gmi-pill-btn" onclick="updateMaintenanceDetails()">Save Notice</button>
+                            <button class="${maintData.active ? 'gmi-pill-btn gmi-btn-danger' : 'gmi-btn-gold'}" style="padding: 8px 16px; font-size: 0.82rem;" onclick="toggleMaintenanceMode(${!maintData.active})">
+                                ${maintData.active ? 'Deactivate Maintenance (Go Live)' : 'Activate Maintenance Mode'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Live API Endpoint Diagnostics -->
                 <div class="gmi-health-card gmi-health-card-wide">
                     <div class="gmi-health-card-head">
                         <div class="gmi-hcard-icon gmi-color-cyan">
@@ -1551,6 +1595,68 @@ async function testAllEndpointsLive() {
 
     html += `</tbody></table>`;
     tableEl.innerHTML = html;
+}
+
+// ============================================
+// MAINTENANCE MODE ACTIONS
+// ============================================
+async function toggleMaintenanceMode(newActive) {
+    const msg = document.getElementById('admin-maint-message')?.value || '';
+    const eta = document.getElementById('admin-maint-eta')?.value || '';
+
+    if (newActive) {
+        openConfirmModal({
+            title: 'Activate Maintenance Mode?',
+            message: 'Are you sure you want to activate System Maintenance Mode?',
+            warning: 'All public traffic will be blocked with HTTP 503 and served the tactical Maintenance Page. Authenticated administrators will continue to have full access.',
+            confirmText: 'Activate Lockout',
+            isDanger: true,
+            onConfirm: async () => {
+                await executeMaintenanceUpdate(true, msg, eta);
+            }
+        });
+    } else {
+        openConfirmModal({
+            title: 'Deactivate Maintenance Mode?',
+            message: 'Are you sure you want to deactivate Maintenance Mode and restore public access?',
+            warning: 'The public website, registration, and intelligence databases will immediately be restored to live operation.',
+            confirmText: 'Restore Live Site',
+            isDanger: false,
+            onConfirm: async () => {
+                await executeMaintenanceUpdate(false, msg, eta);
+            }
+        });
+    }
+}
+
+async function updateMaintenanceDetails() {
+    const msg = document.getElementById('admin-maint-message')?.value || '';
+    const eta = document.getElementById('admin-maint-eta')?.value || '';
+    await executeMaintenanceUpdate(undefined, msg, eta);
+}
+
+async function executeMaintenanceUpdate(active, message, eta) {
+    try {
+        const payload = { message, eta };
+        if (typeof active === 'boolean') payload.active = active;
+
+        const res = await fetch(`${ADMIN_API}/maintenance`, {
+            method: 'POST',
+            headers: {
+                ...adminHeaders(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to update maintenance settings');
+
+        showToast(data.active ? '⚠️ Maintenance Mode is now ACTIVE' : '✅ Maintenance Mode DEACTIVATED — Site is live', 'success');
+        loadSystemHealth();
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
 }
 
 // ============================================

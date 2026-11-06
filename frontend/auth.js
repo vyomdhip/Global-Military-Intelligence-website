@@ -120,6 +120,12 @@ async function handleLogin(e) {
 
         localStorage.setItem('gmi_token', data.token);
         localStorage.setItem('gmi_user', JSON.stringify(data.user));
+
+        // Sync admin bypass cookie for maintenance mode
+        if (data.user && data.user.role === 'admin') {
+            document.cookie = 'gmi_admin_token=' + encodeURIComponent(data.token) + '; path=/; max-age=604800; SameSite=Lax';
+        }
+
         updateAuthUI(data.user);
         closeLoginModal();
         showToast(`Welcome back, ${data.user.displayName || data.user.username}!`);
@@ -162,6 +168,12 @@ async function handleSignup(e) {
 
         localStorage.setItem('gmi_token', data.token);
         localStorage.setItem('gmi_user', JSON.stringify(data.user));
+
+        // Sync admin bypass cookie for maintenance mode
+        if (data.user && data.user.role === 'admin') {
+            document.cookie = 'gmi_admin_token=' + encodeURIComponent(data.token) + '; path=/; max-age=604800; SameSite=Lax';
+        }
+
         updateAuthUI(data.user);
         closeSignupModal();
         showToast(`Welcome to GMI, ${data.user.username}!`);
@@ -179,6 +191,7 @@ async function handleSignup(e) {
 function logoutUser() {
     localStorage.removeItem('gmi_token');
     localStorage.removeItem('gmi_user');
+    document.cookie = 'gmi_admin_token=; path=/; max-age=0; SameSite=Lax';
     updateAuthUI(null);
     if (typeof clearWatchlistCache === 'function') clearWatchlistCache();
     const menu = document.getElementById('auth-user-menu');

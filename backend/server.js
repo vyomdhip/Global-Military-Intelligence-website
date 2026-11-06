@@ -4,6 +4,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const { connectDB } = require('./database/connection');
 const { seedAdmin } = require('./database/seed');
+const { maintenanceMiddleware } = require('./middleware/maintenance');
 const authRoutes = require('./routes/auth');
 const watchlistRoutes = require('./routes/watchlist');
 const reportRoutes = require('./routes/reports');
@@ -18,6 +19,11 @@ const PORT = process.env.PORT || 3000;
 // ============================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ============================================
+// MAINTENANCE MODE GATE
+// ============================================
+app.use(maintenanceMiddleware);
 
 // ============================================
 // STATIC FILES — serve the existing frontend
@@ -56,6 +62,7 @@ async function startServer() {
     await seedAdmin();
 
     app.listen(PORT, () => {
+        const maintActive = (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true';
         console.log('');
         console.log('╔════════════════════════════════════════════╗');
         console.log('║   GLOBAL MILITARY INTELLIGENCE SERVER      ║');
@@ -63,6 +70,7 @@ async function startServer() {
         console.log(`║   🌐 Server:  http://localhost:${PORT}     ║`);
         console.log('║   🍃 Database: MongoDB Atlas               ║');
         console.log('║   🛡️  Admin:   Pre-seeded from .env        ║');
+        console.log(`║   🔧 Maintenance: ${maintActive ? 'ACTIVE ⚠️' : 'OFF'}${maintActive ? '              ' : '                  '}║`);
         console.log('╚════════════════════════════════════════════╝');
         console.log('');
     });

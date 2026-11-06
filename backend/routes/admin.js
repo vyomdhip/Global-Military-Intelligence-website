@@ -628,4 +628,39 @@ router.delete('/reports/:id', async (req, res) => {
     }
 });
 
+// ============================================
+// MAINTENANCE MODE — STATUS & TOGGLE
+// ============================================
+router.get('/maintenance', (req, res) => {
+    res.json({
+        active: (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true',
+        message: process.env.MAINTENANCE_MESSAGE || '',
+        eta: process.env.MAINTENANCE_ETA || null
+    });
+});
+
+router.post('/maintenance', (req, res) => {
+    const { active, message, eta } = req.body;
+
+    if (typeof active === 'boolean') {
+        process.env.MAINTENANCE_MODE = active ? 'true' : 'false';
+    }
+    if (typeof message === 'string') {
+        process.env.MAINTENANCE_MESSAGE = message;
+    }
+    if (eta !== undefined) {
+        process.env.MAINTENANCE_ETA = eta || '';
+    }
+
+    const currentState = (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true';
+    console.log(`🛡️ Admin ${req.user.username} ${currentState ? 'ACTIVATED' : 'DEACTIVATED'} maintenance mode`);
+
+    res.json({
+        active: currentState,
+        message: process.env.MAINTENANCE_MESSAGE || '',
+        eta: process.env.MAINTENANCE_ETA || null,
+        toggled: true
+    });
+});
+
 module.exports = router;
