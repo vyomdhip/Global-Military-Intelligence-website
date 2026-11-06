@@ -5813,13 +5813,13 @@ textarea:focus-visible {
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
 }
 
-.auth-input-wrap svg {
+.auth-input-wrap > svg {
     flex-shrink: 0;
     color: var(--color-text-muted);
     transition: color 0.2s;
 }
 
-.auth-input-wrap:focus-within svg {
+.auth-input-wrap:focus-within > svg {
     color: var(--color-accent-gold);
 }
 
@@ -5836,6 +5836,77 @@ textarea:focus-visible {
 
 .auth-input-wrap input::placeholder {
     color: rgba(255, 255, 255, 0.25);
+}
+
+/* Password Visibility Toggle Button */
+.password-toggle-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    margin-right: -4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.auth-input-wrap .password-toggle-btn {
+    color: var(--color-text-muted);
+}
+
+.auth-input-wrap:focus-within .password-toggle-btn {
+    color: rgba(212, 175, 55, 0.75);
+}
+
+.auth-input-wrap .password-toggle-btn:hover,
+.auth-input-wrap:focus-within .password-toggle-btn:hover,
+.password-toggle-btn:hover {
+    color: #ffffff !important;
+    background: rgba(212, 175, 55, 0.15);
+}
+
+.password-toggle-btn:active {
+    transform: scale(0.92);
+}
+
+.password-toggle-btn:focus-visible {
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: 1px;
+}
+
+.password-toggle-btn svg {
+    pointer-events: none;
+    display: block;
+    color: inherit;
+}
+
+/* Standalone GMI Password Field Wrap (for admin panels) */
+.gmi-password-field-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.gmi-password-field-wrap .gmi-input {
+    padding-right: 44px;
+}
+
+.gmi-password-field-wrap .password-toggle-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.gmi-password-field-wrap .password-toggle-btn:hover {
+    color: var(--color-accent-gold);
 }
 
 /* Submit Button */

@@ -17,6 +17,50 @@ function showToast(message, type = 'success') {
     }, 3500);
 }
 
+// ============================================
+// PASSWORD VISIBILITY TOGGLE SYSTEM
+// ============================================
+function togglePasswordVisibility(inputId, btn) {
+    const input = typeof inputId === 'string' ? document.getElementById(inputId) : inputId;
+    if (!input) return;
+
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+
+    if (btn) {
+        const eyeShow = btn.querySelector('.eye-show');
+        const eyeHide = btn.querySelector('.eye-hide');
+        if (eyeShow && eyeHide) {
+            eyeShow.style.display = isPassword ? 'none' : 'block';
+            eyeHide.style.display = isPassword ? 'block' : 'none';
+        }
+        const label = isPassword ? 'Hide password' : 'Show password';
+        btn.setAttribute('aria-label', label);
+        btn.setAttribute('title', label);
+    }
+}
+window.togglePasswordVisibility = togglePasswordVisibility;
+
+function resetPasswordToggles(container = document) {
+    if (!container) return;
+    container.querySelectorAll('.password-toggle-btn').forEach(btn => {
+        const wrap = btn.closest('.auth-input-wrap, .gmi-password-field-wrap, .maint-password-wrap');
+        if (wrap) {
+            const input = wrap.querySelector('input');
+            if (input) input.type = 'password';
+        }
+        const eyeShow = btn.querySelector('.eye-show');
+        const eyeHide = btn.querySelector('.eye-hide');
+        if (eyeShow && eyeHide) {
+            eyeShow.style.display = 'block';
+            eyeHide.style.display = 'none';
+        }
+        btn.setAttribute('aria-label', 'Show password');
+        btn.setAttribute('title', 'Show password');
+    });
+}
+window.resetPasswordToggles = resetPasswordToggles;
+
 // Modal Functions
 function openLoginModal() {
     const modal = document.getElementById('auth-login-modal');
@@ -34,6 +78,7 @@ function closeLoginModal() {
         document.body.style.overflow = '';
         const form = document.getElementById('login-form');
         if (form) form.reset();
+        resetPasswordToggles(modal);
     }
 }
 
@@ -52,6 +97,7 @@ function closeSignupModal() {
         document.body.style.overflow = '';
         const form = document.getElementById('signup-form');
         if (form) form.reset();
+        resetPasswordToggles(modal);
     }
 }
 
@@ -320,6 +366,7 @@ function closeProfileModal() {
     // Reset password form
     const pwForm = document.getElementById('profile-password-form');
     if (pwForm) pwForm.reset();
+    resetPasswordToggles(modal);
     const meterFill = document.getElementById('dash-pw-bar-fill');
     if (meterFill) meterFill.style.width = '0%';
     const meterLabel = document.getElementById('dash-pw-strength-label');

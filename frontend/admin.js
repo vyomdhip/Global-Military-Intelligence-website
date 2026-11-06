@@ -849,7 +849,13 @@ async function openUserDossier(userId) {
                         </div>
                         <div class="gmi-form-group">
                             <label>Reset Password (leave empty to keep unchanged)</label>
-                            <input type="password" id="dossier-input-password" class="gmi-input" placeholder="New password (min 6 characters)" minlength="6">
+                            <div class="gmi-password-field-wrap">
+                                <input type="password" id="dossier-input-password" class="gmi-input" placeholder="New password (min 6 characters)" minlength="6">
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('dossier-input-password', this)" aria-label="Show password" title="Show password">
+                                    <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="gmi-form-actions">
                             <button type="submit" class="gmi-btn-gold">Save Changes</button>
@@ -1874,15 +1880,33 @@ async function loadAdminSecurity() {
                     <form onsubmit="handleAdminPasswordChange(event)" id="admin-password-change-form">
                         <div class="gmi-form-group">
                             <label for="admin-setting-curpw">Current Password</label>
-                            <input type="password" id="admin-setting-curpw" class="gmi-input" placeholder="Current master password" required minlength="6">
+                            <div class="gmi-password-field-wrap">
+                                <input type="password" id="admin-setting-curpw" class="gmi-input" placeholder="Current master password" required minlength="6">
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('admin-setting-curpw', this)" aria-label="Show password" title="Show password">
+                                    <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="gmi-form-group">
                             <label for="admin-setting-newpw">New Password</label>
-                            <input type="password" id="admin-setting-newpw" class="gmi-input" placeholder="New master password (min 6 characters)" required minlength="6">
+                            <div class="gmi-password-field-wrap">
+                                <input type="password" id="admin-setting-newpw" class="gmi-input" placeholder="New master password (min 6 characters)" required minlength="6">
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('admin-setting-newpw', this)" aria-label="Show password" title="Show password">
+                                    <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="gmi-form-group">
                             <label for="admin-setting-confirmpw">Confirm New Password</label>
-                            <input type="password" id="admin-setting-confirmpw" class="gmi-input" placeholder="Repeat new master password" required minlength="6">
+                            <div class="gmi-password-field-wrap">
+                                <input type="password" id="admin-setting-confirmpw" class="gmi-input" placeholder="Repeat new master password" required minlength="6">
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('admin-setting-confirmpw', this)" aria-label="Show password" title="Show password">
+                                    <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="gmi-btn-gold" id="btn-save-admin-pw">
                             <span>Update Master Password</span>
