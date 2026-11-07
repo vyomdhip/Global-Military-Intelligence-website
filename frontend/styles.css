@@ -6343,7 +6343,7 @@ textarea:focus-visible {
 }
 
 .profile-modal-content.gmi-user-dashboard-shell {
-    max-width: 1180px;
+    max-width: 1240px;
     width: 95vw;
     height: 100%;
     max-height: calc(100vh - 124px); /* Guarantees comfortable top & bottom margins from navbar */
@@ -6673,35 +6673,55 @@ textarea:focus-visible {
     z-index: 10;
     display: flex;
     gap: 6px;
-    padding: 10px 24px;
+    padding: 8px 20px;
     background: rgba(8, 13, 24, 0.85);
     border-bottom: 1px solid rgba(148, 163, 184, 0.1);
     overflow-x: auto;
-    scrollbar-width: none;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.3) rgba(8, 13, 24, 0.5);
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 0 16px;
     margin-bottom: 0;
     border-radius: 0;
+    align-items: center;
 }
 
 .gmi-dash-tabs::-webkit-scrollbar {
-    display: none;
+    height: 4px;
+}
+
+.gmi-dash-tabs::-webkit-scrollbar-track {
+    background: rgba(8, 13, 24, 0.5);
+}
+
+.gmi-dash-tabs::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+}
+
+.gmi-dash-tabs::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.6);
 }
 
 .gmi-dash-tab {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 9px 16px;
+    gap: 6px;
+    padding: 8px 12px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 8px;
     color: #94a3b8;
     font-family: var(--font-display, 'Rajdhani', sans-serif);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
     letter-spacing: 0.03em;
+    flex-shrink: 0;
 }
 
 .gmi-dash-tab:hover {
@@ -6721,6 +6741,25 @@ textarea:focus-visible {
     color: #d4af37;
 }
 
+.gmi-dash-tab-admin {
+    color: #d4af37 !important;
+    border: 1px solid rgba(212, 175, 55, 0.35) !important;
+    background: rgba(212, 175, 55, 0.06);
+    flex-shrink: 0;
+}
+
+.gmi-dash-tab-admin svg {
+    color: #d4af37;
+    opacity: 0.9;
+}
+
+.gmi-dash-tab-admin:hover {
+    background: rgba(212, 175, 55, 0.18) !important;
+    border-color: #d4af37 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.25);
+}
+
 .gmi-dash-pill-badge {
     padding: 1px 6px;
     border-radius: 10px;
@@ -6733,6 +6772,32 @@ textarea:focus-visible {
 .gmi-dash-tab.active .gmi-dash-pill-badge {
     background: rgba(212, 175, 55, 0.25);
     color: #d4af37;
+}
+
+/* Responsive tab labels in Analyst Dashboard */
+.gmi-tab-label-short {
+    display: none;
+}
+.gmi-tab-label-full {
+    display: inline;
+}
+
+@media (max-width: 1200px) {
+    .gmi-tab-label-full {
+        display: none;
+    }
+    .gmi-tab-label-short {
+        display: inline;
+    }
+    .gmi-dash-tabs {
+        padding: 8px 14px;
+        gap: 5px;
+    }
+    .gmi-dash-tab {
+        padding: 7px 10px;
+        font-size: 0.8rem;
+        gap: 5px;
+    }
 }
 
 /* Scrollable Body */
@@ -8179,12 +8244,13 @@ input:checked + .gmi-slider:before {
     }
 
     .gmi-dash-tabs {
-        padding: 8px 14px;
+        padding: 8px 12px;
+        gap: 4px;
     }
 
     .gmi-dash-tab {
-        padding: 7px 12px;
-        font-size: 0.78rem;
+        padding: 6px 10px;
+        font-size: 0.76rem;
     }
 
     .gmi-dash-body-scroll {
