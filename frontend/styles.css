@@ -11464,31 +11464,6 @@ input:checked + .gmi-slider:before {
     text-transform: uppercase;
 }
 
-.gmi-sidebar-close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    background: rgba(148, 163, 184, 0.08);
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    color: #94a3b8;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.gmi-sidebar-close-btn:hover {
-    background: rgba(212, 175, 55, 0.15);
-    border-color: rgba(212, 175, 55, 0.45);
-    color: #d4af37;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-}
-
 /* Atlas Pulse Chip */
 .gmi-admin-pulse-pill {
     margin: 14px 6px;
@@ -13722,10 +13697,6 @@ input:checked + .gmi-slider:before {
 
     .gmi-admin-sidebar.open {
         transform: translateX(0);
-    }
-
-    .gmi-sidebar-close-btn {
-        display: block;
     }
 
     .gmi-menu-toggle-btn {
