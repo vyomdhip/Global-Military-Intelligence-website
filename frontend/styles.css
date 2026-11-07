@@ -12644,8 +12644,14 @@ input:checked + .gmi-slider:before {
 /* ── SYSTEM HEALTH GRIDS ─────────────────────── */
 .gmi-health-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+}
+
+@media (max-width: 860px) {
+    .gmi-health-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .gmi-health-card {
@@ -12653,6 +12659,8 @@ input:checked + .gmi-slider:before {
     border: 1px solid rgba(148, 163, 184, 0.14);
     border-radius: 12px;
     padding: 22px;
+    display: flex;
+    flex-direction: column;
 }
 
 .gmi-health-card-wide {
@@ -12708,25 +12716,45 @@ input:checked + .gmi-slider:before {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .gmi-hstat-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     font-size: 0.84rem;
     color: #94a3b8;
+    min-height: 26px;
+}
+
+.gmi-hstat-label {
+    flex-shrink: 0;
+    color: #94a3b8;
+    white-space: nowrap;
 }
 
 .gmi-hval-mono {
-    font-family: monospace;
+    font-family: var(--font-mono, 'Consolas', 'Courier New', monospace);
+    font-size: 0.82rem;
     color: #f1f5f9;
+    text-align: right;
 }
 
 .gmi-hval-bold {
     font-weight: 600;
     color: #f1f5f9;
+    text-align: right;
+}
+
+.gmi-hstat-val {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .gmi-ping-tag {
@@ -12746,6 +12774,7 @@ input:checked + .gmi-slider:before {
     border: 1px solid rgba(148, 163, 184, 0.1);
     border-radius: 8px;
     padding: 14px;
+    margin-top: auto;
 }
 
 .gmi-collections-summary h4 {
@@ -12776,6 +12805,7 @@ input:checked + .gmi-slider:before {
     border: 1px solid rgba(148, 163, 184, 0.1);
     border-radius: 8px;
     padding: 14px;
+    margin-top: auto;
 }
 
 .gmi-meter-header {

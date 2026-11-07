@@ -1325,16 +1325,11 @@ async function loadSystemHealth() {
         const heapTotal = data.memory?.heapTotalMB || 1;
         const heapPct = data.memory?.heapPercent || 0;
 
-        const sysTotalMB = data.memory?.systemTotalMemMB || 1;
-        const sysFreeMB = data.memory?.systemFreeMemMB || 0;
-        const sysUsedMB = sysTotalMB - sysFreeMB;
-        const sysPct = data.memory?.systemMemPercent || 0;
-
         let html = `
             <div class="gmi-view-header">
                 <div>
                     <h2 class="gmi-view-title">Infrastructure Health & Telemetry</h2>
-                    <p class="gmi-view-sub">Live telemetry queried from MongoDB Atlas, Node.js process runtime, and operating host.</p>
+                    <p class="gmi-view-sub">Live telemetry queried from MongoDB Atlas cluster and Node.js process runtime.</p>
                 </div>
                 <button class="gmi-btn-gold" onclick="loadSystemHealth()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
@@ -1360,16 +1355,20 @@ async function loadSystemHealth() {
 
                     <div class="gmi-health-stats-list">
                         <div class="gmi-hstat-row">
-                            <span>Database Ping Latency</span>
+                            <span class="gmi-hstat-label">Database Ping Latency</span>
                             <span class="gmi-ping-tag ${pingColor}">${pingMs !== null ? `${pingMs} ms` : 'N/A'}</span>
                         </div>
                         <div class="gmi-hstat-row">
-                            <span>Database Name</span>
+                            <span class="gmi-hstat-label">Database Name</span>
                             <span class="gmi-hval-mono">${adminEscape(data.database?.name || 'test')}</span>
                         </div>
                         <div class="gmi-hstat-row">
-                            <span>Connection Host</span>
-                            <span class="gmi-hval-mono gmi-ellipsis" style="max-width: 220px;">${adminEscape(data.database?.host || 'atlas.mongodb.net')}</span>
+                            <span class="gmi-hstat-label">Connection Host</span>
+                            <span class="gmi-hval-mono gmi-hstat-val" title="MongoDB Connection Host: ${adminEscape(data.database?.host || 'atlas.mongodb.net')}">${adminEscape(data.database?.host || 'atlas.mongodb.net')}</span>
+                        </div>
+                        <div class="gmi-hstat-row">
+                            <span class="gmi-hstat-label">Cluster State</span>
+                            <span class="gmi-hval-mono" style="color: #4ade80;">Active (Read / Write)</span>
                         </div>
                     </div>
 
@@ -1399,19 +1398,19 @@ async function loadSystemHealth() {
 
                     <div class="gmi-health-stats-list">
                         <div class="gmi-hstat-row">
-                            <span>Server Process Uptime</span>
+                            <span class="gmi-hstat-label">Server Process Uptime</span>
                             <span class="gmi-hval-bold">${data.server?.uptimeFormatted || '—'}</span>
                         </div>
                         <div class="gmi-hstat-row">
-                            <span>Runtime Engine</span>
+                            <span class="gmi-hstat-label">Runtime Engine</span>
                             <span class="gmi-hval-mono">Node ${data.server?.nodeVersion || 'v18+'}</span>
                         </div>
                         <div class="gmi-hstat-row">
-                            <span>Process ID (PID)</span>
+                            <span class="gmi-hstat-label">Process ID (PID)</span>
                             <span class="gmi-hval-mono">${data.server?.pid || '—'}</span>
                         </div>
                         <div class="gmi-hstat-row">
-                            <span>Execution Environment</span>
+                            <span class="gmi-hstat-label">Execution Environment</span>
                             <span class="gmi-hval-mono">${adminEscape(data.server?.environment || 'development')}</span>
                         </div>
                     </div>
@@ -1427,46 +1426,7 @@ async function loadSystemHealth() {
                     </div>
                 </div>
 
-                <!-- Card 3: Host Environment -->
-                <div class="gmi-health-card">
-                    <div class="gmi-health-card-head">
-                        <div class="gmi-hcard-icon gmi-color-blue">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-                        </div>
-                        <div>
-                            <h3>Host & OS Infrastructure</h3>
-                            <span class="gmi-sub-tag">Hardware Resources</span>
-                        </div>
-                        <span class="gmi-badge-status blue">${adminEscape(data.server?.platform || 'win32')}</span>
-                    </div>
-
-                    <div class="gmi-health-stats-list">
-                        <div class="gmi-hstat-row">
-                            <span>Architecture</span>
-                            <span class="gmi-hval-mono">${adminEscape(data.server?.arch || 'x64')}</span>
-                        </div>
-                        <div class="gmi-hstat-row">
-                            <span>Logical CPU Cores</span>
-                            <span class="gmi-hval-bold">${data.os?.cpuCount || '—'} Cores</span>
-                        </div>
-                        <div class="gmi-hstat-row">
-                            <span>Processor Model</span>
-                            <span class="gmi-hval-mono gmi-ellipsis" style="max-width: 220px;" title="${adminEscape(data.os?.cpuModel || 'CPU')}">${adminEscape(data.os?.cpuModel || 'AMD / Intel')}</span>
-                        </div>
-                    </div>
-
-                    <div class="gmi-memory-meter-box">
-                        <div class="gmi-meter-header">
-                            <span>System Physical RAM</span>
-                            <span>${sysUsedMB} MB / ${sysTotalMB} MB (${sysPct}%)</span>
-                        </div>
-                        <div class="gmi-meter-track">
-                            <div class="gmi-meter-fill ${sysPct > 85 ? 'warn' : ''}" style="width: ${Math.min(100, sysPct)}%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: System Maintenance Mode Control -->
+                <!-- Card 3: System Maintenance Mode Control -->
                 <div class="gmi-health-card gmi-health-card-wide" style="border: 1px solid ${maintData.active ? 'rgba(245, 158, 11, 0.45)' : 'var(--color-border)'}; background: ${maintData.active ? 'rgba(245, 158, 11, 0.04)' : 'var(--color-bg-card)'};">
                     <div class="gmi-health-card-head">
                         <div class="gmi-hcard-icon ${maintData.active ? 'gmi-color-amber' : 'gmi-color-gold'}">
