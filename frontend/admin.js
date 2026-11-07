@@ -1427,7 +1427,7 @@ async function loadSystemHealth() {
                 </div>
 
                 <!-- Card 3: System Maintenance Mode Control -->
-                <div class="gmi-health-card gmi-health-card-wide" style="border: 1px solid ${maintData.active ? 'rgba(245, 158, 11, 0.45)' : 'var(--color-border)'}; background: ${maintData.active ? 'rgba(245, 158, 11, 0.04)' : 'var(--color-bg-card)'};">
+                <div class="gmi-health-card gmi-health-card-wide ${maintData.active ? 'maint-mode-active' : ''}">
                     <div class="gmi-health-card-head">
                         <div class="gmi-hcard-icon ${maintData.active ? 'gmi-color-amber' : 'gmi-color-gold'}">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
