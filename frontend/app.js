@@ -2232,12 +2232,18 @@ function openNewsCalendar() {
     const btn = document.getElementById('news-calendar-btn');
     if (!popover || !btn) return;
 
-    // If currently filtered, focus on that month
+    const now = new Date();
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // If currently filtered, focus on that month (capped at current month)
     if (currentNewsDate && currentNewsDate !== 'all') {
         const parsed = new Date(currentNewsDate);
         if (!isNaN(parsed.getTime())) {
-            newsCalendarViewDate = new Date(parsed.getFullYear(), parsed.getMonth(), 1);
+            const targetMonth = new Date(parsed.getFullYear(), parsed.getMonth(), 1);
+            newsCalendarViewDate = targetMonth > currentMonthStart ? currentMonthStart : targetMonth;
         }
+    } else if (newsCalendarViewDate > currentMonthStart) {
+        newsCalendarViewDate = currentMonthStart;
     }
 
     renderNewsCalendarGrid();
@@ -2257,7 +2263,16 @@ function closeNewsCalendar() {
 }
 
 function navigateNewsCalendarMonth(delta) {
-    newsCalendarViewDate.setMonth(newsCalendarViewDate.getMonth() + delta);
+    const nextView = new Date(newsCalendarViewDate.getFullYear(), newsCalendarViewDate.getMonth() + delta, 1);
+    const now = new Date();
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Prevent navigating into future months
+    if (delta > 0 && nextView > currentMonthStart) {
+        return;
+    }
+
+    newsCalendarViewDate = nextView;
     renderNewsCalendarGrid();
 }
 
@@ -2265,7 +2280,20 @@ function renderNewsCalendarGrid() {
     const titleEl = document.getElementById('cal-month-title');
     const gridEl = document.getElementById('cal-days-grid');
     const countEl = document.getElementById('cal-intel-count');
+    const nextBtn = document.getElementById('cal-next-month-btn');
     if (!titleEl || !gridEl) return;
+
+    const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Disable Next Month button if currently viewing current month or beyond
+    if (nextBtn) {
+        const isAtOrPastCurrentMonth = newsCalendarViewDate >= currentMonthStart;
+        nextBtn.disabled = isAtOrPastCurrentMonth;
+        nextBtn.classList.toggle('disabled', isAtOrPastCurrentMonth);
+        nextBtn.setAttribute('title', isAtOrPastCurrentMonth ? 'Future months not accessible' : 'Next Month');
+    }
 
     const year = newsCalendarViewDate.getFullYear();
     const month = newsCalendarViewDate.getMonth();
@@ -2279,7 +2307,7 @@ function renderNewsCalendarGrid() {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-    const todayStr = new Date().toLocaleDateString('en-US', {
+    const todayStr = todayMidnight.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric'
@@ -2291,27 +2319,34 @@ function renderNewsCalendarGrid() {
     for (let i = firstDayIndex - 1; i >= 0; i--) {
         const prevDay = daysInPrevMonth - i;
         const prevDate = new Date(year, month - 1, prevDay);
+        const isFuture = prevDate.getTime() > todayMidnight.getTime();
         const dateKey = prevDate.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
         });
-        const hasNews = newsArticlesByDate.has(dateKey);
+        const hasNews = !isFuture && newsArticlesByDate.has(dateKey);
         const isSelected = (currentNewsDate === dateKey);
 
-        html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
-            onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${prevDay}</button>`;
+        if (isFuture) {
+            html += `<button type="button" class="cal-day-cell cal-day-empty cal-day-disabled cal-day-future" 
+                disabled aria-disabled="true" title="${dateKey} (Future date)">${prevDay}</button>`;
+        } else {
+            html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
+                onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${prevDay}</button>`;
+        }
     }
 
     // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
         const thisDate = new Date(year, month, day);
+        const isFuture = thisDate.getTime() > todayMidnight.getTime();
         const dateKey = thisDate.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
         });
-        const hasNews = newsArticlesByDate.has(dateKey);
+        const hasNews = !isFuture && newsArticlesByDate.has(dateKey);
         const count = hasNews ? newsArticlesByDate.get(dateKey).length : 0;
         const isSelected = (currentNewsDate === dateKey);
         const isToday = (dateKey === todayStr);
@@ -2321,9 +2356,13 @@ function renderNewsCalendarGrid() {
         if (isSelected) classes.push('cal-day-selected');
         if (isToday) classes.push('cal-day-today');
 
-        const titleTip = hasNews ? `${dateKey} (${count} report${count > 1 ? 's' : ''})` : dateKey;
-
-        html += `<button type="button" class="${classes.join(' ')}" onclick="selectNewsCalendarDate('${dateKey}')" title="${titleTip}">${day}</button>`;
+        if (isFuture) {
+            classes.push('cal-day-disabled', 'cal-day-future');
+            html += `<button type="button" class="${classes.join(' ')}" disabled aria-disabled="true" title="${dateKey} (Future date)">${day}</button>`;
+        } else {
+            const titleTip = hasNews ? `${dateKey} (${count} report${count > 1 ? 's' : ''})` : dateKey;
+            html += `<button type="button" class="${classes.join(' ')}" onclick="selectNewsCalendarDate('${dateKey}')" title="${titleTip}">${day}</button>`;
+        }
     }
 
     // Next month filler days to complete grid cleanly
@@ -2331,16 +2370,22 @@ function renderNewsCalendarGrid() {
     const nextDays = (7 - (totalCells % 7)) % 7;
     for (let j = 1; j <= nextDays; j++) {
         const nextDate = new Date(year, month + 1, j);
+        const isFuture = nextDate.getTime() > todayMidnight.getTime();
         const dateKey = nextDate.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
         });
-        const hasNews = newsArticlesByDate.has(dateKey);
+        const hasNews = !isFuture && newsArticlesByDate.has(dateKey);
         const isSelected = (currentNewsDate === dateKey);
 
-        html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
-            onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${j}</button>`;
+        if (isFuture) {
+            html += `<button type="button" class="cal-day-cell cal-day-empty cal-day-disabled cal-day-future" 
+                disabled aria-disabled="true" title="${dateKey} (Future date)">${j}</button>`;
+        } else {
+            html += `<button type="button" class="cal-day-cell cal-day-empty ${hasNews ? 'cal-day-has-news' : ''} ${isSelected ? 'cal-day-selected' : ''}" 
+                onclick="selectNewsCalendarDate('${dateKey}')" title="${dateKey}">${j}</button>`;
+        }
     }
 
     gridEl.innerHTML = html;
@@ -2406,6 +2451,17 @@ function getFilteredNews() {
 }
 
 function selectNewsCalendarDate(dateKey) {
+    if (dateKey && dateKey !== 'all') {
+        const parsed = new Date(dateKey);
+        if (!isNaN(parsed.getTime())) {
+            const now = new Date();
+            const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const targetMidnight = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+            if (targetMidnight.getTime() > todayMidnight.getTime()) {
+                return; // Disallow selecting future dates
+            }
+        }
+    }
     visibleNewsCount = NEWS_PAGE_SIZE;
     currentNewsDate = dateKey;
     updateNewsCalendarUI(dateKey);

@@ -3959,6 +3959,45 @@ textarea:focus-visible {
     box-shadow: none !important;
 }
 
+/* Disabled / Future Calendar Days */
+.cal-day-cell:disabled,
+.cal-day-cell.cal-day-disabled,
+.cal-day-cell.cal-day-future {
+    opacity: 0.18 !important;
+    color: #475569 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.cal-day-cell:disabled:hover,
+.cal-day-cell.cal-day-disabled:hover,
+.cal-day-cell.cal-day-future:hover {
+    background: transparent !important;
+    color: #475569 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.cal-day-cell:disabled::after,
+.cal-day-cell.cal-day-disabled::after,
+.cal-day-cell.cal-day-future::after {
+    display: none !important;
+}
+
+/* Disabled Month Navigation Button */
+.cal-nav-btn:disabled,
+.cal-nav-btn.disabled {
+    opacity: 0.2 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
+    color: #475569 !important;
+}
+
 /* Popover Footer */
 .cal-pop-footer {
     display: flex;
