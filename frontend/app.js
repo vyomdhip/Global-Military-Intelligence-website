@@ -285,33 +285,35 @@ function initNavigation() {
             'conflicts-section': 'conflicts',
             'history-section': 'history',
             'about-section': 'about',
-            'privacy-policy': 'privacy',
-            'terms-conditions': 'terms',
-            'terms-and-conditions': 'terms'
+            'privacy': 'privacy-policy',
+            'privacy-policy': 'privacy-policy',
+            'terms': 'terms-conditions',
+            'terms-conditions': 'terms-conditions',
+            'terms-and-conditions': 'terms-conditions'
         };
 
         const targetPage = aliasMap[rawPath] || rawPath;
         const validPages = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
 
-        if (targetPage === 'privacy') {
+        if (targetPage === 'privacy-policy') {
             if (typeof openPrivacyPolicy === 'function') {
                 openPrivacyPolicy(false);
             }
             try {
                 if (window.location.protocol.startsWith('http')) {
-                    window.history.replaceState({ page: 'privacy', overlay: 'privacy' }, '', '/privacy');
+                    window.history.replaceState({ page: 'privacy-policy', overlay: 'privacy-policy' }, '', '/privacy-policy');
                 }
             } catch (e) {}
             return;
         }
 
-        if (targetPage === 'terms') {
+        if (targetPage === 'terms-conditions') {
             if (typeof openTermsConditions === 'function') {
                 openTermsConditions(false);
             }
             try {
                 if (window.location.protocol.startsWith('http')) {
-                    window.history.replaceState({ page: 'terms', overlay: 'terms' }, '', '/terms');
+                    window.history.replaceState({ page: 'terms-conditions', overlay: 'terms-conditions' }, '', '/terms-conditions');
                 }
             } catch (e) {}
             return;
@@ -7458,11 +7460,11 @@ function openPrivacyPolicy(updateHistory = true) {
     if (updateHistory) {
         try {
             if (window.location.protocol.startsWith('http')) {
-                if (window.location.pathname !== '/privacy' || window.location.hash) {
-                    window.history.pushState({ page: 'privacy', overlay: 'privacy' }, '', '/privacy');
+                if (window.location.pathname !== '/privacy-policy' || window.location.hash) {
+                    window.history.pushState({ page: 'privacy-policy', overlay: 'privacy-policy' }, '', '/privacy-policy');
                 }
             } else {
-                window.location.hash = 'privacy';
+                window.location.hash = 'privacy-policy';
             }
         } catch (e) {}
     }
@@ -7476,7 +7478,7 @@ function closePrivacyPolicy(updateHistory = true) {
     document.body.style.overflow = '';
 
     if (updateHistory) {
-        if (window.history.state && window.history.state.overlay === 'privacy' && window.history.length > 1) {
+        if (window.history.state && (window.history.state.overlay === 'privacy-policy' || window.history.state.overlay === 'privacy') && window.history.length > 1) {
             window.history.back();
         } else {
             try {
@@ -7535,11 +7537,11 @@ function openTermsConditions(updateHistory = true) {
     if (updateHistory) {
         try {
             if (window.location.protocol.startsWith('http')) {
-                if (window.location.pathname !== '/terms' || window.location.hash) {
-                    window.history.pushState({ page: 'terms', overlay: 'terms' }, '', '/terms');
+                if (window.location.pathname !== '/terms-conditions' || window.location.hash) {
+                    window.history.pushState({ page: 'terms-conditions', overlay: 'terms-conditions' }, '', '/terms-conditions');
                 }
             } else {
-                window.location.hash = 'terms';
+                window.location.hash = 'terms-conditions';
             }
         } catch (e) {}
     }
@@ -7553,7 +7555,7 @@ function closeTermsConditions(updateHistory = true) {
     document.body.style.overflow = '';
 
     if (updateHistory) {
-        if (window.history.state && window.history.state.overlay === 'terms' && window.history.length > 1) {
+        if (window.history.state && (window.history.state.overlay === 'terms-conditions' || window.history.state.overlay === 'terms') && window.history.length > 1) {
             window.history.back();
         } else {
             try {
@@ -7596,8 +7598,8 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('popstate', () => {
     const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
     const hash = window.location.hash.replace(/^#/, '').toLowerCase();
-    const isPrivacy = (path === 'privacy' || path === 'privacy-policy' || hash === 'privacy');
-    const isTerms = (path === 'terms' || path === 'terms-conditions' || path === 'terms-and-conditions' || hash === 'terms');
+    const isPrivacy = (path === 'privacy' || path === 'privacy-policy' || hash === 'privacy' || hash === 'privacy-policy');
+    const isTerms = (path === 'terms' || path === 'terms-conditions' || path === 'terms-and-conditions' || hash === 'terms' || hash === 'terms-conditions');
 
     const privacyOverlay = document.getElementById('privacy-policy-overlay');
     const termsOverlay = document.getElementById('terms-conditions-overlay');

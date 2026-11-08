@@ -43,6 +43,17 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/news', newsRoutes);
 
 // ============================================
+// ROUTE REDIRECTS (LEGACY TO CANONICAL)
+// ============================================
+app.get('/privacy', (req, res) => {
+    res.redirect(301, '/privacy-policy');
+});
+
+app.get('/terms', (req, res) => {
+    res.redirect(301, '/terms-conditions');
+});
+
+// ============================================
 // CATCH-ALL — serve index.html for any non-API route
 // ============================================
 app.get('*', (req, res) => {
