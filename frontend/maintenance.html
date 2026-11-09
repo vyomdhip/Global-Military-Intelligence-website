@@ -248,7 +248,7 @@
 
         .maint-card {
             width: 100%;
-            max-width: 680px;
+            max-width: 700px;
             background: var(--bg-card);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -269,15 +269,15 @@
         }
 
         .maint-card-body {
-            padding: 36px 36px 28px;
+            padding: 64px 46px 60px;
             text-align: center;
         }
 
         /* Tactical Emblem */
         .maint-emblem-wrap {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 20px;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 24px;
             position: relative;
             display: flex;
             align-items: center;
@@ -298,9 +298,9 @@
         }
 
         .maint-emblem-core {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+            width: 66px;
+            height: 66px;
+            border-radius: 16px;
             background: rgba(212, 175, 55, 0.08);
             border: 1.5px solid rgba(212, 175, 55, 0.3);
             display: flex;
@@ -310,110 +310,98 @@
         }
 
         .maint-emblem-core svg {
-            width: 28px;
-            height: 28px;
+            width: 34px;
+            height: 34px;
             color: var(--color-gold);
         }
 
         /* Headings */
-        .maint-badge-kicker {
-            display: inline-block;
-            font-family: var(--font-display);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--color-amber);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
         .maint-title {
             font-family: var(--font-display);
-            font-size: 2rem;
+            font-size: 2.15rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             color: var(--text-primary);
-            line-height: 1.2;
-            margin-bottom: 12px;
+            line-height: 1.25;
+            margin-bottom: 16px;
         }
 
         .maint-message {
-            font-size: 0.94rem;
-            line-height: 1.65;
+            font-size: 0.98rem;
+            line-height: 1.7;
             color: var(--text-secondary);
-            max-width: 520px;
-            margin: 0 auto 28px;
+            max-width: 580px;
+            margin: 0 auto 36px;
         }
 
         /* ============================================
-           DATA SPECIFICATION GRID (Clean, Enterprise)
+           DATA SPECIFICATION LIST (Centered Values in Right Column)
            ============================================ */
-        .maint-spec-grid {
+        .maint-spec-list {
             background: var(--bg-card-inner);
             border: 1px solid var(--border-soft);
-            border-radius: 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            margin-bottom: 24px;
+            border-radius: 12px;
+            margin-bottom: 34px;
             text-align: left;
             overflow: hidden;
         }
 
-        .maint-spec-item {
-            padding: 16px 20px;
-        }
-
-        .maint-spec-item:nth-child(1) {
-            border-right: 1px solid var(--border-soft);
+        .maint-spec-row {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            align-items: center;
+            padding: 23px 28px;
             border-bottom: 1px solid var(--border-soft);
         }
 
-        .maint-spec-item:nth-child(2) {
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        .maint-spec-item:nth-child(3) {
-            border-right: 1px solid var(--border-soft);
+        .maint-spec-row:last-child {
+            border-bottom: none;
         }
 
         .maint-spec-label {
+            justify-self: start;
             font-family: var(--font-display);
-            font-size: 0.7rem;
+            font-size: 0.78rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .maint-spec-label svg {
+            color: var(--color-gold);
+            flex-shrink: 0;
         }
 
         .maint-spec-val {
-            font-size: 0.9rem;
+            justify-self: center;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-primary);
             display: flex;
             align-items: center;
+            justify-content: center;
+            text-align: center;
             gap: 8px;
+            width: 100%;
         }
 
         .maint-spec-val.highlight {
             color: var(--color-amber);
             font-weight: 700;
-        }
-
-        .maint-contact-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            font-family: var(--font-display);
+            font-size: 1.02rem;
+            letter-spacing: 1px;
         }
 
         .maint-contact-link {
             color: var(--color-gold);
             text-decoration: none;
-            font-size: 0.86rem;
+            font-size: 0.95rem;
             font-weight: 500;
             transition: color 150ms ease;
         }
@@ -423,23 +411,6 @@
             text-decoration: underline;
         }
 
-        .maint-copy-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
-            font-size: 0.7rem;
-            padding: 2px 7px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 150ms ease;
-        }
-
-        .maint-copy-btn:hover {
-            background: rgba(212, 175, 55, 0.15);
-            color: #ffffff;
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-
         /* ============================================
            LIVE STATUS BAR & AUTO REFRESH
            ============================================ */
@@ -447,27 +418,28 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 16px;
+            padding-top: 26px;
             border-top: 1px solid var(--border-soft);
-            gap: 12px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
         .maint-auto-check {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
+            gap: 10px;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
         .maint-check-spinner {
-            width: 14px;
-            height: 14px;
+            width: 15px;
+            height: 15px;
             border: 2px solid rgba(148, 163, 184, 0.2);
             border-top-color: var(--color-gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            flex-shrink: 0;
         }
 
         @keyframes spin {
@@ -547,17 +519,6 @@
             letter-spacing: 2px;
             font-size: 0.7rem;
             color: rgba(148, 163, 184, 0.6);
-        }
-
-        .maint-footer-link {
-            color: var(--text-muted);
-            text-decoration: underline;
-            cursor: pointer;
-            transition: color 150ms ease;
-        }
-
-        .maint-footer-link:hover {
-            color: var(--color-gold);
         }
 
         /* ============================================
@@ -751,7 +712,7 @@
         /* ============================================
            RESPONSIVE REFINEMENTS
            ============================================ */
-        @media (max-width: 640px) {
+        @media (max-width: 680px) {
             .maint-header-inner {
                 padding: 12px 16px;
             }
@@ -766,27 +727,32 @@
             }
 
             .maint-card-body {
-                padding: 24px 20px;
+                padding: 32px 20px 28px;
             }
 
             .maint-title {
-                font-size: 1.5rem;
+                font-size: 1.65rem;
             }
 
-            .maint-spec-grid {
+            .maint-spec-row {
                 grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 16px 18px;
+                text-align: center;
             }
 
-            .maint-spec-item:nth-child(1),
-            .maint-spec-item:nth-child(2),
-            .maint-spec-item:nth-child(3) {
-                border-right: none;
-                border-bottom: 1px solid var(--border-soft);
+            .maint-spec-label {
+                justify-self: center;
+            }
+
+            .maint-spec-val {
+                justify-self: center;
             }
 
             .maint-refresh-bar {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 12px;
             }
 
             .maint-check-btn {
@@ -846,18 +812,17 @@
                 </div>
 
                 <!-- Title & Announcement -->
-                <span class="maint-badge-kicker">INCIDENT NOTICE // HTTP 503</span>
                 <h1 class="maint-title">Scheduled Platform Maintenance</h1>
                 <p class="maint-message" id="maint-message">
                     We are performing scheduled system upgrades to improve platform performance, data integrity, and security hardening. Public services will be restored shortly.
                 </p>
 
-                <!-- Data Specification Grid -->
-                <div class="maint-spec-grid">
-                    <div class="maint-spec-item">
+                <!-- Data Specification List -->
+                <div class="maint-spec-list">
+                    <div class="maint-spec-row">
                         <div class="maint-spec-label">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            CURRENT STATUS
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>CURRENT STATUS</span>
                         </div>
                         <div class="maint-spec-val">
                             <span class="maint-pulse-dot" style="background:#f59e0b;box-shadow:none;"></span>
@@ -865,34 +830,23 @@
                         </div>
                     </div>
 
-                    <div class="maint-spec-item">
+                    <div class="maint-spec-row">
                         <div class="maint-spec-label">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-                            ESTIMATED RETURN (ETA)
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                            <span>ESTIMATED RETURN (ETA)</span>
                         </div>
                         <div class="maint-spec-val highlight" id="maint-eta-text">
                             Underway
                         </div>
                     </div>
 
-                    <div class="maint-spec-item">
+                    <div class="maint-spec-row">
                         <div class="maint-spec-label">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                            AFFECTED SCOPE
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <span>OPERATIONS DESK</span>
                         </div>
                         <div class="maint-spec-val">
-                            Public Feeds &amp; Portal API
-                        </div>
-                    </div>
-
-                    <div class="maint-spec-item">
-                        <div class="maint-spec-label">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            OPERATIONS DESK
-                        </div>
-                        <div class="maint-spec-val maint-contact-row">
                             <a href="mailto:vyomdhip1132003@gmail.com" class="maint-contact-link">vyomdhip1132003@gmail.com</a>
-                            <button type="button" class="maint-copy-btn" id="copy-email-btn" onclick="copyContactEmail()" title="Copy email address">Copy</button>
                         </div>
                     </div>
                 </div>
@@ -922,10 +876,9 @@
 
     <!-- Bottom Footer -->
     <footer class="maint-footer">
-        <div class="maint-footer-meta">SECURITY LEVEL: UNCLASSIFIED // OSINT RESEARCH PLATFORM</div>
+        <div class="maint-footer-meta">OSINT RESEARCH PLATFORM</div>
         <div>
-            &copy; <script>document.write(new Date().getFullYear())</script> Global Military Intelligence. All rights reserved. &bull; 
-            <span class="maint-footer-link" onclick="openMaintLogin()">Administrator Login</span>
+            &copy; <script>document.write(new Date().getFullYear())</script> Global Military Intelligence. All rights reserved.
         </div>
     </footer>
 
@@ -976,17 +929,6 @@
 
         let countdown = 30;
         let countdownInterval = null;
-
-        // Copy contact email
-        function copyContactEmail() {
-            navigator.clipboard.writeText('vyomdhip1132003@gmail.com').then(() => {
-                const btn = document.getElementById('copy-email-btn');
-                if (btn) {
-                    btn.textContent = 'Copied!';
-                    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-                }
-            });
-        }
 
         // Check system status
         async function checkSystemStatus(manual = false) {

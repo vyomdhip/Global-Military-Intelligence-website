@@ -53,6 +53,14 @@ app.get('/terms', (req, res) => {
     res.redirect(301, '/terms-conditions');
 });
 
+app.get('/maintenance.html', (req, res) => {
+    res.redirect(301, '/maintenance');
+});
+
+app.get('/maintenance', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/maintenance.html'));
+});
+
 // ============================================
 // CATCH-ALL — serve index.html for any non-API route
 // ============================================
