@@ -91,7 +91,7 @@ function initFrontpageClock() {
         const day = String(now.getUTCDate()).padStart(2, '0');
         const month = months[now.getUTCMonth()];
         const year = now.getUTCFullYear();
-        clockEl.textContent = `${hrs}:${mins}:${secs} UTC // ${dayName} ${day} ${month} ${year} // ZULU`;
+        clockEl.textContent = `${hrs}:${mins}:${secs} UTC // ${dayName} ${day} ${month} ${year}`;
     }
     
     updateClock();
@@ -107,6 +107,7 @@ function showFrontPage() {
     void gate.offsetHeight;
     gate.classList.remove('dismissed');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     initFrontpageClock();
 }
 
@@ -118,11 +119,13 @@ function hideFrontPage(animated = false) {
         setTimeout(() => {
             gate.style.display = 'none';
             document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         }, 450);
     } else {
         gate.classList.add('dismissed');
         gate.style.display = 'none';
         document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
     }
 }
 
@@ -7475,7 +7478,16 @@ function closePrivacyPolicy(updateHistory = true) {
     if (!overlay) return;
 
     overlay.classList.remove('active');
-    document.body.style.overflow = '';
+    
+    const gate = document.getElementById('frontpage-gate');
+    const isFrontActive = gate && !gate.classList.contains('dismissed') && gate.style.display !== 'none';
+    if (isFrontActive) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }
 
     if (updateHistory) {
         if (window.history.state && (window.history.state.overlay === 'privacy-policy' || window.history.state.overlay === 'privacy') && window.history.length > 1) {
@@ -7483,8 +7495,12 @@ function closePrivacyPolicy(updateHistory = true) {
         } else {
             try {
                 if (window.location.protocol.startsWith('http')) {
-                    const returnPage = window.currentPage || 'home';
-                    window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                    if (isFrontActive) {
+                        window.history.pushState({ page: 'frontpage' }, '', '/');
+                    } else {
+                        const returnPage = window.currentPage || 'home';
+                        window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                    }
                 } else {
                     window.location.hash = '';
                 }
@@ -7552,7 +7568,16 @@ function closeTermsConditions(updateHistory = true) {
     if (!overlay) return;
 
     overlay.classList.remove('active');
-    document.body.style.overflow = '';
+    
+    const gate = document.getElementById('frontpage-gate');
+    const isFrontActive = gate && !gate.classList.contains('dismissed') && gate.style.display !== 'none';
+    if (isFrontActive) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }
 
     if (updateHistory) {
         if (window.history.state && (window.history.state.overlay === 'terms-conditions' || window.history.state.overlay === 'terms') && window.history.length > 1) {
@@ -7560,8 +7585,12 @@ function closeTermsConditions(updateHistory = true) {
         } else {
             try {
                 if (window.location.protocol.startsWith('http')) {
-                    const returnPage = window.currentPage || 'home';
-                    window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                    if (isFrontActive) {
+                        window.history.pushState({ page: 'frontpage' }, '', '/');
+                    } else {
+                        const returnPage = window.currentPage || 'home';
+                        window.history.pushState({ page: returnPage }, '', '/' + returnPage);
+                    }
                 } else {
                     window.location.hash = '';
                 }
