@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
     try { initSearch(); } catch (e) { console.error('initSearch error:', e); }
     try { initHistory(); dismissLoader('history-loader'); } catch (e) { console.error('initHistory error:', e); }
     try { initFrontpageClock(); } catch (e) { console.error('initFrontpageClock error:', e); }
+    try { runFrontpageCounters(); } catch (e) {}
+    try { initFrontpageTilt(); } catch (e) {}
 });
 
 // ============================================
@@ -100,6 +102,63 @@ function initFrontpageClock() {
     }
 }
 
+// Rolling Count-Up Animation for Front Page Metrics (Pure vanilla JS, zero dependencies)
+function runFrontpageCounters() {
+    const counterEls = document.querySelectorAll('.frontpage-metric-card .metric-val[data-counter]');
+    if (!counterEls.length) return;
+
+    counterEls.forEach(el => {
+        const target = parseFloat(el.getAttribute('data-counter'));
+        const suffix = el.getAttribute('data-suffix') || '';
+        const decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+        const duration = 1400; // ms
+        const startTime = performance.now();
+
+        function update(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Smooth ease-out cubic
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = target * easeOut;
+            
+            el.textContent = current.toFixed(decimals) + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                el.textContent = target.toFixed(decimals) + suffix;
+            }
+        }
+
+        requestAnimationFrame(update);
+    });
+}
+
+// Interactive 3D Perspective Tilt for Cards
+let frontpageTiltInitialized = false;
+function initFrontpageTilt() {
+    if (frontpageTiltInitialized) return;
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
+
+    const cards = document.querySelectorAll('.frontpage-metric-card, .direct-link-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - (rect.width / 2);
+            const y = e.clientY - rect.top - (rect.height / 2);
+            const rotateX = -(y / (rect.height / 2)) * 4;
+            const rotateY = (x / (rect.width / 2)) * 4;
+            card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-3px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    frontpageTiltInitialized = true;
+}
+
 function showFrontPage() {
     const gate = document.getElementById('frontpage-gate');
     if (!gate) return;
@@ -109,6 +168,8 @@ function showFrontPage() {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
     initFrontpageClock();
+    runFrontpageCounters();
+    initFrontpageTilt();
 }
 
 function hideFrontPage(animated = false) {

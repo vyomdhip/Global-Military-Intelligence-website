@@ -29,7 +29,7 @@
     </script>
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.4.3">
+    <link rel="stylesheet" href="styles.css?v=2.5.5">
 </head>
 
 <body>
@@ -85,12 +85,6 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                         Analyst Sign In
-                    </button>
-                    <button class="frontpage-quick-skip" onclick="proceedToPortal('home')" aria-label="Proceed to Home">
-                        Proceed to Home
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
                     </button>
                 </div>
             </header>
@@ -169,7 +163,7 @@
                 <div class="frontpage-metrics-grid">
                     <div class="frontpage-metric-card">
                         <div class="metric-top">
-                            <span class="metric-val">35+</span>
+                            <span class="metric-val" data-counter="35" data-suffix="+">35+</span>
                             <span class="metric-tag">SOVEREIGN</span>
                         </div>
                         <div class="metric-label">Armed Forces Tracked</div>
@@ -177,7 +171,7 @@
                     </div>
                     <div class="frontpage-metric-card">
                         <div class="metric-top">
-                            <span class="metric-val">14.7M+</span>
+                            <span class="metric-val" data-counter="14.7" data-suffix="M+" data-decimals="1">14.7M+</span>
                             <span class="metric-tag">PERSONNEL</span>
                         </div>
                         <div class="metric-label">Active &amp; Reserve Troops</div>
@@ -185,7 +179,7 @@
                     </div>
                     <div class="frontpage-metric-card">
                         <div class="metric-top">
-                            <span class="metric-val">380K+</span>
+                            <span class="metric-val" data-counter="380" data-suffix="K+">380K+</span>
                             <span class="metric-tag">EQUIPMENT</span>
                         </div>
                         <div class="metric-label">Combat Assets Monitored</div>
