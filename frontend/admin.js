@@ -314,14 +314,7 @@ async function loadMissionControl() {
         const health = healthRes.ok ? await healthRes.json() : null;
         const activity = activityRes.ok ? await activityRes.json() : { activities: [] };
 
-        // Update sidebar status & counters
-        const pingPill = document.getElementById('gmi-sidebar-ping');
-        const statusText = document.getElementById('gmi-sidebar-status-text');
-        if (health && health.database) {
-            if (pingPill) pingPill.textContent = health.database.pingLatencyMs !== null ? `${health.database.pingLatencyMs}ms` : 'Online';
-            if (statusText) statusText.textContent = health.database.status === 'Connected' ? 'ATLAS CONNECTED' : health.database.status.toUpperCase();
-        }
-
+        // Update sidebar counters
         const navUsersPill = document.getElementById('nav-pill-users');
         const navReportsPill = document.getElementById('nav-pill-reports');
         if (navUsersPill) navUsersPill.textContent = stats.totalUsers || 0;
