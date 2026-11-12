@@ -13921,12 +13921,23 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
 
 /* Top Operational Status Header */
 .frontpage-header {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding-bottom: clamp(10px, 1.4vh, 16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     gap: 16px;
+}
+
+.frontpage-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: clamp(-72px, -5.5vw, -45px);
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
 }
 
 .frontpage-brand {
@@ -13935,6 +13946,8 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
     gap: 14px;
     justify-self: start;
     min-width: 0;
+    transform: translateX(clamp(-65px, -5vw, -40px));
+    transition: transform 0.25s ease;
 }
 
 .frontpage-logo {
@@ -14394,16 +14407,27 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
 
 /* Front Page Footer */
 .frontpage-footer {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: clamp(14px, 1.8vh, 20px) 0 clamp(6px, 1vh, 12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
     gap: 10px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.frontpage-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: clamp(-72px, -5.5vw, -45px);
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
 }
 
 .frontpage-footer-notice {
@@ -14533,9 +14557,15 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
         align-items: stretch;
         gap: 14px;
     }
+    .frontpage-header::after,
+    .frontpage-footer::before {
+        left: 0;
+        right: 0;
+    }
     .frontpage-brand {
         justify-content: center;
         text-align: center;
+        transform: none;
     }
     .frontpage-header-actions {
         justify-content: center;
