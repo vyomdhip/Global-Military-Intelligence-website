@@ -568,11 +568,14 @@ textarea:focus-visible {
 }
 
 .logo-subtitle {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-accent-gold);
-    letter-spacing: 0.2em;
+    font-family: 'Rajdhani', var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #d4af37;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-top: 2px;
 }
 
 .nav {
