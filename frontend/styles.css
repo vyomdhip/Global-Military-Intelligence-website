@@ -11033,13 +11033,13 @@ input:checked + .gmi-slider:before {
 .footer-brand {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 12px;
     margin-bottom: var(--space-lg);
 }
 
 .footer-logo-img {
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid rgba(212, 175, 55, 0.3);
@@ -11052,20 +11052,21 @@ input:checked + .gmi-slider:before {
 
 .footer-brand-title {
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--color-accent-gold);
-    line-height: 1.1;
+    letter-spacing: 0.1em;
+    color: var(--color-text-primary);
 }
 
 .footer-brand-subtitle {
-    font-family: var(--font-display);
+    font-family: 'Rajdhani', var(--font-display);
     font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 3px;
-    color: var(--color-text-secondary);
-    line-height: 1.2;
+    font-weight: 600;
+    color: #d4af37;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-top: 2px;
 }
 
 .footer-description {
