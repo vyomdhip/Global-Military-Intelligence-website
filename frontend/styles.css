@@ -14729,3 +14729,188 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
         transform: translate(-50%, -50%) !important;
     }
 }
+
+/* ============================================
+   404 NOT FOUND PAGE
+   Dark Glassmorphic UI matching GMI Theme
+   ============================================ */
+.not-found-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 8800;
+    background: var(--color-bg-primary);
+    overflow-y: auto;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: calc(84px + var(--space-xl)) var(--space-md) var(--space-2xl);
+    -webkit-overflow-scrolling: touch;
+}
+
+.not-found-overlay.active {
+    display: flex;
+}
+
+/* Ambient Tactical Grid Background */
+.not-found-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 70% 50% at 50% 40%, rgba(212, 175, 55, 0.08) 0%, transparent 65%),
+        linear-gradient(rgba(212, 175, 55, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 175, 55, 0.025) 1px, transparent 1px);
+    background-size: 100% 100%, 48px 48px, 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.not-found-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 580px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.not-found-card {
+    width: 100%;
+    background: rgba(15, 34, 55, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: var(--radius-xl);
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.65),
+        0 0 30px rgba(212, 175, 55, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    padding: clamp(32px, 5vw, 48px) clamp(24px, 4vw, 40px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tactical gold top accent edge */
+.not-found-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-gold) 50%, transparent);
+}
+
+.not-found-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 20px;
+    color: var(--color-accent-gold);
+    font-family: var(--font-display);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: var(--space-md);
+}
+
+.not-found-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent-gold);
+    box-shadow: 0 0 8px var(--color-accent-gold);
+}
+
+.not-found-code-wrap {
+    margin-bottom: var(--space-xs);
+    line-height: 1;
+}
+
+.not-found-code {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 15vw, 8rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 4px;
+    background: linear-gradient(180deg, #ffffff 20%, var(--color-accent-gold) 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.25));
+    margin: 0;
+}
+
+.not-found-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.not-found-message {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.125rem);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    margin: 0 auto var(--space-xs);
+    max-width: 440px;
+}
+
+.not-found-subtext {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 auto var(--space-xl);
+    max-width: 420px;
+    display: block;
+}
+
+.not-found-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-lg);
+}
+
+.not-found-btn {
+    min-width: 160px;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+}
+
+@media (max-width: 540px) {
+    .not-found-overlay {
+        padding: calc(76px + var(--space-md)) var(--space-md) var(--space-xl);
+    }
+
+    .not-found-card {
+        padding: 32px 20px 28px;
+    }
+
+    .not-found-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--space-sm);
+    }
+
+    .not-found-btn {
+        width: 100%;
+    }
+}
+

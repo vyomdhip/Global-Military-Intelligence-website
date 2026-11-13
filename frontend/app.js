@@ -160,6 +160,9 @@ function initFrontpageTilt() {
 }
 
 function showFrontPage() {
+    if (typeof hideNotFoundPage === 'function') {
+        hideNotFoundPage();
+    }
     const gate = document.getElementById('frontpage-gate');
     if (!gate) return;
     gate.style.display = 'flex';
@@ -281,6 +284,12 @@ function initNavigation() {
     let scrollUrlTimeout = null;
 
     window.addEventListener('scroll', () => {
+        // Do not update route while 404 Not Found overlay is active
+        const notFoundOverlay = document.getElementById('not-found-overlay');
+        if (notFoundOverlay && notFoundOverlay.classList.contains('active')) {
+            return;
+        }
+
         const scrollPos = window.scrollY + 100;
 
         sections.forEach(sectionId => {
@@ -332,6 +341,7 @@ function initNavigation() {
         // Root path, index.html, or explicit welcome/gateway/frontpage routes show the front page
         const isFrontpagePath = !rawPath || rawPath === 'index.html' || rawPath === 'welcome' || rawPath === 'gateway' || rawPath === 'frontpage';
         if (isFrontpagePath) {
+            hideNotFoundPage();
             showFrontPage();
             return;
         }
@@ -360,6 +370,7 @@ function initNavigation() {
         const validPages = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
 
         if (targetPage === 'privacy-policy') {
+            hideNotFoundPage();
             if (typeof openPrivacyPolicy === 'function') {
                 openPrivacyPolicy(false);
             }
@@ -372,6 +383,7 @@ function initNavigation() {
         }
 
         if (targetPage === 'terms-conditions') {
+            hideNotFoundPage();
             if (typeof openTermsConditions === 'function') {
                 openTermsConditions(false);
             }
@@ -396,12 +408,16 @@ function initNavigation() {
         }
 
         if (validPages.includes(targetPage)) {
+            hideNotFoundPage();
             showPage(targetPage);
             try {
                 if (window.location.protocol.startsWith('http')) {
                     window.history.replaceState({ page: targetPage }, '', '/' + targetPage);
                 }
             } catch (e) {}
+        } else {
+            // Invalid route -> Display 404 Not Found Page
+            showNotFoundPage();
         }
     };
 
@@ -1538,6 +1554,9 @@ function toggleEquipmentDetail(cardId) {
 // UTILITY FUNCTIONS
 // ============================================
 function showPage(page) {
+    if (typeof hideNotFoundPage === 'function') {
+        hideNotFoundPage();
+    }
     const pageMap = {
         'home': 'home',
         'hero': 'home',
@@ -7508,6 +7527,9 @@ function renderCommunityMarkdown(md) {
 // PRIVACY POLICY OVERLAY CONTROLLER
 // ============================================
 function openPrivacyPolicy(updateHistory = true) {
+    if (typeof hideNotFoundPage === 'function') {
+        hideNotFoundPage();
+    }
     const overlay = document.getElementById('privacy-policy-overlay');
     if (!overlay) return;
 
@@ -7598,6 +7620,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // TERMS & CONDITIONS OVERLAY CONTROLLER
 // ============================================
 function openTermsConditions(updateHistory = true) {
+    if (typeof hideNotFoundPage === 'function') {
+        hideNotFoundPage();
+    }
     const overlay = document.getElementById('terms-conditions-overlay');
     if (!overlay) return;
 
@@ -7718,5 +7743,89 @@ window.addEventListener('popstate', () => {
         }
     }
 });
+
+// ============================================
+// 404 NOT FOUND OVERLAY CONTROLLER
+// ============================================
+function showNotFoundPage() {
+    const overlay = document.getElementById('not-found-overlay');
+    if (!overlay) return;
+
+    // Close other overlays if active
+    const privacyOverlay = document.getElementById('privacy-policy-overlay');
+    if (privacyOverlay && privacyOverlay.classList.contains('active')) {
+        privacyOverlay.classList.remove('active');
+    }
+    const termsOverlay = document.getElementById('terms-conditions-overlay');
+    if (termsOverlay && termsOverlay.classList.contains('active')) {
+        termsOverlay.classList.remove('active');
+    }
+
+    // Dismiss frontpage gate if visible
+    const gate = document.getElementById('frontpage-gate');
+    if (gate) {
+        gate.classList.add('dismissed');
+        gate.style.display = 'none';
+    }
+
+    overlay.classList.add('active');
+    overlay.style.display = 'flex';
+    overlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+
+    // Clear active state on header navigation links
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+    document.title = '404 Page Not Found | Global Military Intelligence';
+}
+
+function hideNotFoundPage() {
+    const overlay = document.getElementById('not-found-overlay');
+    if (!overlay) return;
+
+    overlay.classList.remove('active');
+    overlay.style.display = 'none';
+
+    const gate = document.getElementById('frontpage-gate');
+    const isFrontActive = gate && !gate.classList.contains('dismissed') && gate.style.display !== 'none';
+    if (!isFrontActive) {
+        document.body.style.overflow = '';
+    }
+
+    document.title = 'Global Military Intelligence | Defense Analysis Portal';
+}
+
+function navigateToHome() {
+    hideNotFoundPage();
+    hideFrontPage(false);
+    showPage('home');
+    updateUrlPath('home');
+}
+
+function navigateBack() {
+    hideNotFoundPage();
+    if (window.history.length > 1 && (document.referrer && document.referrer.includes(window.location.host) || (window.history.state && window.history.state.page))) {
+        window.history.back();
+    } else if (window.history.length > 1 && !document.referrer) {
+        window.history.back();
+    } else {
+        navigateToHome();
+    }
+}
+
+// Expose 404 controllers globally
+window.showNotFoundPage = showNotFoundPage;
+window.hideNotFoundPage = hideNotFoundPage;
+window.navigateToHome = navigateToHome;
+window.navigateBack = navigateBack;
+
+// Escape key listener to close 404 overlay and go back
+document.addEventListener('keydown', (e) => {
+    const overlay = document.getElementById('not-found-overlay');
+    if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) {
+        navigateBack();
+    }
+});
+
 
 

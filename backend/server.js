@@ -70,6 +70,11 @@ app.get('*', (req, res) => {
     }
 });
 
+// 404 handler for unknown API routes
+app.all('/api/*', (req, res) => {
+    res.status(404).json({ error: 'Endpoint not found' });
+});
+
 // ============================================
 // START SERVER
 // ============================================
