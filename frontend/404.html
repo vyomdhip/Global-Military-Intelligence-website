@@ -24,19 +24,23 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             background: var(--color-bg-primary, #0a1628);
             color: var(--color-text-primary, #ffffff);
             font-family: var(--font-body, 'Inter', sans-serif);
             overflow-x: hidden;
             position: relative;
+            margin: 0;
+            padding: 0;
         }
 
         .standalone-404-main {
-            flex: 1;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: calc(84px + var(--space-xl, 2rem)) var(--space-md, 1rem) var(--space-2xl, 3rem);
+            padding: var(--space-xl, 2rem) var(--space-md, 1rem);
             position: relative;
             z-index: 1;
         }
@@ -58,31 +62,6 @@
 <body>
     <div class="standalone-404-bg" aria-hidden="true"></div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-container">
-            <a href="/home" class="logo" style="text-decoration:none;cursor:pointer;">
-                <div class="logo-icon">
-                    <img src="logo.png" alt="GMI Logo"
-                        style="width:52px;height:52px;border-radius:50%;object-fit:cover;">
-                </div>
-                <div class="logo-text">
-                    <span class="logo-title">GLOBAL MILITARY</span>
-                    <span class="logo-subtitle">INTELLIGENCE</span>
-                </div>
-            </a>
-            <nav class="nav">
-                <a href="/home" class="nav-link">Home</a>
-                <a href="/nations" class="nav-link">Nations</a>
-                <a href="/compare" class="nav-link">Compare</a>
-                <a href="/news" class="nav-link">News</a>
-                <a href="/conflicts" class="nav-link">Conflicts</a>
-                <a href="/history" class="nav-link">History</a>
-                <a href="/about" class="nav-link">About</a>
-            </nav>
-        </div>
-    </header>
-
     <!-- Main Content -->
     <main class="standalone-404-main" role="main">
         <div class="not-found-container">
@@ -100,23 +79,18 @@
 
                 <p class="not-found-message">The requested page could not be found.</p>
 
-                <span class="not-found-subtext">The tactical sector or file path you requested does not exist or may have been relocated.</span>
+                <span class="not-found-subtext">The tactical sector or file path you requested does not exist or may
+                    have been relocated.</span>
 
                 <div class="not-found-actions">
                     <a href="/home" class="btn btn-primary not-found-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
                         </svg>
                         <span>Return Home</span>
                     </a>
-                    <button type="button" class="btn btn-secondary not-found-btn" onclick="if (history.length > 1) { history.back(); } else { window.location.href = '/home'; }">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <line x1="19" y1="12" x2="5" y2="12"/>
-                            <polyline points="12 19 5 12 12 5"/>
-                        </svg>
-                        <span>Go Back</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -124,4 +98,3 @@
 </body>
 
 </html>
-

@@ -7768,6 +7768,13 @@ function showNotFoundPage() {
         gate.style.display = 'none';
     }
 
+    // Hide top navigation bar on 404 error page
+    document.body.classList.add('not-found-active');
+    const header = document.querySelector('.header');
+    if (header) {
+        header.style.display = 'none';
+    }
+
     overlay.classList.add('active');
     overlay.style.display = 'flex';
     overlay.scrollTop = 0;
@@ -7785,6 +7792,13 @@ function hideNotFoundPage() {
 
     overlay.classList.remove('active');
     overlay.style.display = 'none';
+
+    // Restore top navigation bar
+    document.body.classList.remove('not-found-active');
+    const header = document.querySelector('.header');
+    if (header) {
+        header.style.display = '';
+    }
 
     const gate = document.getElementById('frontpage-gate');
     const isFrontActive = gate && !gate.classList.contains('dismissed') && gate.style.display !== 'none';
@@ -7819,11 +7833,11 @@ window.hideNotFoundPage = hideNotFoundPage;
 window.navigateToHome = navigateToHome;
 window.navigateBack = navigateBack;
 
-// Escape key listener to close 404 overlay and go back
+// Escape key listener to close 404 overlay and return home
 document.addEventListener('keydown', (e) => {
     const overlay = document.getElementById('not-found-overlay');
     if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) {
-        navigateBack();
+        navigateToHome();
     }
 });
 

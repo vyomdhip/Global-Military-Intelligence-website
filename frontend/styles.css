@@ -14734,16 +14734,20 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
    404 NOT FOUND PAGE
    Dark Glassmorphic UI matching GMI Theme
    ============================================ */
+body.not-found-active .header {
+    display: none !important;
+}
+
 .not-found-overlay {
     position: fixed;
     inset: 0;
-    z-index: 8800;
+    z-index: 10000;
     background: var(--color-bg-primary);
     overflow-y: auto;
     display: none;
     align-items: center;
     justify-content: center;
-    padding: calc(84px + var(--space-xl)) var(--space-md) var(--space-2xl);
+    padding: var(--space-xl) var(--space-md);
     -webkit-overflow-scrolling: touch;
 }
 
@@ -14896,7 +14900,7 @@ body:has(#frontpage-gate:not(.dismissed))::-webkit-scrollbar {
 
 @media (max-width: 540px) {
     .not-found-overlay {
-        padding: calc(76px + var(--space-md)) var(--space-md) var(--space-xl);
+        padding: var(--space-lg) var(--space-md);
     }
 
     .not-found-card {
