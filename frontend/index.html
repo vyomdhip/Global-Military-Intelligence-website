@@ -28,6 +28,33 @@
         }
     </script>
 
+    <!-- Immediate route & auth pre-check: suppress loading screen if visiting 404 or unauthorized admin routes -->
+    <script>
+        (function () {
+            try {
+                const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+                const validRoutes = [
+                    '', 'index.html', 'welcome', 'gateway', 'frontpage',
+                    'home', 'hero', 'nations', 'nation', 'map', 'map-section',
+                    'compare', 'compare-section', 'news', 'news-section',
+                    'conflicts', 'conflicts-section', 'history', 'history-section',
+                    'about', 'about-section', 'privacy', 'privacy-policy',
+                    'terms', 'terms-conditions', 'terms-and-conditions'
+                ];
+                const isAdminRoute = path === 'admin' || path.startsWith('admin/') || path === 'admin-dashboard' || path === 'admin-panel';
+                let isAdmin = false;
+                if (isAdminRoute) {
+                    const user = JSON.parse(localStorage.getItem('gmi_user') || 'null');
+                    const token = localStorage.getItem('gmi_token');
+                    isAdmin = Boolean(token && user && String(user.role).trim().toLowerCase() === 'admin');
+                }
+                if ((isAdminRoute && !isAdmin) || (!validRoutes.includes(path) && !isAdminRoute)) {
+                    document.documentElement.classList.add('no-loader');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="styles.css?v=2.6.8">
 </head>

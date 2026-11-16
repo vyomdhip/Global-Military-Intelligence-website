@@ -25,6 +25,11 @@
     pointer-events: none;
 }
 
+html.no-loader .page-loader,
+html.no-loader #page-loader {
+    display: none !important;
+}
+
 .loader-content {
     text-align: center;
     display: flex;

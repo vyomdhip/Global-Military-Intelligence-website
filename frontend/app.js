@@ -31,6 +31,19 @@
 window.addEventListener('load', function () {
     const loader = document.getElementById('page-loader');
     if (loader) {
+        const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+        const isAdminRoute = rawPath === 'admin' || rawPath.startsWith('admin/') || rawPath === 'admin-dashboard' || rawPath === 'admin-panel';
+        let isAdmin = false;
+        try {
+            const u = JSON.parse(localStorage.getItem('gmi_user') || 'null');
+            isAdmin = Boolean(localStorage.getItem('gmi_token') && u && String(u.role).trim().toLowerCase() === 'admin');
+        } catch (e) {}
+
+        if ((isAdminRoute && !isAdmin) || rawPath === '404' || rawPath === '404.html' || document.documentElement.classList.contains('no-loader') || document.body.classList.contains('not-found-active')) {
+            loader.remove();
+            return;
+        }
+
         // Ensure a minimum display time of 1.5s for the animation to be visible
         const minTime = 1500;
         const elapsed = performance.now();
@@ -363,11 +376,59 @@ function initNavigation() {
             'privacy-policy': 'privacy-policy',
             'terms': 'terms-conditions',
             'terms-conditions': 'terms-conditions',
-            'terms-and-conditions': 'terms-conditions'
+            'terms-and-conditions': 'terms-conditions',
+            'admin-dashboard': 'admin',
+            'admin-panel': 'admin'
         };
 
         const targetPage = aliasMap[rawPath] || rawPath;
         const validPages = ['home', 'nations', 'compare', 'news', 'conflicts', 'history', 'about'];
+
+        if (targetPage === 'maintenance' || rawPath === 'maintenance' || rawPath === 'maintenance.html') {
+            try {
+                if (window.location.protocol.startsWith('http')) {
+                    window.history.replaceState({ page: '404' }, '', '/404');
+                }
+            } catch (e) {}
+            showNotFoundPage();
+            return;
+        }
+
+        const isAdminRoute = targetPage === 'admin' || rawPath === 'admin' || rawPath.startsWith('admin/') || targetPage === 'admin-dashboard' || targetPage === 'admin-panel';
+        if (isAdminRoute) {
+            let isAdmin = false;
+            try {
+                if (typeof checkAdminAccess === 'function') {
+                    isAdmin = checkAdminAccess();
+                } else {
+                    const u = JSON.parse(localStorage.getItem('gmi_user') || 'null');
+                    isAdmin = Boolean(localStorage.getItem('gmi_token') && u && String(u.role).trim().toLowerCase() === 'admin');
+                }
+            } catch (e) {}
+
+            if (!isAdmin) {
+                // Instantly remove any page loader so no loading screen is shown
+                const loader = document.getElementById('page-loader');
+                if (loader) loader.remove();
+
+                try {
+                    if (window.location.protocol.startsWith('http')) {
+                        window.history.replaceState({ page: '404' }, '', '/404');
+                    }
+                } catch (e) {}
+                showNotFoundPage();
+                return;
+            }
+
+            // Valid admin -> Open admin command center
+            hideNotFoundPage();
+            hideFrontPage(false);
+            showPage('home');
+            if (typeof openAdminPanel === 'function') {
+                openAdminPanel('overview');
+            }
+            return;
+        }
 
         if (targetPage === 'privacy-policy') {
             hideNotFoundPage();
@@ -417,12 +478,15 @@ function initNavigation() {
             } catch (e) {}
         } else {
             // Invalid route -> Display 404 Not Found Page
+            const loader = document.getElementById('page-loader');
+            if (loader) loader.remove();
             showNotFoundPage();
         }
     };
 
     window.addEventListener('popstate', handleRoute);
     window.addEventListener('hashchange', handleRoute);
+    handleRoute();
     setTimeout(handleRoute, 300);
 }
 
@@ -7748,6 +7812,10 @@ window.addEventListener('popstate', () => {
 // 404 NOT FOUND OVERLAY CONTROLLER
 // ============================================
 function showNotFoundPage() {
+    // Instantly remove page loader if present
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.remove();
+
     const overlay = document.getElementById('not-found-overlay');
     if (!overlay) return;
 

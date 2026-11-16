@@ -943,14 +943,8 @@
             try {
                 const res = await fetch('/api/news');
                 if (res.status === 200) {
-                    // System restored!
-                    if (alertEl) {
-                        alertEl.className = 'maint-live-alert live';
-                        alertEl.innerHTML = '<strong>System Restored!</strong> Maintenance completed. Redirecting to live portal...';
-                    }
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 1200);
+                    // System is live and not in maintenance mode: redirect to 404
+                    window.location.replace('/404');
                     return;
                 }
 
