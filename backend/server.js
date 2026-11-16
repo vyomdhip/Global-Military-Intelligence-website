@@ -25,6 +25,15 @@ app.use(express.urlencoded({ extended: true }));
 // ============================================
 app.use(maintenanceMiddleware);
 
+// If maintenance mode is OFF, block direct access to /maintenance and redirect to 404
+app.use((req, res, next) => {
+    const isMaintenanceActive = (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true';
+    if (!isMaintenanceActive && (req.path === '/maintenance' || req.path === '/maintenance.html')) {
+        return res.redirect(302, '/404');
+    }
+    next();
+});
+
 // ============================================
 // STATIC FILES — serve the existing frontend
 // ============================================
@@ -54,10 +63,18 @@ app.get('/terms', (req, res) => {
 });
 
 app.get('/maintenance.html', (req, res) => {
+    const isMaintenanceActive = (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true';
+    if (!isMaintenanceActive) {
+        return res.redirect(302, '/404');
+    }
     res.redirect(301, '/maintenance');
 });
 
 app.get('/maintenance', (req, res) => {
+    const isMaintenanceActive = (process.env.MAINTENANCE_MODE || '').toLowerCase() === 'true';
+    if (!isMaintenanceActive) {
+        return res.redirect(302, '/404');
+    }
     res.sendFile(path.join(__dirname, '../frontend/maintenance.html'));
 });
 
