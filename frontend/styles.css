@@ -6377,18 +6377,19 @@ textarea:focus-visible {
 /* ============================================================================
    GMI DEFENSE ANALYST COMMAND DASHBOARD (PRODUCTION UI)
    ============================================================================ */
-/* Dashboard Modal Frame: Placed strictly below the fixed top navbar with breathing room */
+/* Dashboard Modal Frame: Full-screen modal overlay with tactical backdrop */
 .gmi-user-dashboard-modal {
     position: fixed;
-    top: 84px; /* Positions dashboard strictly below the 84px persistent navbar */
+    inset: 0;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 8990; /* Right below the sticky navbar (z-index: 9000), above all page content */
+    z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 24px 24px;
+    padding: 24px;
     box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
@@ -6412,7 +6413,7 @@ textarea:focus-visible {
     max-width: 1240px;
     width: 95vw;
     height: 100%;
-    max-height: calc(100vh - 124px); /* Guarantees comfortable top & bottom margins from navbar */
+    max-height: min(900px, calc(100vh - 48px));
     margin: 0 auto;
     padding: 0;
     display: flex;
@@ -8238,17 +8239,26 @@ input:checked + .gmi-slider:before {
 
 /* Responsive Styles */
 @media (max-width: 992px) {
-    .modal,
-    .gmi-user-dashboard-modal {
+    .modal {
         top: 76px;
         padding: 12px 16px 18px;
     }
 
-    .modal-content,
-    .profile-modal-content.gmi-user-dashboard-shell {
+    .gmi-user-dashboard-modal {
+        top: 0;
+        padding: 16px;
+    }
+
+    .modal-content {
         width: 96vw;
         height: 100%;
         max-height: calc(100vh - 105px);
+    }
+
+    .profile-modal-content.gmi-user-dashboard-shell {
+        width: 96vw;
+        height: 100%;
+        max-height: calc(100vh - 32px);
     }
 
     .gmi-dash-metrics-grid {
@@ -8273,17 +8283,27 @@ input:checked + .gmi-slider:before {
 }
 
 @media (max-width: 640px) {
-    .modal,
-    .gmi-user-dashboard-modal {
+    .modal {
         top: 70px;
         padding: 8px 8px 12px;
     }
 
-    .modal-content,
-    .profile-modal-content.gmi-user-dashboard-shell {
+    .gmi-user-dashboard-modal {
+        top: 0;
+        padding: 8px;
+    }
+
+    .modal-content {
         width: 98vw;
         height: 100%;
         max-height: calc(100vh - 86px);
+        border-radius: 12px;
+    }
+
+    .profile-modal-content.gmi-user-dashboard-shell {
+        width: 98vw;
+        height: 100%;
+        max-height: calc(100vh - 16px);
         border-radius: 12px;
     }
 
