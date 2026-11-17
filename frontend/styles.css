@@ -6566,7 +6566,7 @@ textarea:focus-visible {
 .gmi-dash-identity-meta {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     min-width: 0;
 }
 
@@ -6577,6 +6577,7 @@ textarea:focus-visible {
     font-size: 0.68rem;
     letter-spacing: 0.08em;
     font-family: var(--font-display, 'Rajdhani', sans-serif);
+    margin-bottom: 3px;
 }
 
 .gmi-dash-unit-tag {
@@ -6673,7 +6674,7 @@ textarea:focus-visible {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-right: 48px;
+    margin-right: 76px;
     flex-shrink: 0;
 }
 
@@ -6731,7 +6732,7 @@ textarea:focus-visible {
 }
 
 .gmi-dash-admin-banner {
-    margin: 12px 28px 0;
+    margin: 14px 28px 16px;
 }
 
 /* Tabs Ribbon */
@@ -6742,7 +6743,10 @@ textarea:focus-visible {
     gap: 6px;
     padding: 8px 20px;
     background: rgba(8, 13, 24, 0.85);
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
     border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    border-left: none;
+    border-right: none;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
@@ -8311,6 +8315,10 @@ input:checked + .gmi-slider:before {
         padding: 14px 16px;
     }
 
+    .gmi-dash-admin-banner {
+        margin: 10px 16px 12px;
+    }
+
     .gmi-dash-header-left {
         gap: 12px;
     }
@@ -9142,15 +9150,23 @@ input:checked + .gmi-slider:before {
    ============================================ */
 .notebook-layout {
     display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 20px;
-    min-height: 65vh;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    min-height: 68vh;
+    background: linear-gradient(145deg, rgba(13, 21, 38, 0.75), rgba(9, 15, 28, 0.85));
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.04);
+    overflow: hidden;
 }
 
 .notebook-sidebar {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 20px;
+    background: rgba(7, 12, 22, 0.6);
+    border-right: 1px solid rgba(212, 175, 55, 0.12);
 }
 
 .notebook-new-btn {
@@ -9209,7 +9225,7 @@ input:checked + .gmi-slider:before {
 .notebook-report-item {
     padding: 12px 14px;
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -9217,12 +9233,13 @@ input:checked + .gmi-slider:before {
 
 .notebook-report-item:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.2);
 }
 
 .notebook-report-item.active {
     background: rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.25);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.06);
 }
 
 .notebook-report-item-title {
@@ -9260,6 +9277,9 @@ input:checked + .gmi-slider:before {
    ============================================ */
 .notebook-main {
     min-height: 400px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
 }
 
 .notebook-empty-state {
@@ -9267,14 +9287,25 @@ input:checked + .gmi-slider:before {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 50vh;
+    min-height: 48vh;
     text-align: center;
-    gap: 12px;
+    gap: 14px;
+    padding: 40px 24px;
+    background: rgba(212, 175, 55, 0.015);
+    border: 1px dashed rgba(212, 175, 55, 0.18);
+    border-radius: 10px;
+    margin: auto 0;
+    transition: border-color 0.25s ease;
+}
+
+.notebook-empty-state:hover {
+    border-color: rgba(212, 175, 55, 0.28);
 }
 
 .notebook-empty-icon {
-    font-size: 3rem;
-    opacity: 0.5;
+    font-size: 2.8rem;
+    opacity: 0.75;
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.2));
 }
 
 .notebook-empty-state h3 {
@@ -9298,8 +9329,8 @@ input:checked + .gmi-slider:before {
 }
 
 .notebook-title-input {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(212, 175, 55, 0.18);
     border-radius: 8px;
     padding: 14px 18px;
     color: var(--color-text-primary);
@@ -9308,11 +9339,12 @@ input:checked + .gmi-slider:before {
     font-weight: 700;
     letter-spacing: 0.02em;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
 }
 
 .notebook-title-input:focus {
-    border-color: rgba(212, 175, 55, 0.35);
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.1);
 }
 
 .notebook-title-input::placeholder {
@@ -9326,8 +9358,8 @@ input:checked + .gmi-slider:before {
     align-items: center;
     gap: 6px;
     padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.15);
     border-radius: 8px;
     flex-wrap: wrap;
 }
@@ -10007,7 +10039,9 @@ input:checked + .gmi-slider:before {
     }
 
     .notebook-sidebar {
-        max-height: 200px;
+        border-right: none;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        max-height: 220px;
         overflow-y: auto;
     }
 
